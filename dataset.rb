@@ -5,6 +5,8 @@ require 'validate-owl'
 
 class DatasetTest < Test::Unit::TestCase
 
+=begin
+=end
   def setup
     @datasets = {
       @@classification_training_dataset.uri => {
@@ -26,7 +28,6 @@ class DatasetTest < Test::Unit::TestCase
     #@new_dataset.delete
   end
 
-=begin
   def test_save_external
 
     @dataset = OpenTox::Dataset.find "http://apps.ideaconsult.net:8080/ambit2/dataset/2698", @@subjectid
@@ -37,13 +38,13 @@ class DatasetTest < Test::Unit::TestCase
     #@dataset.load_csv(File.open("data/hamster_carcinogenicity.csv").read)
     #@dataset.save
   end
-=end
 
   def test_create
     dataset = OpenTox::Dataset.create(CONFIG[:services]["opentox-dataset"], @@subjectid)
     dataset.save(@@subjectid)
     assert_kind_of URI::HTTP, URI.parse(dataset.uri)
-    dataset.delete(@@subjectid)
+    puts `curl #{dataset.uri}`
+    #dataset.delete(@@subjectid)
   end
 
   def test_all
@@ -65,14 +66,14 @@ class DatasetTest < Test::Unit::TestCase
   end
 
   def test_rest_csv
-    uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"],{:accept => "text/uri-list"}, {:file => File.new("data/hamster_carcinogenicity.csv"), :subjectid => @@subjectid}).to_s.chomp
+    uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"], {:file => File.new("data/hamster_carcinogenicity.csv")} ,{:accept => "text/uri-list", :subjectid => @@subjectid}).to_s.chomp
     @dataset = OpenTox::Dataset.new uri, @@subjectid
     @dataset.load_all(@@subjectid)
     hamster_carc?
   end
 
   def test_multicolumn_csv
-    uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"],{:accept => "text/uri-list"}, {:file => File.new("data/multicolumn.csv"), :subjectid => @@subjectid}).to_s.chomp
+    uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"], {:file => File.new("data/multicolumn.csv")},{:accept => "text/uri-list", :subjectid => @@subjectid}).to_s.chomp
     @dataset = OpenTox::Dataset.new uri, @@subjectid
     @dataset.load_all(@@subjectid)
     assert_equal 5, @dataset.features.size

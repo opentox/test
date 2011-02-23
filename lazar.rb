@@ -17,7 +17,12 @@ class LazarTest < Test::Unit::TestCase
     lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
     assert_equal lazar.features.size, 222
     compound = OpenTox::Compound.from_smiles("c1ccccc1NN")
+    #puts lazar.uri
+    #puts compound.inspect
+    #puts "prediction"
+    #puts prediction.value(compound).inspect
     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid)
+    #puts prediction_uri
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
     assert_equal prediction.value(compound).round_to(4), 0.149518871336721.round_to(4)
     assert_equal prediction.confidence(compound).round_to(4), 0.615246530364447.round_to(4)
@@ -62,8 +67,8 @@ class LazarTest < Test::Unit::TestCase
     assert_equal prediction.value(compound), false
     prediction.delete(@@subjectid)
     lazar.delete(@@subjectid)
+  end
 =begin
 =end
-  end
 
 end
