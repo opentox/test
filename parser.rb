@@ -20,7 +20,7 @@ class ParserTest < Test::Unit::TestCase
       "http://apps.ideaconsult.net:8080/ambit2/dataset/2698" => {
         :nr_compounds => 3,
         :nr_features => 8,
-        :nr_dataset_features => 37,
+        :nr_dataset_features => 36,
         :nr_data_entries => 3
       }
     }

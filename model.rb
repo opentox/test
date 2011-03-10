@@ -7,7 +7,7 @@ class ModelTest < Test::Unit::TestCase
 
   def setup
     @models = [
-      OpenTox::Model.find_all.last,
+      OpenTox::Model.all.last,
       #"http://apps.ideaconsult.net:8080/ambit2/algorithm/J48",
     ]
   end

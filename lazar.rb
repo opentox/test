@@ -15,7 +15,7 @@ class LazarTest < Test::Unit::TestCase
   def test_create_regression_model
     model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => @@regression_training_dataset.uri, :subjectid => @@subjectid}).to_s
     lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
-    assert_equal lazar.features.size, 222
+    assert_equal 225, lazar.features.size
     compound = OpenTox::Compound.from_smiles("c1ccccc1NN")
     #puts lazar.uri
     #puts compound.inspect
@@ -24,8 +24,8 @@ class LazarTest < Test::Unit::TestCase
     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid)
     #puts prediction_uri
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
-    assert_equal prediction.value(compound).round_to(4), 0.149518871336721.round_to(4)
-    assert_equal prediction.confidence(compound).round_to(4), 0.615246530364447.round_to(4)
+    assert_equal prediction.value(compound).round_to(4), 0.1618.round_to(4)
+    assert_equal prediction.confidence(compound).round_to(4), 0.6114.round_to(4)
     assert_equal prediction.neighbors(compound).size, 81
     prediction.delete(@@subjectid)
     lazar.delete(@@subjectid)
@@ -39,11 +39,12 @@ class LazarTest < Test::Unit::TestCase
 
     # single prediction
     compound = OpenTox::Compound.from_smiles("c1ccccc1NN")
-    #puts compound.uri
     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid)
+    #puts prediction_uri
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
+    puts prediction.inspect
     assert_equal prediction.value(compound), false
-    assert_equal prediction.confidence(compound).round_to(4), 0.25857114104619.round_to(4)
+    assert_equal prediction.confidence(compound).round_to(4), 0.3005.round_to(4)
     assert_equal prediction.neighbors(compound).size, 15
     prediction.delete(@@subjectid)
     # dataset activity
@@ -62,7 +63,6 @@ class LazarTest < Test::Unit::TestCase
     compound = OpenTox::Compound.new prediction.compounds.first
     #puts "compound"
     #puts compound.inspect
-    #puts "prediction"
     #puts prediction.value(compound).inspect
     assert_equal prediction.value(compound), false
     prediction.delete(@@subjectid)

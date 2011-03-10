@@ -4,24 +4,13 @@ require 'opentox-ruby'
 =begin
 =end
 class Exception
-
   def message
-    unless errorCause == nil
-      errorCause.to_yaml
-    else
-      self.to_s
-    end
+   errorCause ? errorCause.to_yaml : to_s
   end
-
 end
 
-#if File.exists? "auth.rb"
-  #require "auth"
-#else
-  #exit "Please create an authenticatio
-    TEST_USER = "guest"
-    TEST_PW   = "guest"
-#end
+TEST_USER = "guest"
+TEST_PW   = "guest"
 
 task ARGV[0] do
   puts "Environment: #{ENV["RACK_ENV"]}"
@@ -41,8 +30,8 @@ task :teardown do
   OpenTox::Authorization.logout(@@subjectid)
 end
 
-[:all, :feature, :dataset, :fminer, :lazar, :authorization, :validation].each do |t|
-#[:all, :feature, :dataset, :fminer, :lazar, :authorization].each do |t|
+#[:all, :feature, :dataset, :fminer, :lazar, :authorization, :validation].each do |t|
+[:all, :feature, :dataset, :fminer, :lazar, :authorization].each do |t|
   task :teardown => t
   task t => :setup 
 end
