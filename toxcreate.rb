@@ -18,8 +18,8 @@ class ToxCreateTest < Test::Unit::TestCase
   def teardown
     @browser.close
   end
-
 =end
+
   def test_toxcreate
     @browser.goto CONFIG[:services]["opentox-toxcreate"]
     @browser.file_field(:id, "file").set(`pwd`.chomp+"/data/hamster_carcinogenicity.csv")
