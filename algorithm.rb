@@ -20,8 +20,7 @@ class AlgorithmTest < Test::Unit::TestCase
 
   def test_metadata
     @algorithms.each do |algorithm|
-      #puts algorithm
-      validate_owl(algorithm, @@subjectid)
+      validate_owl(algorithm, @@subjectid) unless CONFIG[:services]["opentox-algorithm"].match(/localhost/)
     end
   end
 

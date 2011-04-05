@@ -12,17 +12,8 @@ class FminerTest < Test::Unit::TestCase
     dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({:dataset_uri => @@classification_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid}).to_s
     d =OpenTox::Dataset.new dataset_uri, @@subjectid
     d.load_features(@@subjectid)
-    assert_equal 41, d.features.size
-    #validate_owl
-    d.delete(@@subjectid)
-  end
-
-  def test_last
-    feature = @@classification_training_dataset.features.keys.first
-    dataset_uri = OpenTox::Algorithm::Fminer::LAST.new.run({:dataset_uri => @@classification_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid}).to_s
-    d =OpenTox::Dataset.new dataset_uri, @@subjectid
-    d.load_features(@@subjectid)
-    assert_equal 35, d.features.size
+    #puts dataset_uri
+    assert_equal 52, d.features.size
     #validate_owl
     d.delete(@@subjectid)
   end
@@ -32,7 +23,18 @@ class FminerTest < Test::Unit::TestCase
     dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({:dataset_uri => @@regression_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid}).to_s
     d =OpenTox::Dataset.new dataset_uri, @@subjectid
     d.load_features(@@subjectid)
-    assert_equal 225, d.features.size
+    assert_equal 1354, d.features.size
+    d.delete(@@subjectid)
+  end
+
+=begin
+  def test_last
+    feature = @@classification_training_dataset.features.keys.first
+    dataset_uri = OpenTox::Algorithm::Fminer::LAST.new.run({:dataset_uri => @@classification_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid}).to_s
+    d =OpenTox::Dataset.new dataset_uri, @@subjectid
+    d.load_features(@@subjectid)
+    assert_equal 35, d.features.size
+    #validate_owl
     d.delete(@@subjectid)
   end
 
@@ -44,7 +46,6 @@ class FminerTest < Test::Unit::TestCase
     assert_equal 16, d.features.size
     d.delete(@@subjectid)
   end
-=begin
 =end
 
 end
