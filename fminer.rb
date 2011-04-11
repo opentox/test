@@ -23,7 +23,7 @@ class FminerTest < Test::Unit::TestCase
     dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({:dataset_uri => @@regression_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid}).to_s
     d =OpenTox::Dataset.new dataset_uri, @@subjectid
     d.load_features(@@subjectid)
-    assert_equal 1354, d.features.size
+    assert_equal 1356, d.features.size
     d.delete(@@subjectid)
   end
 
