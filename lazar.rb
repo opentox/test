@@ -26,7 +26,7 @@ class LazarTest < Test::Unit::TestCase
     model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => @@regression_training_dataset.uri, :subjectid => @@subjectid}).to_s
     lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
     @models << lazar
-    assert_equal 1354, lazar.features.size
+    assert_equal 1356, lazar.features.size
     compound = OpenTox::Compound.from_smiles("c1ccccc1NN")
     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid).to_s
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
@@ -112,7 +112,7 @@ class LazarTest < Test::Unit::TestCase
     # dataset prediction
     #@lazar.delete(@@subjectid)
   end
-
-end
 =begin
 =end
+
+end
