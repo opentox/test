@@ -11,10 +11,29 @@ class ToxCreateTest < Test::Unit::TestCase
     @password = "test_ch"
   end
 
-=begin
   def test_login
+    @browser.goto File.join(CONFIG[:services]["opentox-toxcreate"], "login")
+    @browser.button(:value, "Login").click
+    puts "Login without credentials"    
+    assert @browser.text.include? "Please enter username and password."
+    @browser.text_field(:id, "username").set(@user)
+    @browser.text_field(:id, "password").set(@password + "nonsense")
+    @browser.button(:value, "Login").click
+    puts "Login with wrong password"
+    assert @browser.text.include? "Login failed. Please try again." 
+    @browser.text_field(:id, "username").set(@user)
+    @browser.text_field(:id, "password").set(@password)
+    @browser.button(:value, "Login").click
+    puts "Login as user #{@user}"
+    assert @browser.text.include? "Welcome #{@user}!"
+    @browser.goto File.join(CONFIG[:services]["opentox-toxcreate"], "login")
+    @browser.button(:value, "Login as guest").click
+    puts "Login as user guest"    
+    assert @browser.text.include? "Welcome guest!"
+    @browser.close    
   end
 
+=begin
   def teardown
     @browser.close
   end
