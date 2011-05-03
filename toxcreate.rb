@@ -10,7 +10,8 @@ class ToxCreateTest < Test::Unit::TestCase
     @user = "test_ch"
     @password = "test_ch"
   end
-
+  
+=begin
   def test_login
     @browser.goto File.join(CONFIG[:services]["opentox-toxcreate"], "login")
     @browser.button(:value, "Login").click
@@ -33,13 +34,14 @@ class ToxCreateTest < Test::Unit::TestCase
     @browser.close    
   end
 
-=begin
+
   def teardown
     @browser.close
   end
-=end
+
 
   def test_toxcreate
+    login(@browser, @user, @password)
     @browser.goto CONFIG[:services]["opentox-toxcreate"]
     @browser.file_field(:id, "file").set(`pwd`.chomp+"/data/hamster_carcinogenicity.csv")
     @browser.button(:value, "Create model").click
@@ -47,9 +49,10 @@ class ToxCreateTest < Test::Unit::TestCase
     # check results (links, reports, results)
     puts @browser.url
   end
-
+=end
 =begin
   def test_multi_cell_call
+    login(@browser, @user, @password)
     @browser.goto CONFIG[:services]["opentox-toxcreate"]
     @browser.file_field(:id, "file").set(`pwd`.chomp+"/data/multi_cell_call.csv")
     @browser.button(:value, "Create model").click
@@ -59,6 +62,7 @@ class ToxCreateTest < Test::Unit::TestCase
   end
 
   def test_kazius
+    login(@browser, @user, @password)
     @browser.goto CONFIG[:services]["opentox-toxcreate"]
     @browser.file_field(:id, "file").set(`pwd`.chomp+"/data/kazius.csv")
     @browser.button(:value, "Create model").click
@@ -68,6 +72,7 @@ class ToxCreateTest < Test::Unit::TestCase
   end
 
   def test_parallel_models
+    login(@browser, @user, @password)
     10.times do
       @browser.goto CONFIG[:services]["opentox-toxcreate"]
       @browser.file_field(:id, "file").set(`pwd`.chomp+"/data/hamster_carcinogenicity.csv")
@@ -76,4 +81,11 @@ class ToxCreateTest < Test::Unit::TestCase
     #@browser.close
   end
 =end
+end
+
+def login(browser, user, password)
+  browser.goto File.join(CONFIG[:services]["opentox-toxcreate"], "login")
+  browser.text_field(:id, "username").set(user)
+  browser.text_field(:id, "password").set(password)
+  browser.button(:value, "Login").click
 end
