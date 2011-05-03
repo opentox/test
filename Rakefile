@@ -31,7 +31,7 @@ task :teardown do
 end
 
 #[:all, :feature, :dataset, :fminer, :lazar, :authorization, :validation].each do |t|
-[:all, :feature, :dataset, :fminer, :lazar, :authorization].each do |t|
+[:all, :feature, :dataset, :fminer, :lazar, :authorization, :parser].each do |t|
   task :teardown => t
   task t => :setup 
 end
