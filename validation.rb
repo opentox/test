@@ -105,8 +105,8 @@ class ValidationTest < Test::Unit::TestCase
           end
         end
         v = OpenTox::Validation.find(v.uri, @@subjectid)
+        assert_valid_date v
         assert v.uri.uri?
-        
         model = v.metadata[OT.model]
         assert model.uri?
         v_list = OpenTox::Validation.list( {:model => model} )
@@ -139,6 +139,7 @@ class ValidationTest < Test::Unit::TestCase
         end
       end
       report = OpenTox::ValidationReport.find(report.uri,@@subjectid)
+      assert_valid_date report
       assert report.uri.uri?
       report2 = OpenTox::ValidationReport.find_for_validation(v.uri,@@subjectid)
       assert_equal report.uri,report2.uri
@@ -188,6 +189,7 @@ class ValidationTest < Test::Unit::TestCase
           end
         end
         cv = OpenTox::Crossvalidation.find(cv.uri, @@subjectid)
+        assert_valid_date cv
         assert cv.uri.uri?
         if @@subjectid
           assert_rest_call_error OpenTox::NotAuthorizedError do
@@ -236,6 +238,7 @@ class ValidationTest < Test::Unit::TestCase
         end
       end
       report = OpenTox::CrossvalidationReport.find(report.uri,@@subjectid)
+      assert_valid_date report
       assert report.uri.uri?
       report2 = OpenTox::CrossvalidationReport.find_for_crossvalidation(cv.uri,@@subjectid)
       assert_equal report.uri,report2.uri
@@ -290,6 +293,17 @@ class ValidationTest < Test::Unit::TestCase
       end
       assert_equal report.errorType,ex.to_s
     end
+  end
+  
+  # checks if opento_object has date defined in metadata, and time is less than max_time seconds ago
+  def assert_valid_date( opentox_object, max_time=600 )
+    
+    raise "no opentox object" unless opentox_object.class.to_s.split("::").first=="OpenTox"
+    assert opentox_object.metadata.is_a?(Hash)
+    assert opentox_object.metadata[DC.date].to_s.length>0,"date not set for "+opentox_object.uri.to_s+", is metadata loaded? (use find)"
+    time = Time.parse(opentox_object.metadata[DC.date])
+    assert time<Time.new,"date of "+opentox_object.uri.to_s+" is in the future: "+time.to_s
+    assert time>Time.new-(10*60),opentox_object.uri.to_s+" took longer than 10 minutes "+time.to_s
   end
   
   # hack to have a global_setup and global_teardown 
