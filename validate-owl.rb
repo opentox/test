@@ -1,5 +1,3 @@
-#require 'nokogiri'
-
 def validate_owl(uri, subjectid=nil)
   if validator_available?
     owl = OpenTox::RestClientWrapper.get(uri,{:accept => "application/rdf+xml",:subjectid => subjectid})
