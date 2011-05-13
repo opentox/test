@@ -26,16 +26,15 @@ class LazarTest < Test::Unit::TestCase
     model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => @@regression_training_dataset.uri, :subjectid => @@subjectid}).to_s
     lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
     @models << lazar
-    assert_equal 1356, lazar.features.size
+    assert_equal 185, lazar.features.size
     compound = OpenTox::Compound.from_smiles("c1ccccc1NN")
     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid).to_s
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
     @predictions << prediction
-    assert_equal prediction.value(compound).round_to(4), 0.17.round_to(4)
-    assert_equal prediction.confidence(compound).round_to(4), 0.5697.round_to(4)
-    assert_equal prediction.neighbors(compound).size, 77
+    assert_equal prediction.value(compound).round_to(4), 0.3469.round_to(4)
+    assert_equal prediction.confidence(compound).round_to(4), 0.3223.round_to(4)
+    assert_equal prediction.neighbors(compound).size, 73
   end
-
 
   def test_classification_model
 
