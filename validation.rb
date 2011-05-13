@@ -101,7 +101,7 @@ class ValidationTest < Test::Unit::TestCase
         assert v.uri.uri?
         if @@subjectid
           assert_rest_call_error OpenTox::NotAuthorizedError do
-            OpenTox::Crossvalidation.find(v.uri)
+            OpenTox::Validation.find(v.uri)
           end
         end
         v = OpenTox::Validation.find(v.uri, @@subjectid)
@@ -126,7 +126,7 @@ class ValidationTest < Test::Unit::TestCase
       assert_kind_of OpenTox::Validation,v
       if @@subjectid
         assert_rest_call_error OpenTox::NotAuthorizedError do
-          OpenTox::CrossvalidationReport.create(v.uri)
+          OpenTox::ValidationReport.create(v.uri)
         end
       end
       report = OpenTox::ValidationReport.find_for_validation(v.uri,@@subjectid)
@@ -135,7 +135,7 @@ class ValidationTest < Test::Unit::TestCase
       assert report.uri.uri?
       if @@subjectid
         assert_rest_call_error OpenTox::NotAuthorizedError do
-          OpenTox::CrossvalidationReport.find(report.uri)
+          OpenTox::ValidationReport.find(report.uri)
         end
       end
       report = OpenTox::ValidationReport.find(report.uri,@@subjectid)
@@ -287,6 +287,7 @@ class ValidationTest < Test::Unit::TestCase
     begin
       yield
     rescue OpenTox::RestCallError => e
+      raise "error Report of RestCallError is no errorReport: "+e.errorCause.class.to_s+":\n"+e.errorCause.to_yaml  unless e.errorCause.is_a?(OpenTox::ErrorReport)
       report = e.errorCause
       while report.errorCause
         report = report.errorCause
