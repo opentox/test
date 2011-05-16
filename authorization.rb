@@ -44,7 +44,7 @@ class TestOpenToxAuthorizationLDAP < Test::Unit::TestCase
   end  
 
   def test_02_list_user_groups
-    assert_kind_of Array, OpenTox::Authorization.list_groups(@@subjectid)
+    assert_kind_of Array, OpenTox::Authorization.list_user_groups(TEST_USER, @@subjectid)
   end
   
   def test_03_get_user
@@ -64,6 +64,7 @@ class TestOpenToxAuthorizationLDAP < Test::Unit::TestCase
     policies.each do |policy|
       assert OpenTox::Authorization.delete_policy(policy, @@subjectid)
     end
+    assert_equal false, OpenTox::Authorization.uri_has_policy(TEST_URI, @@subjectid)
   end
 
   def test_02_check_policy_rules
