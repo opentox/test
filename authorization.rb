@@ -3,6 +3,10 @@ require "opentox-ruby"
 require "test/unit"
 
 TEST_URI  = "http://only_a_test/test/" + rand(1000000).to_s
+unless AA_SERVER #overwrite turned off A&A server for testing
+  AA_SERVER = "https://opensso.in-silico.ch"
+  @@subjectid = OpenTox::Authorization.authenticate(TEST_USER,TEST_PW)
+end
 
 class TestOpenToxAuthorizationBasic < Test::Unit::TestCase
  
