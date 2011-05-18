@@ -72,6 +72,34 @@ class LazarTest < Test::Unit::TestCase
     assert_equal prediction.measured_activities(compound).first, true
   end
 
+  def test_classification_svm_model
+
+    # create model
+    model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => @@classification_training_dataset.uri, :subjectid => @@subjectid, :prediction_algorithm => "local_svm_classification"}).to_s
+    lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
+    @models << lazar
+    assert_equal lazar.features.size, 53
+
+    # single prediction
+    compound = OpenTox::Compound.from_smiles("c1ccccc1NN")
+    prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid)
+    prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
+    @predictions << prediction
+    assert_equal prediction.value(compound), false
+    assert_equal prediction.confidence(compound).round_to(4), 0.4131.round_to(4)
+    assert_equal prediction.neighbors(compound).size, 14
+
+    # dataset prediction
+    test_dataset = OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
+    prediction = OpenTox::LazarPrediction.find lazar.run(:dataset_uri => test_dataset.uri, :subjectid => @@subjectid), @@subjectid
+    @predictions << prediction
+    assert_equal prediction.compounds.size, 4
+    compound = OpenTox::Compound.from_smiles "CC(=Nc1ccc2c(c1)Cc1ccccc21)O"
+    assert_equal prediction.value(compound), nil
+    assert_equal prediction.measured_activities(compound).first, true
+
+  end
+
   def test_ambit_classification_model
 
     # create model
