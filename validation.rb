@@ -35,11 +35,13 @@ class ValidationTest < Test::Unit::TestCase
     end
 
     @@data = []
-    files = { File.new("data/hamster_carcinogenicity.mini.csv") => :crossvalidation,  
+    files = { #File.new("data/hamster_carcinogenicity.csv") => :crossvalidation,  
+              File.new("data/hamster_carcinogenicity.mini.csv") => :crossvalidation,
+              #File.new("data/EPAFHM.csv") => :crossvalidation,
               File.new("data/EPAFHM.mini.csv") => :crossvalidation,
               File.new("data/hamster_carcinogenicity.csv") => :validation,
               File.new("data/EPAFHM.csv") => :validation,
-#              File.new("data/StJudes-HepG2-testset_Class.csv") => :crossvalidation
+              #File.new("data/StJudes-HepG2-testset_Class.csv") => :crossvalidation
                }
     files.each do |file,type|
       @@data << { :type => type,
@@ -91,7 +93,7 @@ class ValidationTest < Test::Unit::TestCase
           :random_seed => 2}
         t = OpenTox::SubTask.new(nil,0,1)
         def t.progress(pct)
-          if !defined?@last_msg or @last_msg+3<Time.new
+          if !defined?@last_msg or @last_msg+10<Time.new
             puts "waiting for training-test-split validation: "+pct.to_s
             @last_msg=Time.new
           end
@@ -164,51 +166,58 @@ class ValidationTest < Test::Unit::TestCase
     #  OpenTox::Crossvalidation.find(File.join(CONFIG[:services]["opentox-validation"],"crossvalidation/noexistingid"))
     #end
     @@cvs = []
+    @@cv_datasets = []
+    @@cv_identifiers = []
     @@data.each do |data|
       if data[:type]==:crossvalidation
-        puts "test_crossvalidation "+data[:info].to_s
-        p = { 
-          :dataset_uri => data[:data],
-          :algorithm_uri => File.join(CONFIG[:services]["opentox-algorithm"],"lazar"),
-          :algorithm_params => "feature_generation_uri="+File.join(CONFIG[:services]["opentox-algorithm"],"fminer/bbrc"),
-          :prediction_feature => data[:feat],
-          :num_folds => 2 }
-        t = OpenTox::SubTask.new(nil,0,1)
-        def t.progress(pct)
-          if !defined?@last_msg or @last_msg+3<Time.new
-            puts "waiting for crossvalidation: "+pct.to_s
-            @last_msg=Time.new
+        ["bbrc", "last"].each do |fminer|
+          puts "test_crossvalidation "+data[:info].to_s+" "+fminer
+          p = { 
+            :dataset_uri => data[:data],
+            :algorithm_uri => File.join(CONFIG[:services]["opentox-algorithm"],"lazar"),
+            :algorithm_params => "feature_generation_uri="+File.join(CONFIG[:services]["opentox-algorithm"],"fminer/"+fminer),
+            :prediction_feature => data[:feat],
+            :num_folds => 10 }
+            #:num_folds => 2 }
+          t = OpenTox::SubTask.new(nil,0,1)
+          def t.progress(pct)
+            if !defined?@last_msg or @last_msg+10<Time.new
+              puts "waiting for crossvalidation: "+pct.to_s
+              @last_msg=Time.new
+            end
           end
-        end
-        def t.waiting_for(task_uri); end
-        cv = OpenTox::Crossvalidation.create(p, @@subjectid, t)
-        assert cv.uri.uri?
-        if @@subjectid
-          assert_rest_call_error OpenTox::NotAuthorizedError do
-            OpenTox::Crossvalidation.find(cv.uri)
+          def t.waiting_for(task_uri); end
+          cv = OpenTox::Crossvalidation.create(p, @@subjectid, t)
+          assert cv.uri.uri?
+          if @@subjectid
+            assert_rest_call_error OpenTox::NotAuthorizedError do
+              OpenTox::Crossvalidation.find(cv.uri)
+            end
           end
-        end
-        cv = OpenTox::Crossvalidation.find(cv.uri, @@subjectid)
-        assert_valid_date cv
-        assert cv.uri.uri?
-        if @@subjectid
-          assert_rest_call_error OpenTox::NotAuthorizedError do
-            cv.summary(cv)
+          cv = OpenTox::Crossvalidation.find(cv.uri, @@subjectid)
+          assert_valid_date cv
+          assert cv.uri.uri?
+          if @@subjectid
+            assert_rest_call_error OpenTox::NotAuthorizedError do
+              cv.summary(cv)
+            end
           end
+          summary = cv.summary(@@subjectid)
+          assert_kind_of Hash,summary
+          
+          algorithm = cv.metadata[OT.algorithm]
+          assert algorithm.uri?
+          cv_list = OpenTox::Crossvalidation.list( {:algorithm => algorithm} )
+          assert cv_list.include?(cv.uri)
+          cv_list.each do |cv_uri|
+            alg = OpenTox::Crossvalidation.find(cv_uri).metadata[OT.algorithm]
+            assert alg==algorithm,"wrong algorithm for filtered crossvalidation, should be: '"+algorithm.to_s+"', is: '"+alg.to_s+"'"
+          end
+          
+          @@cvs << cv
+          @@cv_datasets << data
+          @@cv_identifiers << fminer
         end
-        summary = cv.summary(@@subjectid)
-        assert_kind_of Hash,summary
-        
-        algorithm = cv.metadata[OT.algorithm]
-        assert algorithm.uri?
-        cv_list = OpenTox::Crossvalidation.list( {:algorithm => algorithm} )
-        assert cv_list.include?(cv.uri)
-        cv_list.each do |cv_uri|
-          alg = OpenTox::Crossvalidation.find(cv_uri).metadata[OT.algorithm]
-          assert alg==algorithm,"wrong algorithm for filtered crossvalidation, should be: '"+algorithm.to_s+"', is: '"+alg.to_s+"'"
-        end
-        
-        @@cvs << cv
       end
     end
   end
@@ -229,7 +238,7 @@ class ValidationTest < Test::Unit::TestCase
           OpenTox::CrossvalidationReport.create(cv.uri)
         end
       end
-      assert OpenTox::ValidationReport.find_for_validation(cv.uri,@@subjectid)==nil
+      assert OpenTox::CrossvalidationReport.find_for_crossvalidation(cv.uri,@@subjectid)==nil
       report = OpenTox::CrossvalidationReport.create(cv.uri,@@subjectid)
       assert report.uri.uri?
       if @@subjectid
@@ -246,6 +255,43 @@ class ValidationTest < Test::Unit::TestCase
       assert_equal report.uri,report3_uri
       @@reports << report2
     end  
+  end
+  
+  def test_crossvalidation_compare_report
+    @@reports = [] unless defined?@@reports
+    @@cvs.size.times do |i|
+      @@cvs.size.times do |j|
+        if j>i and @@cv_datasets[i]==@@cv_datasets[j]
+          puts "test_crossvalidation_compare_report"
+          assert_kind_of OpenTox::Crossvalidation,@@cvs[i]
+          assert_kind_of OpenTox::Crossvalidation,@@cvs[j]
+          hash = { @@cv_identifiers[i] => [@@cvs[i].uri],
+                   @@cv_identifiers[j] => [@@cvs[j].uri] }
+          if @@subjectid
+            assert_rest_call_error OpenTox::NotAuthorizedError do
+              OpenTox::AlgorithmComparisonReport.create hash,@@subjectid
+            end
+          end
+          assert OpenTox::AlgorithmComparisonReport.find_for_crossvalidation(@@cvs[i].uri,@@subjectid)==nil
+          assert OpenTox::AlgorithmComparisonReport.find_for_crossvalidation(@@cvs[j].uri,@@subjectid)==nil
+          report = OpenTox::AlgorithmComparisonReport.create hash,@@subjectid
+          assert report.uri.uri?
+          if @@subjectid
+            assert_rest_call_error OpenTox::NotAuthorizedError do
+              OpenTox::AlgorithmComparisonReport.find(report.uri)
+            end
+          end
+          report = OpenTox::AlgorithmComparisonReport.find(report.uri,@@subjectid)
+          assert_valid_date report
+          assert report.uri.uri?
+          report2 = OpenTox::AlgorithmComparisonReport.find_for_crossvalidation(@@cvs[i].uri,@@subjectid)
+          assert_equal report.uri,report2.uri
+          report3 = OpenTox::AlgorithmComparisonReport.find_for_crossvalidation(@@cvs[j].uri,@@subjectid)
+          assert_equal report.uri,report3.uri
+          @@reports << report2 
+        end
+      end
+    end
   end
   
   def test_qmrf_report
@@ -302,8 +348,9 @@ class ValidationTest < Test::Unit::TestCase
     raise "no opentox object" unless opentox_object.class.to_s.split("::").first=="OpenTox"
     assert opentox_object.metadata.is_a?(Hash)
     assert opentox_object.metadata[DC.date].to_s.length>0,"date not set for "+opentox_object.uri.to_s+", is metadata loaded? (use find)"
-=begin
     time = Time.parse(opentox_object.metadata[DC.date])
+    assert time!=nil
+=begin    
     assert time<Time.new,"date of "+opentox_object.uri.to_s+" is in the future: "+time.to_s
     assert time>Time.new-(10*60),opentox_object.uri.to_s+" took longer than 10 minutes "+time.to_s
 =end
