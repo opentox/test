@@ -56,10 +56,18 @@ class PolicyTest < Test::Unit::TestCase
     assert !policy.rule.readwrite
     policy.rule.post = "allow"
     policy.rule.put = "allow"
-    assert policy.rule.read
+    assert !policy.rule.read
     assert policy.rule.readwrite
+    policy.rule.read = true
   end
- 
+
+  def test_04_group_user
+    policies = OpenTox::Policies.new()
+    policies.load_default_policy(TEST_USER, TEST_URI, "member")
+    assert_equal "member", policies.policies["policy_group"].group
+    assert_equal TEST_USER, policies.policies["policy_user"].user    
+  end
+
 end
 
 
