@@ -31,8 +31,8 @@ class LazarTest < Test::Unit::TestCase
     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid).to_s
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
     @predictions << prediction
-    assert_equal prediction.value(compound).round_to(4), 0.3469.round_to(4)
-    assert_equal prediction.confidence(compound).round_to(4), 0.3223.round_to(4)
+    assert_equal prediction.value(compound).round_to(3),0.2849.round_to(3)
+    assert_equal prediction.confidence(compound).round_to(3), 0.3223.round_to(3)
     assert_equal prediction.neighbors(compound).size, 73
   end
 
