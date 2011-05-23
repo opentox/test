@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'opentox-ruby'
 require 'test/unit'
+require "./validate-owl.rb"
 
 class Float
   def round_to(x)
@@ -24,6 +25,8 @@ class LazarTest < Test::Unit::TestCase
 =end
   def test_create_regression_model
     model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => @@regression_training_dataset.uri, :subjectid => @@subjectid}).to_s
+    puts model_uri
+    validate_owl model_uri,@@subjectid
     lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
     @models << lazar
     assert_equal 185, lazar.features.size
@@ -31,7 +34,7 @@ class LazarTest < Test::Unit::TestCase
     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid).to_s
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
     @predictions << prediction
-    assert_equal prediction.value(compound).round_to(4), 0.3469.round_to(4)
+    assert_equal prediction.value(compound).round_to(4), 0.2847.round_to(4)
     assert_equal prediction.confidence(compound).round_to(4), 0.3223.round_to(4)
     assert_equal prediction.neighbors(compound).size, 73
   end
@@ -40,6 +43,7 @@ class LazarTest < Test::Unit::TestCase
 
     # create model
     model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => @@classification_training_dataset.uri, :subjectid => @@subjectid}).to_s
+    validate_owl model_uri,@@subjectid
     lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
     @models << lazar
     assert_equal lazar.features.size, 52
@@ -49,6 +53,7 @@ class LazarTest < Test::Unit::TestCase
     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid)
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
     @predictions << prediction
+    #puts prediction_uri
     assert_equal prediction.value(compound), false
     assert_equal prediction.confidence(compound).round_to(4), 0.3067.round_to(4)
     assert_equal prediction.neighbors(compound).size, 14
@@ -72,6 +77,7 @@ class LazarTest < Test::Unit::TestCase
     assert_equal prediction.measured_activities(compound).first, true
   end
 
+=begin
   def test_ambit_classification_model
 
     # create model
@@ -80,6 +86,7 @@ class LazarTest < Test::Unit::TestCase
     #model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => dataset_uri, :prediction_feature => feature_uri}).to_s
     #lazar = OpenTox::Model::Lazar.find model_uri
     model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => dataset_uri, :prediction_feature => feature_uri, :subjectid => @@subjectid}).to_s
+    validate_owl model_uri,@@subjectid
     lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
     assert_equal lazar.features.size, 6609
     #puts "Model: #{lazar.uri}"
@@ -111,7 +118,6 @@ class LazarTest < Test::Unit::TestCase
     # dataset prediction
     #@lazar.delete(@@subjectid)
   end
-=begin
 =end
 
 end
