@@ -1,6 +1,6 @@
 def validate_owl(uri, subjectid=nil)
   if validator_available?
-    owl = OpenTox::RestClientWrapper.get(uri,{:accept => "application/rdf+xml",:subjectid => subjectid})
+    owl = OpenTox::RestClientWrapper.get(uri,{:accept => "application/rdf+xml",:subjectid => subjectid}, nil, false)
     html = OpenTox::RestClientWrapper.post("http://www.mygrid.org.uk/OWL/Validator",{:rdf => owl, :level => "DL",:subjectid => subjectid})
     assert_match(/YES/,html)
   else
