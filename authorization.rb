@@ -3,6 +3,10 @@ require "opentox-ruby"
 require "test/unit"
 
 TEST_URI  = "http://only_a_test/test/" + rand(1000000).to_s
+unless AA_SERVER #overwrite turned off A&A server for testing
+  AA_SERVER = "https://opensso.in-silico.ch"
+  @@subjectid = OpenTox::Authorization.authenticate(TEST_USER,TEST_PW)
+end
 
 class TestOpenToxAuthorizationBasic < Test::Unit::TestCase
  
@@ -40,7 +44,7 @@ class TestOpenToxAuthorizationLDAP < Test::Unit::TestCase
   end  
 
   def test_02_list_user_groups
-    assert_kind_of Array, OpenTox::Authorization.list_groups(@@subjectid)
+    assert_kind_of Array, OpenTox::Authorization.list_user_groups(TEST_USER, @@subjectid)
   end
   
   def test_03_get_user
@@ -60,6 +64,7 @@ class TestOpenToxAuthorizationLDAP < Test::Unit::TestCase
     policies.each do |policy|
       assert OpenTox::Authorization.delete_policy(policy, @@subjectid)
     end
+    assert_equal false, OpenTox::Authorization.uri_has_policy(TEST_URI, @@subjectid)
   end
 
   def test_02_check_policy_rules

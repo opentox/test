@@ -47,7 +47,7 @@ class DatasetTest < Test::Unit::TestCase
   end
 
   def test_all
-    datasets = OpenTox::Dataset.all
+    datasets = OpenTox::Dataset.all(CONFIG[:services]["opentox-dataset"], @@subjectid)
     assert_kind_of Array, datasets
   end
 
