@@ -4,7 +4,9 @@ require "test/unit"
 
 TEST_URI    = "http://only_a_test/test/" + rand(1000000).to_s
 USER_TYPE   = "LDAPUsers"
+USER_NAME   = "guest"
 USER_VALUE  = "uid=guest,ou=people,dc=opentox,dc=org"
+USER_GROUP  = "member"
 GROUP_TYPE  = "LDAPGroups"
 GROUP_VALUE = "cn=member,ou=groups,dc=opentox,dc=org"
 POLICY_NAME = "test_policy_#{rand(100000)}"
@@ -32,12 +34,15 @@ class PolicyTest < Test::Unit::TestCase
     assert_equal(policies.names[0], POLICY_NAME)
     assert_equal(policies.policies[policies.names[0]].class, OpenTox::Policy)
     policy = policies.policies[policies.names[0]]
-    policy.set_rule(RULE_NAME, TEST_URI)
+    policy.rule.name = RULE_NAME
+    policy.uri = TEST_URI
     assert_equal(policy.rule.class, OpenTox::Policy::Rule)
     assert_equal(policy.rule.name, RULE_NAME)
     assert_equal(policy.rule.uri, TEST_URI)
     assert_equal(policy.uri, TEST_URI)    
-    policy.set_subject(SUBJECT_NAME, USER_TYPE, USER_VALUE)
+    policy.subject.name = SUBJECT_NAME
+    policy.type = USER_TYPE
+    policy.value = USER_VALUE
     assert_equal(policy.subject.class, OpenTox::Policy::Subject)
     assert_equal(policy.subject.name, SUBJECT_NAME)
     assert_equal(policy.subject.type, USER_TYPE)
@@ -50,7 +55,8 @@ class PolicyTest < Test::Unit::TestCase
     policies = OpenTox::Policies.new()
     policies.new_policy(POLICY_NAME)
     policy = policies.policies[policies.names[0]]
-    policy.set_rule(RULE_NAME, TEST_URI)
+    policy.rule.name = RULE_NAME
+    policy.uri = TEST_URI
     policy.rule.get = "allow"
     assert policy.rule.read
     assert !policy.rule.readwrite
@@ -66,6 +72,19 @@ class PolicyTest < Test::Unit::TestCase
     policies.load_default_policy(TEST_USER, TEST_URI, "member")
     assert_equal "member", policies.policies["policy_group"].group
     assert_equal TEST_USER, policies.policies["policy_user"].user    
+  end
+
+  def test_05_DN
+    policies = OpenTox::Policies.new()
+    policies.new_policy(POLICY_NAME)
+    policy = policies.policies[policies.names[0]]
+    policy.set_ot_user(USER_NAME)
+    assert_equal USER_VALUE, policy.value
+    assert_equal USER_TYPE, policy.type  
+    policy.set_ot_group(USER_GROUP)
+    assert_equal GROUP_VALUE, policy.value 
+    assert_equal GROUP_TYPE, policy.type
+    
   end
 
 end

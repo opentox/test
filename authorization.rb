@@ -51,6 +51,11 @@ class TestOpenToxAuthorizationLDAP < Test::Unit::TestCase
     assert_equal TEST_USER, OpenTox::Authorization.get_user(@@subjectid)
   end
 
+  def test_04_user_exists
+    assert OpenTox::Authorization.user_exists(TEST_USER, @@subjectid)
+    assert_equal false, OpenTox::Authorization.user_exists("#{TEST_USER}_is_not_a valid_user_xy321", @@subjectid)
+  end
+
 end
 
 class TestOpenToxAuthorizationLDAP < Test::Unit::TestCase
