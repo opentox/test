@@ -34,6 +34,8 @@ class ValidationTest < Test::Unit::TestCase
       @@subjectid = nil
     end
 
+    @@delete = true
+    @@feature_types = ["bbrc", "last"]
     @@data = []
     files = { #File.new("data/hamster_carcinogenicity.csv") => :crossvalidation,  
               File.new("data/hamster_carcinogenicity.mini.csv") => :crossvalidation,
@@ -61,11 +63,13 @@ class ValidationTest < Test::Unit::TestCase
   
   def global_teardown
     puts "delete and logout"
-    @@data.each{|data| OpenTox::Dataset.find(data[:data],@@subjectid).delete(@@subjectid) if data[:delete]}
-    @@vs.each{|v| v.delete(@@subjectid)} if defined?@@vs
-    @@cvs.each{|cv| cv.delete(@@subjectid)} if defined?@@cvs
-    @@reports.each{|report| report.delete(@@subjectid)} if defined?@@reports
-    @@qmrfReports.each{|qmrfReport| qmrfReport.delete(@@subjectid)} if defined?@@qmrfReports
+    if @@delete
+      @@data.each{|data| OpenTox::Dataset.find(data[:data],@@subjectid).delete(@@subjectid) if data[:delete]}
+      @@vs.each{|v| v.delete(@@subjectid)} if defined?@@vs
+      @@cvs.each{|cv| cv.delete(@@subjectid)} if defined?@@cvs
+      @@reports.each{|report| report.delete(@@subjectid)} if defined?@@reports
+      @@qmrfReports.each{|qmrfReport| qmrfReport.delete(@@subjectid)} if defined?@@qmrfReports
+    end
     OpenTox::Authorization.logout(@@subjectid) if AA_SERVER
   end
   
@@ -113,6 +117,7 @@ class ValidationTest < Test::Unit::TestCase
         assert model.uri?
         v_list = OpenTox::Validation.list( {:model => model} )
         assert v_list.size==1 and v_list.include?(v.uri)
+        puts v.uri unless @@delete
         @@vs << v
       end
     end
@@ -147,6 +152,7 @@ class ValidationTest < Test::Unit::TestCase
       assert_equal report.uri,report2.uri
       report3_uri = v.find_or_create_report(@@subjectid)
       assert_equal report.uri,report3_uri
+      puts report2.uri unless @@delete
       @@reports << report2
     end  
   end
@@ -170,7 +176,7 @@ class ValidationTest < Test::Unit::TestCase
     @@cv_identifiers = []
     @@data.each do |data|
       if data[:type]==:crossvalidation
-        ["bbrc", "last"].each do |fminer|
+        @@feature_types.each do |fminer|
           puts "test_crossvalidation "+data[:info].to_s+" "+fminer
           p = { 
             :dataset_uri => data[:data],
@@ -213,6 +219,7 @@ class ValidationTest < Test::Unit::TestCase
             alg = OpenTox::Crossvalidation.find(cv_uri).metadata[OT.algorithm]
             assert alg==algorithm,"wrong algorithm for filtered crossvalidation, should be: '"+algorithm.to_s+"', is: '"+alg.to_s+"'"
           end
+          puts cv.uri unless @@delete
           
           @@cvs << cv
           @@cv_datasets << data
@@ -253,6 +260,7 @@ class ValidationTest < Test::Unit::TestCase
       assert_equal report.uri,report2.uri
       report3_uri = cv.find_or_create_report(@@subjectid)
       assert_equal report.uri,report3_uri
+      puts report2.uri unless @@delete
       @@reports << report2
     end  
   end
@@ -288,6 +296,7 @@ class ValidationTest < Test::Unit::TestCase
           assert_equal report.uri,report2.uri
           report3 = OpenTox::AlgorithmComparisonReport.find_for_crossvalidation(@@cvs[j].uri,@@subjectid)
           assert_equal report.uri,report3.uri
+          puts report2.uri unless @@delete
           @@reports << report2 
         end
       end
@@ -301,21 +310,23 @@ class ValidationTest < Test::Unit::TestCase
     @@cvs.each do |cv|
       puts "test_qmrf_report"
       assert defined?cv,"no crossvalidation defined"
-      validations = cv.metadata[OT.validation]
-      assert_kind_of Array,validations
-      assert validations.size==cv.metadata[OT.numFolds].to_i,validations.size.to_s+"!="+cv.metadata[OT.numFolds].to_s
-      val = OpenTox::Validation.find(validations[0], @@subjectid)
-      model_uri = val.metadata[OT.model]
-      
+      model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => cv.metadata[OT.dataset], :subjectid => @@subjectid}).to_s
+      assert model_uri.uri?
+#      validations = cv.metadata[OT.validation]
+#      assert_kind_of Array,validations
+#      assert validations.size==cv.metadata[OT.numFolds].to_i,validations.size.to_s+"!="+cv.metadata[OT.numFolds].to_s
+#      val = OpenTox::Validation.find(validations[0], @@subjectid)
+#      model_uri = val.metadata[OT.model]
       model = OpenTox::Model::Generic.find(model_uri, @@subjectid)
       assert model!=nil
-      
       #assert_rest_call_error OpenTox::NotFoundError do 
       #  OpenTox::QMRFReport.find_for_model(model_uri, @@subjectid)
       #end
-      
-      @@qmrfReports << OpenTox::QMRFReport.create(model_uri, @@subjectid)
+      qmrfReport = OpenTox::QMRFReport.create(model_uri, @@subjectid)
+      puts qmrfReport.uri unless @@delete
+      @@qmrfReports << qmrfReport
     end
+    
   end
   
   ################### utils and overrides ##########################
