@@ -181,7 +181,8 @@ class ValidationTest < Test::Unit::TestCase
           p = { 
             :dataset_uri => data[:data],
             :algorithm_uri => File.join(CONFIG[:services]["opentox-algorithm"],"lazar"),
-            :algorithm_params => "feature_generation_uri="+File.join(CONFIG[:services]["opentox-algorithm"],"fminer/"+fminer),
+            :algorithm_params => "feature_generation_uri="+File.join(CONFIG[:services]["opentox-algorithm"],"fminer/"+fminer)+
+             (data[:info] =~ /mini/ ? ";backbone=false;min_chisq_significance=0.0" : ""),
             :prediction_feature => data[:feat],
             :num_folds => 10 }
             #:num_folds => 2 }
@@ -216,8 +217,17 @@ class ValidationTest < Test::Unit::TestCase
           cv_list = OpenTox::Crossvalidation.list( {:algorithm => algorithm} )
           assert cv_list.include?(cv.uri)
           cv_list.each do |cv_uri|
-            alg = OpenTox::Crossvalidation.find(cv_uri).metadata[OT.algorithm]
-            assert alg==algorithm,"wrong algorithm for filtered crossvalidation, should be: '"+algorithm.to_s+"', is: '"+alg.to_s+"'"
+            begin
+              alg = OpenTox::Crossvalidation.find(cv_uri, @@subjectid).metadata[OT.algorithm]
+              assert alg==algorithm,"wrong algorithm for filtered crossvalidation, should be: '"+algorithm.to_s+"', is: '"+alg.to_s+"'"
+            rescue OpenTox::RestCallError => e
+              raise "error Report of RestCallError is no errorReport: "+e.errorCause.class.to_s+":\n"+e.errorCause.to_yaml  unless e.errorCause.is_a?(OpenTox::ErrorReport)
+              report = e.errorCause
+              while report.errorCause
+                report = report.errorCause
+              end
+              assert_equal report.errorType,OpenTox::NotAuthorizedError.to_s
+            end
           end
           puts cv.uri unless @@delete
           
