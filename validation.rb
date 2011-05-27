@@ -37,12 +37,12 @@ class ValidationTest < Test::Unit::TestCase
     @@delete = true
     @@feature_types = ["bbrc", "last"]
     @@data = []
-    files = { #File.new("data/hamster_carcinogenicity.csv") => :crossvalidation,  
-              File.new("data/hamster_carcinogenicity.mini.csv") => :crossvalidation,
-              #File.new("data/EPAFHM.csv") => :crossvalidation,
-              File.new("data/EPAFHM.mini.csv") => :crossvalidation,
-              File.new("data/hamster_carcinogenicity.csv") => :validation,
-              File.new("data/EPAFHM.csv") => :validation,
+    files = {  File.new("data/hamster_carcinogenicity.csv") => :crossvalidation,  
+               #File.new("data/hamster_carcinogenicity.mini.csv") => :crossvalidation,
+               #File.new("data/EPAFHM.csv") => :crossvalidation,
+               File.new("data/EPAFHM.mini.csv") => :crossvalidation,
+               File.new("data/hamster_carcinogenicity.csv") => :validation,
+               File.new("data/EPAFHM.csv") => :validation,
               #File.new("data/StJudes-HepG2-testset_Class.csv") => :crossvalidation
                }
     files.each do |file,type|
