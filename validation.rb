@@ -64,7 +64,8 @@ class ValidationTest < Test::Unit::TestCase
   def global_teardown
     puts "delete and logout"
     if @@delete
-      @@data.each{|data| OpenTox::Dataset.find(data[:data],@@subjectid).delete(@@subjectid) if data[:delete]}
+      @@data.each{|data| OpenTox::Dataset.find(data[:data],@@subjectid).delete(@@subjectid) if data[:delete] and 
+        OpenTox::Dataset.exist?(data[:data]) }
       @@vs.each{|v| v.delete(@@subjectid)} if defined?@@vs
       @@cvs.each{|cv| cv.delete(@@subjectid)} if defined?@@cvs
       @@reports.each{|report| report.delete(@@subjectid)} if defined?@@reports
