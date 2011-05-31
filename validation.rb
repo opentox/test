@@ -22,7 +22,34 @@ class Exception
 end
 
 class ValidationTest < Test::Unit::TestCase
-  
+
+  @@delete = true
+  @@feature_types = ["bbrc", "last"]
+  @@qmrf_test = true
+  @@data = []
+  @@data << { :type => :crossvalidation,
+      :data => "http://apps.ideaconsult.net:8080/ambit2/dataset/272?max=100",
+      :feat => "http://apps.ideaconsult.net:8080/ambit2/feature/26221",
+      :info => "http://apps.ideaconsult.net:8080/ambit2/dataset/272?max=100" } 
+  @@data << { :type => :training_test_validation,
+      :train_data => "http://apps.ideaconsult.net:8080/ambit2/dataset/272?page=0&pagesize=150",
+      :test_data => "http://apps.ideaconsult.net:8080/ambit2/dataset/272?page=3&pagesize=50",
+      :feat => "http://apps.ideaconsult.net:8080/ambit2/feature/26221",
+      :info => "http://apps.ideaconsult.net:8080/ambit2/dataset/272?page=0&pagesize=150" } 
+  @@data << { :type => :training_test_validation,
+      :train_data => "http://apps.ideaconsult.net:8080/ambit2/dataset/435293?page=0&pagesize=300",
+      :test_data => "http://apps.ideaconsult.net:8080/ambit2/dataset/435293?page=30&pagesize=10",
+      :feat => "http://apps.ideaconsult.net:8080/ambit2/feature/533748",
+      :info => "http://apps.ideaconsult.net:8080/ambit2/dataset/435293?page=0&pagesize=300" }     
+  @@files = { File.new("data/hamster_carcinogenicity.csv") => :crossvalidation,  
+             #File.new("data/hamster_carcinogenicity.mini.csv") => :crossvalidation,
+             #File.new("data/EPAFHM.csv") => :crossvalidation,
+             File.new("data/EPAFHM.mini.csv") => :crossvalidation,
+             File.new("data/hamster_carcinogenicity.csv") => :split_validation,
+             File.new("data/EPAFHM.csv") => :split_validation,
+            #File.new("data/StJudes-HepG2-testset_Class.csv") => :crossvalidation
+             }  
+    
   def global_setup
     puts "login and upload datasets"
     if AA_SERVER
@@ -33,39 +60,22 @@ class ValidationTest < Test::Unit::TestCase
       puts "AA disabled"
       @@subjectid = nil
     end
-
-    @@delete = true
-    @@feature_types = ["bbrc", "last"]
-    @@data = []
-    files = {  File.new("data/hamster_carcinogenicity.csv") => :crossvalidation,  
-               #File.new("data/hamster_carcinogenicity.mini.csv") => :crossvalidation,
-               #File.new("data/EPAFHM.csv") => :crossvalidation,
-               File.new("data/EPAFHM.mini.csv") => :crossvalidation,
-               File.new("data/hamster_carcinogenicity.csv") => :validation,
-               File.new("data/EPAFHM.csv") => :validation,
-              #File.new("data/StJudes-HepG2-testset_Class.csv") => :crossvalidation
-               }
-    files.each do |file,type|
+    @@files.each do |file,type|
       @@data << { :type => type,
         :data => ValidationTestUtil.upload_dataset(file, @@subjectid),
         :feat => ValidationTestUtil.prediction_feature_for_file(file),
         :info => file.path, :delete => true} 
     end
-#    @@data << { :type => :crossvalidation,
-#      :data => "http://apps.ideaconsult.net:8080/ambit2/dataset/9?max=50",
-#      :feat => "http://apps.ideaconsult.net:8080/ambit2/feature/21573",
-#      :info => "http://apps.ideaconsult.net:8080/ambit2/dataset/9?max=50" }
-#    @@data << { :type => :validation,
-#      :data => "http://apps.ideaconsult.net:8080/ambit2/dataset/272?max=50",
-#      :feat => "http://apps.ideaconsult.net:8080/ambit2/feature/26221",
-#      :info => "http://apps.ideaconsult.net:8080/ambit2/dataset/272?max=50" } 
   end
   
   def global_teardown
     puts "delete and logout"
     if @@delete
-      @@data.each{|data| OpenTox::Dataset.find(data[:data],@@subjectid).delete(@@subjectid) if data[:delete] and 
-        OpenTox::Dataset.exist?(data[:data]) }
+      [:data, :train_data, :test_data].each do |d|
+        @@data.each do |data| 
+          OpenTox::Dataset.find(data[d],@@subjectid).delete(@@subjectid) if data[d] and data[:delete] and OpenTox::Dataset.exist?(data[d])
+        end
+      end
       @@vs.each{|v| v.delete(@@subjectid)} if defined?@@vs
       @@cvs.each{|cv| cv.delete(@@subjectid)} if defined?@@cvs
       @@reports.each{|report| report.delete(@@subjectid)} if defined?@@reports
@@ -87,7 +97,7 @@ class ValidationTest < Test::Unit::TestCase
     
     @@vs = []
     @@data.each do |data|
-      if data[:type]==:validation
+      if data[:type]==:split_validation
         puts "test_training_test_split "+data[:info].to_s
         p = { 
           :dataset_uri => data[:data],
@@ -123,6 +133,48 @@ class ValidationTest < Test::Unit::TestCase
       end
     end
   end
+  
+  
+  def test_training_test_validation
+    
+    @@vs = []
+    @@data.each do |data|
+      if data[:type]==:training_test_validation
+        puts "test_training_test_validation "+data[:info].to_s
+        p = { 
+          :training_dataset_uri => data[:train_data],
+          :test_dataset_uri => data[:test_data],
+          :algorithm_uri => File.join(CONFIG[:services]["opentox-algorithm"],"lazar"),
+          :algorithm_params => "feature_generation_uri="+File.join(CONFIG[:services]["opentox-algorithm"],"fminer/bbrc"),
+          :prediction_feature => data[:feat]}
+        t = OpenTox::SubTask.new(nil,0,1)
+        def t.progress(pct)
+          if !defined?@last_msg or @last_msg+10<Time.new
+            puts "waiting for training-test-set validation: "+pct.to_s
+            @last_msg=Time.new
+          end
+        end
+        def t.waiting_for(task_uri); end
+        v = OpenTox::Validation.create_training_test_validation(p, @@subjectid, t)
+        assert v.uri.uri?
+        if @@subjectid
+          assert_rest_call_error OpenTox::NotAuthorizedError do
+            OpenTox::Validation.find(v.uri)
+          end
+        end
+        v = OpenTox::Validation.find(v.uri, @@subjectid)
+        assert_valid_date v
+        assert v.uri.uri?
+        model = v.metadata[OT.model]
+        assert model.uri?
+        v_list = OpenTox::Validation.list( {:model => model} )
+        assert v_list.size==1 and v_list.include?(v.uri)
+        puts v.uri unless @@delete
+        @@vs << v
+      end
+    end
+  end
+  
   
   def test_validation_report
     #@@cv = OpenTox::Crossvalidation.find("http://local-ot/validation/crossvalidation/48", @@subjectid)
@@ -314,28 +366,30 @@ class ValidationTest < Test::Unit::TestCase
     end
   end
   
-  def test_qmrf_report
+  if @@qmrf_test
+   def test_qmrf_report
     #@@cv = OpenTox::Crossvalidation.find("http://local-ot/validation/crossvalidation/13", @@subjectid)
-    
-    @@qmrfReports = []
-    @@cvs.each do |cv|
-      puts "test_qmrf_report"
-      assert defined?cv,"no crossvalidation defined"
-      model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => cv.metadata[OT.dataset], :subjectid => @@subjectid}).to_s
-      assert model_uri.uri?
-#      validations = cv.metadata[OT.validation]
-#      assert_kind_of Array,validations
-#      assert validations.size==cv.metadata[OT.numFolds].to_i,validations.size.to_s+"!="+cv.metadata[OT.numFolds].to_s
-#      val = OpenTox::Validation.find(validations[0], @@subjectid)
-#      model_uri = val.metadata[OT.model]
-      model = OpenTox::Model::Generic.find(model_uri, @@subjectid)
-      assert model!=nil
-      #assert_rest_call_error OpenTox::NotFoundError do 
-      #  OpenTox::QMRFReport.find_for_model(model_uri, @@subjectid)
-      #end
-      qmrfReport = OpenTox::QMRFReport.create(model_uri, @@subjectid)
-      puts qmrfReport.uri unless @@delete
-      @@qmrfReports << qmrfReport
+   
+      @@qmrfReports = []
+      @@cvs.each do |cv|
+        puts "test_qmrf_report"
+        assert defined?cv,"no crossvalidation defined"
+        model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => cv.metadata[OT.dataset], :subjectid => @@subjectid}).to_s
+        assert model_uri.uri?
+  #      validations = cv.metadata[OT.validation]
+  #      assert_kind_of Array,validations
+  #      assert validations.size==cv.metadata[OT.numFolds].to_i,validations.size.to_s+"!="+cv.metadata[OT.numFolds].to_s
+  #      val = OpenTox::Validation.find(validations[0], @@subjectid)
+  #      model_uri = val.metadata[OT.model]
+        model = OpenTox::Model::Generic.find(model_uri, @@subjectid)
+        assert model!=nil
+        #assert_rest_call_error OpenTox::NotFoundError do 
+        #  OpenTox::QMRFReport.find_for_model(model_uri, @@subjectid)
+        #end
+        qmrfReport = OpenTox::QMRFReport.create(model_uri, @@subjectid)
+        puts qmrfReport.uri unless @@delete
+        @@qmrfReports << qmrfReport
+      end
     end
     
   end
