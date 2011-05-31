@@ -74,7 +74,7 @@ class LazarTest < Test::Unit::TestCase
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
     @predictions << prediction
     #puts prediction_uri
-    assert_equal prediction.value(compound), false
+    assert_equal prediction.value(compound), "false"
     assert_equal prediction.confidence(compound).round_to(4), 0.3067.round_to(4)
     assert_equal prediction.neighbors(compound).size, 14
 
@@ -84,7 +84,7 @@ class LazarTest < Test::Unit::TestCase
     prediction = OpenTox::LazarPrediction.find prediction_uri, @@subjectid
     @predictions << prediction
     assert !prediction.measured_activities(compound).empty?
-    assert_equal prediction.measured_activities(compound).first, true
+    assert_equal prediction.measured_activities(compound).first.to_s, "true"
     assert prediction.value(compound).nil?
 
     # dataset prediction
@@ -94,7 +94,7 @@ class LazarTest < Test::Unit::TestCase
     assert_equal prediction.compounds.size, 4
     compound = OpenTox::Compound.from_smiles "CC(=Nc1ccc2c(c1)Cc1ccccc21)O"
     assert_equal prediction.value(compound), nil
-    assert_equal prediction.measured_activities(compound).first, true
+    assert_equal prediction.measured_activities(compound).first.to_s, "true"
   end
 
   def test_classification_svm_model
@@ -110,7 +110,7 @@ class LazarTest < Test::Unit::TestCase
     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid)
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
     @predictions << prediction
-    assert_equal prediction.value(compound), false
+    assert_equal prediction.value(compound), "false"
     assert_equal prediction.confidence(compound).round_to(4), 0.4131.round_to(4)
     assert_equal prediction.neighbors(compound).size, 14
 
@@ -138,7 +138,7 @@ class LazarTest < Test::Unit::TestCase
     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid)
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
     @predictions << prediction
-    assert_equal prediction.value(compound), false
+    assert_equal prediction.value(compound), "false"
     assert_equal prediction.confidence(compound).round_to(4), 0.4131.round_to(4)
     assert_equal prediction.neighbors(compound).size, 14
 
@@ -153,18 +153,18 @@ class LazarTest < Test::Unit::TestCase
 
   end
 
-=begin
   def test_ambit_classification_model
 
     # create model
-    dataset_uri = "http://apps.ideaconsult.net:8080/ambit2/dataset/9"
+    dataset_uri = "http://apps.ideaconsult.net:8080/ambit2/dataset/9?max=400"
     feature_uri ="http://apps.ideaconsult.net:8080/ambit2/feature/21573"
     #model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => dataset_uri, :prediction_feature => feature_uri}).to_s
     #lazar = OpenTox::Model::Lazar.find model_uri
     model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => dataset_uri, :prediction_feature => feature_uri, :subjectid => @@subjectid}).to_s
     validate_owl model_uri,@@subjectid
     lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
-    assert_equal lazar.features.size, 6609
+    puts lazar.features.size
+    assert_equal lazar.features.size, 1874
     #puts "Model: #{lazar.uri}"
     #puts lazar.features.size
 
@@ -176,7 +176,7 @@ class LazarTest < Test::Unit::TestCase
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
     #puts "Prediction: #{prediction.uri}"
     #puts prediction.value(compound)
-    assert_equal prediction.value(compound), true
+    assert_equal prediction.value(compound), "3.0"
     #puts @prediction.confidence(compound).round_to(4)
     #assert_equal @prediction.confidence(compound).round_to(4), 0.3005.round_to(4)
     #assert_equal @prediction.neighbors(compound).size, 15
@@ -194,6 +194,7 @@ class LazarTest < Test::Unit::TestCase
     # dataset prediction
     #@lazar.delete(@@subjectid)
   end
+=begin
 =end
 
 end
