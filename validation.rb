@@ -374,7 +374,13 @@ class ValidationTest < Test::Unit::TestCase
       @@cvs.each do |cv|
         puts "test_qmrf_report"
         assert defined?cv,"no crossvalidation defined"
-        model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => cv.metadata[OT.dataset], :subjectid => @@subjectid}).to_s
+        assert cv.metadata[OT.validation].is_a?(Array)
+        assert cv.metadata[OT.validation].first.uri?
+        validation = OpenTox::Validation.find(cv.metadata[OT.validation].first)
+        prediction_feature_uri = validation.metadata[OT.predictionFeature]
+        assert prediction_feature_uri.uri?
+        model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => cv.metadata[OT.dataset], :prediction_feature => prediction_feature_uri,
+          :subjectid => @@subjectid}).to_s
         assert model_uri.uri?
   #      validations = cv.metadata[OT.validation]
   #      assert_kind_of Array,validations
