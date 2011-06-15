@@ -70,9 +70,9 @@ class ToxCreateTest < Test::Unit::TestCase
       time +=5
     end
     assert first(".model_status").has_content?("Completed")
-    #click_on "Predict"
-    #fill_in "or enter a Name, InChI, Smiles, CAS, ...", :with => "NNc1ccccc1"
-    #check "hamster_carcinogenicity"
+    click_on "Predict"
+    fill_in "or enter a Name, InChI, Smiles, CAS, ...", :with => "NNc1ccccc1"
+    check "hamster_carcinogenicity"
     #click_button "Predict"
     #assert page.has_content? "false"
     #assert page.has_content? "0.294"

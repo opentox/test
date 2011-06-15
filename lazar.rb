@@ -29,7 +29,6 @@ class LazarTest < Test::Unit::TestCase
     validate_owl model_uri,@@subjectid
     lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
     @models << lazar
-    assert_equal 219, lazar.features.size
     compound = OpenTox::Compound.from_smiles("c1ccccc1NN")
     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid).to_s
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
@@ -153,6 +152,7 @@ class LazarTest < Test::Unit::TestCase
 
   end
 
+=begin
   def test_ambit_classification_model
 
     # create model
@@ -194,7 +194,6 @@ class LazarTest < Test::Unit::TestCase
     # dataset prediction
     #@lazar.delete(@@subjectid)
   end
-=begin
 =end
 
 end
