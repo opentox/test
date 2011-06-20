@@ -1,8 +1,12 @@
 def validate_owl(uri, subjectid=nil)
   if validator_available?
-    owl = OpenTox::RestClientWrapper.get(uri,{:accept => "application/rdf+xml",:subjectid => subjectid})
+    owl = OpenTox::RestClientWrapper.get(uri,{:accept => "application/rdf+xml",:subjectid => subjectid}, nil, false)
     html = OpenTox::RestClientWrapper.post("http://www.mygrid.org.uk/OWL/Validator",{:rdf => owl, :level => "DL",:subjectid => subjectid})
-    assert_match(/YES/,html)
+    # assert_match(/YES/,html)
+    # avoid verbose html output if validation fails
+    owl_dl = false
+    owl_dl = true if html =~ /YES/
+    assert_equal true, owl_dl, "Invalid OWL-DL: #{uri}"
   else
     puts "http://www.mygrid.org.uk/OWL/Validator offline"
   end
