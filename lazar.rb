@@ -48,7 +48,6 @@ class LazarTest < Test::Unit::TestCase
   end
 
   def cleanup # executed only when assertions succeed (teardown is called even when assertions fail)
-    validate_owl @model.uri
     @files.each do |f|
       reference = f.sub(/dump/,"reference")
       FileUtils.mkdir_p File.dirname(reference)
@@ -56,7 +55,6 @@ class LazarTest < Test::Unit::TestCase
       FileUtils.rm f
     end
     @predictions.each do |dataset|
-      validate_owl @model.uri
       dataset.delete(@@subjectid)
     end
     @model.delete(@@subjectid)
@@ -67,19 +65,18 @@ class LazarTest < Test::Unit::TestCase
   def test_create_regression_model
     create_model :dataset_uri => @@regression_training_dataset.uri
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 0.541.round_to(3), @predictions.first.value(@compounds.first).round_to(3)
-    assert_equal 0.285.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 58, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 0.327.round_to(3), @predictions.first.value(@compounds.first).round_to(3)
+    assert_equal 0.318.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 69, @predictions.first.neighbors(@compounds.first).size
     cleanup
   end
 
   def test_create_regression_prop_model
     create_model :dataset_uri => @@regression_training_dataset.uri, :local_svm_kernel => "propositionalized"
     predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 0.1.round_to(1), @predictions.first.value(@compounds.first).round_to(1)
-    assert_equal 0.285.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 58, @predictions.first.neighbors(@compounds.first).size
-    assert_equal 207, @model.features.size
+    assert_equal 0.318.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 69, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 177, @model.features.size
     cleanup
   end
 
@@ -131,24 +128,24 @@ class LazarTest < Test::Unit::TestCase
     cleanup
  end
 
-  def test_classification_svm_prop_model
+ def test_classification_svm_prop_model
 
-    create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification", :local_svm_kernel => "propositionalized"
-    predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-    predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
-    
-    assert_equal "false", @predictions[0].value(@compounds[0])
-    #assert_equal 0.2938.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
-    assert_equal 0.3952.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
-    assert_equal 16, @predictions[0].neighbors(@compounds[0]).size
+   create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification", :local_svm_kernel => "propositionalized"
+   predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
+   predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
+   
+   assert_equal "false", @predictions[0].value(@compounds[0])
+   #assert_equal 0.2938.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
+   assert_equal 0.3952.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
+   assert_equal 16, @predictions[0].neighbors(@compounds[0]).size
 
-    c = OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 4, @predictions[1].compounds.size
-    assert_equal "false", @predictions[1].value(c)
+   c = OpenTox::Compound.from_smiles("c1ccccc1NN")
+   assert_equal 4, @predictions[1].compounds.size
+   assert_equal "false", @predictions[1].value(c)
 
-    assert_equal 41, @model.features.size
-    cleanup
-  end
+   assert_equal 41, @model.features.size
+   cleanup
+ end
 
 =begin
   def test_ambit_classification_model
