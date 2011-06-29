@@ -68,7 +68,7 @@ class FminerTest < Test::Unit::TestCase
     feature = File.join @@regression_training_dataset.uri,"feature/LC50_mmol" 
     @dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({:dataset_uri => @@regression_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid, :feature_type=>"paths"}).to_s
     dump
-    assert_equal 207, @dataset.features.size # 32 bit
+    assert_equal 177, @dataset.features.size # 32 bit
     #assert_equal 219, @dataset.features.size
     
     # assert no hit counts present
@@ -76,13 +76,13 @@ class FminerTest < Test::Unit::TestCase
     @dataset.data_entries.each { |c,e|
       if c.to_s.scan('InChI=1S/C5H10N2O2S/c1-4(10-3)7-9-5(8)6-2/h1-3H3,(H,6,8)').size > 0
         e.each { |p,h|
-          if p.to_s.scan('bbrc/107').size>0
+          if p.to_s.scan('bbrc/92').size>0
             count += 1 if h[0] == true
           end
-          if p.to_s.scan('bbrc/57').size>0
+          if p.to_s.scan('bbrc/129').size>0
             count += 1 if h[0] == true
           end
-          if p.to_s.scan('bbrc/158').size>0
+          if p.to_s.scan('bbrc/56').size>0
             count += 1 if h[0] == true
           end
         }
@@ -147,21 +147,21 @@ class FminerTest < Test::Unit::TestCase
                                                             :min_frequency => 40,
                                                             :subjectid => @@subjectid}).to_s
     dump
-    assert_equal 8, @dataset.features.size
+    assert_equal 17, @dataset.features.size
 
     
     # assert no hit counts present
     count=0
     @dataset.data_entries.each { |c,e|
-      if c.to_s.scan('InChI=1S/C9H14O3/c1-7(2)9(10)12-6-8-4-3-5-11-8/h8H,1,3-6H2,2H3').size > 0
+      if c.to_s.scan('InChI=1S/C9H10O3/c1-2-12-9-5-7(6-10)3-4-8(9)11/h3-6,11H,2H2,1H3').size > 0
         e.each { |p,h|
-          if p.to_s.scan('last/2').size>0
+          if p.to_s.scan('last/6').size>0
             count += 1 if h[0] == true
           end
-          if p.to_s.scan('last/3').size>0
+          if p.to_s.scan('last/13').size>0
             count += 1 if h[0] == true
           end
-          if p.to_s.scan('last/7').size>0
+          if p.to_s.scan('last/8').size>0
             count += 1 if h[0] == true
           end
         }
@@ -172,9 +172,9 @@ class FminerTest < Test::Unit::TestCase
     # assert some values
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/last/3').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], "deactivating"
-        assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 1.00
-        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#8&A]-[#6&A](-[#6&A])-[#6&A]"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], "activating"
+        assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.45
+        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#8&A]-[#6&A]-[#6&A]-[#6&A]-[#6&A]-[#6&A]"
       end
     }
     cleanup
@@ -364,4 +364,5 @@ class FminerTest < Test::Unit::TestCase
     }
     cleanup
   end
+
 end
