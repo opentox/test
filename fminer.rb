@@ -68,7 +68,7 @@ class FminerTest < Test::Unit::TestCase
     feature = File.join @@regression_training_dataset.uri,"feature/LC50_mmol" 
     @dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({:dataset_uri => @@regression_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid, :feature_type=>"paths"}).to_s
     dump
-    assert_equal 132, @dataset.features.size # 32 bit
+    assert_equal 131, @dataset.features.size # 32 bit
     #assert_equal 219, @dataset.features.size
     
     # assert no hit counts present
@@ -76,7 +76,7 @@ class FminerTest < Test::Unit::TestCase
     @dataset.data_entries.each { |c,e|
       if c.to_s.scan('InChI=1S/C5H10N2O2S/c1-4(10-3)7-9-5(8)6-2/h1-3H3,(H,6,8)').size > 0
         e.each { |p,h|
-          if p.to_s.scan('bbrc/87').size>0
+          if p.to_s.scan('bbrc/86').size>0
             count += 1 if h[0] == true
           end
           if p.to_s.scan('bbrc/54').size>0
@@ -141,44 +141,44 @@ class FminerTest < Test::Unit::TestCase
   end
 
 
- def test_regression_last
-   feature = File.join @@regression_training_dataset.uri,"feature/LC50_mmol" 
-   @dataset_uri = OpenTox::Algorithm::Fminer::LAST.new.run({:dataset_uri => @@regression_training_dataset.uri, :prediction_feature => feature, 
-                                                           :min_frequency => 40,
-                                                           :subjectid => @@subjectid}).to_s
-   dump
-   assert_equal 21, @dataset.features.size
+def test_regression_last
+  feature = File.join @@regression_training_dataset.uri,"feature/LC50_mmol" 
+  @dataset_uri = OpenTox::Algorithm::Fminer::LAST.new.run({:dataset_uri => @@regression_training_dataset.uri, :prediction_feature => feature, 
+                                                          :min_frequency => 40,
+                                                          :subjectid => @@subjectid}).to_s
+  dump
+  assert_equal 14, @dataset.features.size
 
-   
-   # assert no hit counts present
-   count=0
-   @dataset.data_entries.each { |c,e|
-     if c.to_s.scan('InChI=1S/C9H10O3/c1-2-12-9-5-7(6-10)3-4-8(9)11/h3-6,11H,2H2,1H3').size > 0
-       e.each { |p,h|
-         if p.to_s.scan('last/17').size>0
-           count += 1 if h[0] == true
-         end
-         if p.to_s.scan('last/18').size>0
-           count += 1 if h[0] == true
-         end
-         if p.to_s.scan('last/20').size>0
-           count += 1 if h[0] == true
-         end
-       }
-     end
-   }
-   assert_equal 3, count
+  
+  # assert no hit counts present
+  count=0
+  @dataset.data_entries.each { |c,e|
+    if c.to_s.scan('InChI=1S/C9H10O3/c1-2-12-9-5-7(6-10)3-4-8(9)11/h3-6,11H,2H2,1H3').size > 0
+      e.each { |p,h|
+        if p.to_s.scan('last/5').size>0
+          count += 1 if h[0] == true
+        end
+        if p.to_s.scan('last/11').size>0
+          count += 1 if h[0] == true
+        end
+        if p.to_s.scan('last/13').size>0
+          count += 1 if h[0] == true
+        end
+      }
+    end
+  }
+  assert_equal 3, count
 
-   # assert some values
-   @dataset.features.each { |c,e|
-     if c.to_s.scan('feature/last/3').size > 0
-       assert_equal e['http://www.opentox.org/api/1.1#effect'], "activating"
-       assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
-       assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&A]-[#6&a]:[#6&a]:[#6&a]:[#6&a]:[#6&a]"
-     end
-   }
-   cleanup
- end
+  # assert some values
+  @dataset.features.each { |c,e|
+    if c.to_s.scan('feature/last/3').size > 0
+      assert_equal e['http://www.opentox.org/api/1.1#effect'], "activating"
+      assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 1.0
+      assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#8&A]=[#6&A]-[#8&A]-[#6&A]"
+    end
+  }
+  cleanup
+end
 
 
 
