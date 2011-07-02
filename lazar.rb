@@ -65,18 +65,18 @@ class LazarTest < Test::Unit::TestCase
   def test_create_regression_model
     create_model :dataset_uri => @@regression_training_dataset.uri
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 0.423.round_to(3), @predictions.first.value(@compounds.first).round_to(3)
-    assert_equal 0.263.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 121, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 0.421.round_to(3), @predictions.first.value(@compounds.first).round_to(3)
+    assert_equal 0.262.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 123, @predictions.first.neighbors(@compounds.first).size
     cleanup
   end
 
   def test_create_regression_prop_model
     create_model :dataset_uri => @@regression_training_dataset.uri, :local_svm_kernel => "propositionalized"
     predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 0.263.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 121, @predictions.first.neighbors(@compounds.first).size
-    assert_equal 132, @model.features.size
+    assert_equal 0.262.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 123, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 131, @model.features.size
     cleanup
   end
 
