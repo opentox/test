@@ -302,14 +302,14 @@ end
       if c.to_s.scan('feature/bbrc/92').size > 0
         assert_equal e['http://www.opentox.org/api/1.1#effect'], "2"
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
-        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]:[#6&a](:[#6&a])(:[#6&a]:[#6&a]:[#6&a]:[#6&a]-[#16&A])"
+        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#7&A]-[#6&a](:[#6&a]:[#6&a]:[#6&a])(:[#6&a]:[#6&a]-[#16&A])"
       end
     }
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/bbrc/42').size > 0
         assert_equal e['http://www.opentox.org/api/1.1#effect'], "0"
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
-        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]:[#6&a](:[#7&a]:[#6&a])(:[#6&a]:[#6&a])"
+        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]:[#6&a]:[#6&a]:[#6&a]:[#6&a]:[#7&a]:[#6&a]"
       end
     }
     cleanup
