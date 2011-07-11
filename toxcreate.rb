@@ -72,7 +72,7 @@ class ToxCreateTest < Test::Unit::TestCase
     #assert page.has_content? "0.294"   
     #assert page.has_content? "0.875"
   end
-
+=begin
   def test_04_inspect_policies 
     Capybara.current_driver = :selenium
     visit CONFIG[:services]["opentox-toxcreate"]
@@ -173,10 +173,5 @@ def login(browser, user, password)
   browser.button(:value, "Login").click
 end
 
-
-  function(delete) do
-    page.evaluate_script('window.confirm = function() { return true; }')   
-    click_on "delete"
-  end
 =end
 end   
