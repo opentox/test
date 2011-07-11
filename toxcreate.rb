@@ -4,26 +4,26 @@ require 'opentox-ruby'
 require 'test/unit'
 require 'akephalos'
 require 'capybara/dsl'
-Capybara.default_driver = :akephalos
-#Capybara.default_driver = :selenium # use this for visual inspection
+#Capybara.default_driver = :akephalos # use this without visual inspection
+Capybara.default_driver = :selenium # use this for visual inspection
 Capybara.run_server = false
-Capybara.default_wait_time = 600
-
+Capybara.default_wait_time = 1000
+#Capybara.javascript_driver = :selenium
 
 
 class ToxCreateTest < Test::Unit::TestCase
   include Capybara
 
   def setup
-    @user = "test_ch"
-    @password = "test_ch"
+    @user = "guest"
+    @password = "guest"
   end
 
   def teardown
   end
 
 =begin
-  def test_login
+  def test_01_login
     visit File.join(CONFIG[:services]["opentox-toxcreate"], "login")
     click_on "Login"
     puts "Login without credentials"    
@@ -42,76 +42,128 @@ class ToxCreateTest < Test::Unit::TestCase
     puts "Login as user guest"    
     assert page.has_content? "Welcome guest!"
   end
-
-
-  def test_predict # works only with selenium
-    visit CONFIG[:services]["opentox-toxcreate"]
-    click_on "Predict"
-    fill_in "or enter a Name, InChI, Smiles, CAS, ...", :with => "NNc1ccccc1"
-    check "hamster_carcinogenicity"
-    click_button "Predict"
-    assert page.has_content? "false"
-    assert page.has_content? "0.294"
-    click_on "Details"
-    assert page.has_content? "0.875"
-  end
 =end
-
-  def test_toxcreate # works only with akephalos
+  def test_02_toxcreate # works only with akephalos
+    Capybara.current_driver = :akephalos 
     #login(@browser, @user, @password)
     visit CONFIG[:services]["opentox-toxcreate"]
     assert page.has_content?('Upload training data')
-    attach_file('file', "./data/hamster_carcinogenicity.csv")
+    attach_file('file', "./data/hamster_carcinogenicity.mini.csv")
     click_on "Create model"
-    assert first("h2").has_content? 'hamster_carcinogenicity'
+    assert first("h2").has_content? "hamster_carcinogenicity"
     time = 0
-    while first(".model_status").has_no_content?("Completed") and time < 120 do
+    while first(".model_status").has_no_content?("Completed") do
       sleep 5
       time +=5
     end
     assert first(".model_status").has_content?("Completed")
+  end
+  
+  def test_03_predict # works only with selenium
+    Capybara.current_driver = :selenium
+    visit CONFIG[:services]["opentox-toxcreate"]
     click_on "Predict"
     fill_in "or enter a Name, InChI, Smiles, CAS, ...", :with => "NNc1ccccc1"
-    check "hamster_carcinogenicity"
-    #click_button "Predict"
+    check "hamster_carcinogenicity"   
+    click_button "Predict"
+    assert page.has_content? "inactive"
+    click_on "Details"
     #assert page.has_content? "false"
-    #assert page.has_content? "0.294"
-    #click_on "Details"
+    #assert page.has_content? "0.294"   
     #assert page.has_content? "0.875"
   end
 
-=begin
-  def test_multi_cell_call
-    login(@browser, @user, @password)
-    @browser.goto CONFIG[:services]["opentox-toxcreate"]
-    @browser.file_field(:id, "file").set(`pwd`.chomp+"/data/multi_cell_call.csv")
-    @browser.button(:value, "Create model").click
-    # wait until validation is completed
-    # check results (links, reports, results)
-    puts @browser.url
-  end
-
-  def test_kazius
-    login(@browser, @user, @password)
-    @browser.goto CONFIG[:services]["opentox-toxcreate"]
-    @browser.file_field(:id, "file").set(`pwd`.chomp+"/data/kazius.csv")
-    @browser.button(:value, "Create model").click
-    # wait until validation is completed
-    # check results (links, reports, results)
-    puts @browser.url
-  end
-
-  def test_parallel_models
-    login(@browser, @user, @password)
-    10.times do
-      @browser.goto CONFIG[:services]["opentox-toxcreate"]
-      @browser.file_field(:id, "file").set(`pwd`.chomp+"/data/hamster_carcinogenicity.csv")
-      @browser.button(:value, "Create model").click
+  def test_04_inspect_policies 
+    Capybara.current_driver = :selenium
+    visit CONFIG[:services]["opentox-toxcreate"]
+    click_on "Inspect"
+    assert first('h2').has_content? 'hamster_carcinogenicity'
+    click_on "edit"
+    click_on "manage policy"    
+    within(:xpath, '//form[contains(@id, "form_policy_group_member_")]') do
+      find(:xpath, './/input[5]').click
+      click_on "update"
     end
-    #@browser.close
+    sleep 5
+  end
+  
+  def test_05_inspect_policies
+    Capybara.current_driver = :selenium
+    visit CONFIG[:services]["opentox-toxcreate"]
+    click_on "Inspect"
+    assert first('h2').has_content? 'hamster_carcinogenicity'
+    click_on "edit"
+    click_on "manage policy"
+  
+    within(:xpath, '//form[contains(@id, "form_policy_group_member_")]') do 
+      find(:xpath, './/input[4]').click
+      click_on "update"
+    end
+    sleep 5
+  end
+  
+  def test_06_inspect_policies
+    Capybara.current_driver = :selenium
+    visit CONFIG[:services]["opentox-toxcreate"]
+    click_on "Inspect"
+    assert first('h2').has_content? 'hamster_carcinogenicity'
+    click_on "edit"
+    click_on "manage policy"  
+    within(:xpath, '//form[contains(@id, "form_development")]') do 
+      find(:xpath, './/input[4]').click     
+      click_on "add" 
+    end
+    sleep 5
+  end
+  
+  def test_07_inspect_policies
+    Capybara.current_driver = :selenium
+    visit CONFIG[:services]["opentox-toxcreate"]
+    click_on "Inspect"
+    assert first('h2').has_content? 'hamster_carcinogenicity'
+    click_on "edit"
+    click_on "manage policy" 
+    within(:xpath, '//form[contains(@id, "form_policy_group_development_")]') do 
+      find(:xpath, './/input[3]').click
+      click_on "update"
+    end
+    sleep 5
+    page.evaluate_script('window.confirm = function() { return true; }')   
+    click_on "delete"   
+  end
+  
+=begin
+  def test_08_multi_cell_call
+    #login(@browser, @user, @password)
+    Capybara.current_driver = :akephalos 
+    visit CONFIG[:services]["opentox-toxcreate"]
+    assert page.has_content?('Upload training data')
+    attach_file('file', "./data/multi_cell_call.csv")
+    click_on "Create model"
+  end
+
+  def test_09_kazius
+    Capybara.current_driver = :akephalos 
+    #login(@browser, @user, @password)
+    visit CONFIG[:services]["opentox-toxcreate"]
+    assert page.has_content?('Upload training data')
+    attach_file('file', "./data/kazius.csv")
+    # wait until validation is completed
+    # check results (links, reports, results)
+    puts @browser.url
+  end
+
+  def test_10_parallel_models
+    #login(@browser, @user, @password)
+    10.times do
+      visit CONFIG[:services]["opentox-toxcreate"]
+      assert page.has_content?('Upload training data')
+      attach_file('file', "./data/multi_cell_call.csv")
+      click_on "Create model"
+    end
   end
 =end
-end
+
 
 =begin
 def login(browser, user, password)
@@ -120,4 +172,11 @@ def login(browser, user, password)
   browser.text_field(:id, "password").set(password)
   browser.button(:value, "Login").click
 end
+
+
+  function(delete) do
+    page.evaluate_script('window.confirm = function() { return true; }')   
+    click_on "delete"
+  end
 =end
+end   
