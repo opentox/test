@@ -58,16 +58,22 @@ class ToxCreateTest < Test::Unit::TestCase
     end
     assert first(".model_status").has_content?("Completed")
   end
-  
+
   def test_03_predict # works only with selenium
-    Capybara.current_driver = :selenium
+    Capybara.current_driver = :akephalos
+    Capybara.register_driver :akephalos do |app|
+      Capybara::Driver::Akephalos.new(app, :validate_scripts => false)
+    end
     visit CONFIG[:services]["opentox-toxcreate"]
     click_on "Predict"
     fill_in "or enter a Name, InChI, Smiles, CAS, ...", :with => "NNc1ccccc1"
     check "hamster_carcinogenicity"   
     click_button "Predict"
     assert page.has_content? "inactive"
+    click_on "Confidence"
+    assert page.has_content? "Indicates the applicability domain of a model"
     click_on "Details"
+
     #assert page.has_content? "false"
     #assert page.has_content? "0.294"   
     #assert page.has_content? "0.875"
