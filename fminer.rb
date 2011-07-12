@@ -56,7 +56,7 @@ class FminerTest < Test::Unit::TestCase
     # assert some values
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/bbrc/31').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], "false"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 2
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.97
         assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]-[#6&a]:[#6&a]:[#6&a]:[#6&a]-[#7&A]"
       end
@@ -132,7 +132,7 @@ class FminerTest < Test::Unit::TestCase
     # assert some values
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/last/3').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], "true"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 2
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
         assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#8&A]=[#6&A]-[#6&A]-[#6&A]"
       end
@@ -213,7 +213,7 @@ end
     # assert some values
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/bbrc/31').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], "false"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 2
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.97
         assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]-[#6&a]:[#6&a]:[#6&a]:[#6&a]-[#7&A]"
       end
@@ -256,7 +256,7 @@ end
     # assert some values
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/bbrc/31').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], "false"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 2
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
         assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#8&A]-[#6&A]-[#7&A]-[#7&A]=[#8&A]"
       end
@@ -293,23 +293,23 @@ end
     # assert some values
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/bbrc/0').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], "1"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 2
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 1.00
         assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&A]-[#6&A](=[#6&A])(-[#6&A])"
       end
     }
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/bbrc/92').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], "2"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 1
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
-        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]:[#6&a](:[#6&a])(:[#6&a]:[#6&a]:[#6&a]:[#6&a]-[#16&A])"
+        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#7&A]-[#6&a](:[#6&a]:[#6&a]:[#6&a])(:[#6&a]:[#6&a]-[#16&A])"
       end
     }
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/bbrc/42').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], "0"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 3
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
-        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]:[#6&a](:[#7&a]:[#6&a])(:[#6&a]:[#6&a])"
+        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]:[#6&a]:[#6&a]:[#6&a]:[#6&a]:[#7&a]:[#6&a]"
       end
     }
     cleanup
@@ -343,14 +343,14 @@ end
     # assert some values
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/last/54').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], "0"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 1
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
         assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#7&A;$([#7&A](=[#8&A])=[#8&A]),$([#7&A](-[#6&a])=[#8&A])](~*)=[#8&A]"
       end
     }
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/last/48').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], "1"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 2
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
         assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&A]=[#6&A](-[#6&A])-[#6&A]"
       end
