@@ -6,7 +6,6 @@ require 'test/unit'
 class TransformTest < Test::Unit::TestCase
 
 
-
   def test_pca
 
     d = GSL::Matrix.alloc([1,1.1,2,1.9,3,3.3], 3, 2)
@@ -15,7 +14,7 @@ class TransformTest < Test::Unit::TestCase
     rd = GSL::Matrix.alloc([1.05098674493306, 1.043223563717, 1.91019734898661, 2.0, 3.03881590608033, 3.256776436283], 3, 2)
 
     # Lossy
-    2.times do
+    2.times do # repeat to ensure idempotency
       pca = OpenTox::Algorithm::Transform::PCA.new(d, 0.05)
       assert_equal pca.data_matrix, d
       assert_equal pca.data_transformed_matrix, td
