@@ -132,7 +132,7 @@ class ToxCreateTest < Test::Unit::TestCase
     #page.evaluate_script('window.confirm = function() { return true; }')
     click_on "delete"
   end 
-
+=begin
   def test_08_multi_cell_call
     #login(@browser, @user, @password)
     Capybara.current_driver = :akephalos 
@@ -161,14 +161,12 @@ class ToxCreateTest < Test::Unit::TestCase
       attach_file('file', "./data/multi_cell_call.csv")
       click_on "Create model"
     end
+
+  def login(browser, user, password)
+    browser.goto File.join(CONFIG[:services]["opentox-toxcreate"], "login")
+    browser.text_field(:id, "username").set(user)
+    browser.text_field(:id, "password").set(password)
+    browser.button(:value, "Login").click
   end
-=end
-=begin
-def login(browser, user, password)
-  browser.goto File.join(CONFIG[:services]["opentox-toxcreate"], "login")
-  browser.text_field(:id, "username").set(user)
-  browser.text_field(:id, "password").set(password)
-  browser.button(:value, "Login").click
-end
 =end
 end   
