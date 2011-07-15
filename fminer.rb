@@ -146,7 +146,7 @@ def test_regression_last
                                                           :min_frequency => 40,
                                                           :subjectid => @@subjectid}).to_s
   dump
-  assert_in_delta 16, @dataset.features.size, 2
+  assert_in_delta 16, @dataset.features.size, 8
 
   
   # assert no hit counts present
