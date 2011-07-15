@@ -24,7 +24,8 @@ end
 class ValidationTest < Test::Unit::TestCase
 
   @@delete = true
-  @@feature_types = ["bbrc", "last"]
+  #@@feature_types = ["bbrc", "last"]
+  @@feature_types = ["bbrc"]
   @@qmrf_test = true
   @@data = []
   @@data << { :type => :crossvalidation,

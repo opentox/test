@@ -41,14 +41,13 @@ class LazarTest < Test::Unit::TestCase
   end
 
   def predict_dataset(dataset)
-    prediction_uri = @model.run(:dataset_uri => dataset.uri, :subjectid => @@subjectid)
+    prediction_uri = @model.run(:dataset_uri => dataset.uri,  :subjectid => @@subjectid)
     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
     @predictions << prediction
     dump prediction, File.join(@dump_dir,caller[0][/`.*'/][1..-2],"dataset_prediction")+".yaml"
   end
 
   def cleanup # executed only when assertions succeed (teardown is called even when assertions fail)
-    validate_owl @model.uri
     @files.each do |f|
       reference = f.sub(/dump/,"reference")
       FileUtils.mkdir_p File.dirname(reference)
@@ -56,7 +55,6 @@ class LazarTest < Test::Unit::TestCase
       FileUtils.rm f
     end
     @predictions.each do |dataset|
-      validate_owl @model.uri
       dataset.delete(@@subjectid)
     end
     @model.delete(@@subjectid)
@@ -67,24 +65,24 @@ class LazarTest < Test::Unit::TestCase
   def test_create_regression_model
     create_model :dataset_uri => @@regression_training_dataset.uri
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 0.4.round_to(3), @predictions.first.value(@compounds.first).round_to(3)
-    assert_equal 0.276.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 61, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 0.421.round_to(2), @predictions.first.value(@compounds.first).round_to(2)
+    assert_equal 0.262.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 123, @predictions.first.neighbors(@compounds.first).size
     cleanup
   end
 
   def test_create_regression_prop_model
     create_model :dataset_uri => @@regression_training_dataset.uri, :local_svm_kernel => "propositionalized"
     predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 0.4.round_to(1), @predictions.first.value(@compounds.first).round_to(1)
-    assert_equal 0.276.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 61, @predictions.first.neighbors(@compounds.first).size
-    assert_equal 219, @model.features.size
+    assert_equal 0.262.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 123, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 131, @model.features.size
     cleanup
   end
 
   def test_classification_model
     create_model :dataset_uri => @@classification_training_dataset.uri
+    puts @model.uri
     # single prediction
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
     # dataset activity
@@ -93,9 +91,9 @@ class LazarTest < Test::Unit::TestCase
     predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
     # assertions
     # single prediction
-    assert_equal false, @predictions[0].value(@compounds[0])
-    assert_equal 0.3067.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
-    assert_equal 14, @predictions[0].neighbors(@compounds[0]).size
+    assert_equal "false", @predictions[0].value(@compounds[0])
+    assert_equal 0.2938.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
+    assert_equal 16, @predictions[0].neighbors(@compounds[0]).size
     # dataset activity
     assert !@predictions[1].measured_activities(@compounds[1]).empty?
     assert_equal "true", @predictions[1].measured_activities(@compounds[1]).first.to_s
@@ -104,10 +102,11 @@ class LazarTest < Test::Unit::TestCase
     c = OpenTox::Compound.from_smiles("CC(=Nc1ccc2c(c1)Cc1ccccc21)O")
     assert_equal nil, @predictions[2].value(c)
     assert_equal "true", @predictions[2].measured_activities(c).first.to_s
-    c = OpenTox::Compound.new("http://ot-dev.in-silico.ch/compound/InChI=1S/C2H4N4/c3-2-4-1-5-6-2/h1H,(H3,3,4,5,6)")
-    assert_equal false, @predictions[2].value(c)
+    c = OpenTox::Compound.from_smiles("c1ccccc1NN")
+    assert_equal "false", @predictions[2].value(c)
+    assert_equal 0.2938.round_to(4) , @predictions[2].confidence(c).round_to(4)
     # model
-    assert_equal 52, @model.features.size
+    assert_equal 41, @model.features.size
     cleanup
   end
 
@@ -117,35 +116,36 @@ class LazarTest < Test::Unit::TestCase
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
     predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
 
-    assert_equal false, @predictions[0].value(@compounds[0])
-    assert_equal 0.3067.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
-    assert_equal 14, @predictions[0].neighbors(@compounds[0]).size
+    assert_equal "false", @predictions[0].value(@compounds[0])
+    assert_equal 0.3952.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
+    assert_equal 16, @predictions[0].neighbors(@compounds[0]).size
 
-    c = OpenTox::Compound.new("http://ot-dev.in-silico.ch/compound/InChI=1S/C2H4N4/c3-2-4-1-5-6-2/h1H,(H3,3,4,5,6)")
+    c = OpenTox::Compound.from_smiles("c1ccccc1NN")
     assert_equal 4, @predictions[1].compounds.size
-    assert_equal false, @predictions[1].value(c)
+    assert_equal "false", @predictions[1].value(c)
 
-    assert_equal 52, @model.features.size
+    assert_equal 41, @model.features.size
     cleanup
  end
 
-  def test_classification_svm_prop_model
+ def test_classification_svm_prop_model
 
-    create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification", :local_svm_kernel => "propositionalized"
-    predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-    predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
-    
-    assert_equal false, @predictions[0].value(@compounds[0])
-    assert_equal 0.3067.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
-    assert_equal 14, @predictions[0].neighbors(@compounds[0]).size
+   create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification", :local_svm_kernel => "propositionalized"
+   predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
+   predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
+   
+   assert_equal "false", @predictions[0].value(@compounds[0])
+   #assert_equal 0.2938.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
+   assert_equal 0.3952.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
+   assert_equal 16, @predictions[0].neighbors(@compounds[0]).size
 
-    c = OpenTox::Compound.new("http://ot-dev.in-silico.ch/compound/InChI=1S/C2H4N4/c3-2-4-1-5-6-2/h1H,(H3,3,4,5,6)")
-    assert_equal 4, @predictions[1].compounds.size
-    assert_equal false, @predictions[1].value(c)
+   c = OpenTox::Compound.from_smiles("c1ccccc1NN")
+   assert_equal 4, @predictions[1].compounds.size
+   assert_equal "false", @predictions[1].value(c)
 
-    assert_equal 52, @model.features.size
-    cleanup
-  end
+   assert_equal 41, @model.features.size
+   cleanup
+ end
 
 =begin
   def test_ambit_classification_model

@@ -4,8 +4,11 @@ require 'opentox-ruby'
 require 'test/unit'
 require 'akephalos'
 require 'capybara/dsl'
+<<<<<<< HEAD
 require 'capybara/envjs'
 
+=======
+>>>>>>> development
 Capybara.default_driver = :akephalos # use this without visual inspection
 #Capybara.default_driver = :selenium # use this for visual inspection
 Capybara.run_server = false
@@ -48,7 +51,9 @@ class ToxCreateTest < Test::Unit::TestCase
     assert page.has_content? "Welcome guest!"
   end
 =end
-  def test_02_toxcreate # works only with akephalos    
+  def test_02_toxcreate # works only with akephalos
+    Capybara.current_driver = :akephalos 
+    #login(@browser, @user, @password)
     visit CONFIG[:services]["opentox-toxcreate"]
     assert page.has_content?('Upload training data')
     attach_file('file', "./data/hamster_carcinogenicity.mini.csv")
@@ -131,8 +136,7 @@ class ToxCreateTest < Test::Unit::TestCase
     sleep 5
     #page.evaluate_script('window.confirm = function() { return true; }')
     click_on "delete"
-  end
-  
+  end 
 =begin
   def test_08_multi_cell_call
     #login(@browser, @user, @password)
@@ -163,9 +167,6 @@ class ToxCreateTest < Test::Unit::TestCase
       click_on "Create model"
     end
   end
-=end
-
-
 =begin
 def login(browser, user, password)
   browser.goto File.join(CONFIG[:services]["opentox-toxcreate"], "login")
