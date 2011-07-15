@@ -4,8 +4,8 @@ require 'opentox-ruby'
 require 'test/unit'
 require 'akephalos'
 require 'capybara/dsl'
-#Capybara.default_driver = :akephalos # use this without visual inspection
-Capybara.default_driver = :selenium # use this for visual inspection
+Capybara.default_driver = :akephalos # use this without visual inspection
+#Capybara.default_driver = :selenium # use this for visual inspection
 Capybara.run_server = false
 Capybara.default_wait_time = 1000
 #Capybara.javascript_driver = :selenium
@@ -59,20 +59,20 @@ class ToxCreateTest < Test::Unit::TestCase
     assert first(".model_status").has_content?("Completed")
   end
 
-  def test_03_predict # works only with selenium
-    Capybara.current_driver = :akephalos
+  def test_03_predict
     Capybara.register_driver :akephalos do |app|
       Capybara::Driver::Akephalos.new(app, :validate_scripts => false)
     end
-    visit CONFIG[:services]["opentox-toxcreate"]
-    click_on "Predict"
-    fill_in "or enter a Name, InChI, Smiles, CAS, ...", :with => "NNc1ccccc1"
-    check "hamster_carcinogenicity"   
-    click_button "Predict"
-    assert page.has_content? "inactive"
-    click_on "Confidence"
-    assert page.has_content? "Indicates the applicability domain of a model"
-    click_on "Details"
+    session = Capybara::Session.new(:akephalos)
+    session.visit CONFIG[:services]["opentox-toxcreate"]
+    session.click_on "Predict"
+    session.fill_in "or enter a Name, InChI, Smiles, CAS, ...", :with => "NNc1ccccc1"
+    session.check "hamster_carcinogenicity"
+    session.click_button "Predict"
+    assert session.has_content? "inactive"
+    session.click_on "Confidence"
+    assert session.has_content? "Indicates the applicability domain of a model"
+    session.click_on "Details"
 
     #assert page.has_content? "false"
     #assert page.has_content? "0.294"   
