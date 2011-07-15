@@ -23,7 +23,6 @@ class ToxCreateTest < Test::Unit::TestCase
   end
 
   def teardown
-    Capybara.reset_sessions!
     puts Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S")
     sleep 5
   end
@@ -62,7 +61,7 @@ class ToxCreateTest < Test::Unit::TestCase
     end
     assert first(".model_status").has_content?("Completed")
   end
-  
+
   def test_03_predict
     Capybara.register_driver :akephalos do |app|
       Capybara::Driver::Akephalos.new(app, :validate_scripts => false)
@@ -78,6 +77,7 @@ class ToxCreateTest < Test::Unit::TestCase
     #assert session.has_content? "false"
     #assert session.has_content? "0.294"   
     #assert session.has_content? "0.875"
+    Capybara.reset_sessions!
   end
 
   def test_04_inspect_policies
@@ -129,7 +129,7 @@ class ToxCreateTest < Test::Unit::TestCase
       click_on "update"
     end
     sleep 5
-    page.evaluate_script('window.confirm = function() { return true; }')
+    #page.evaluate_script('window.confirm = function() { return true; }')
     click_on "delete"
   end
   
