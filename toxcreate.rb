@@ -19,11 +19,11 @@ class ToxCreateTest < Test::Unit::TestCase
   def setup
     @user = "guest"
     @password = "guest"
-    puts Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S")
+    #puts Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S")
   end
 
   def teardown
-    puts Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S")
+    #puts Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S")
     sleep 5
   end
 
