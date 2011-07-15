@@ -12,14 +12,12 @@ Capybara.run_server = false
 Capybara.default_wait_time = 1000
 Capybara.javascript_driver = :envjs
 
-
 class ToxCreateTest < Test::Unit::TestCase
   include Capybara
 
   def setup
     @user = "guest"
     @password = "guest"
-    #puts Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S")
   end
 
   def teardown
@@ -134,7 +132,7 @@ class ToxCreateTest < Test::Unit::TestCase
     #page.evaluate_script('window.confirm = function() { return true; }')
     click_on "delete"
   end 
-=begin
+
   def test_08_multi_cell_call
     #login(@browser, @user, @password)
     Capybara.current_driver = :akephalos 
@@ -164,6 +162,7 @@ class ToxCreateTest < Test::Unit::TestCase
       click_on "Create model"
     end
   end
+=end
 =begin
 def login(browser, user, password)
   browser.goto File.join(CONFIG[:services]["opentox-toxcreate"], "login")
@@ -171,6 +170,5 @@ def login(browser, user, password)
   browser.text_field(:id, "password").set(password)
   browser.button(:value, "Login").click
 end
-
 =end
 end   
