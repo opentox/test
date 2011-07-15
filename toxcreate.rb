@@ -19,9 +19,13 @@ class ToxCreateTest < Test::Unit::TestCase
   def setup
     @user = "guest"
     @password = "guest"
+    puts Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S")
   end
 
   def teardown
+    Capybara.reset_sessions!
+    puts Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S")
+    sleep 5
   end
 
 =begin
@@ -45,7 +49,7 @@ class ToxCreateTest < Test::Unit::TestCase
     assert page.has_content? "Welcome guest!"
   end
 =end
-  def test_02_toxcreate # works only with akephalos
+  def test_02_toxcreate # works only with akephalos    
     visit CONFIG[:services]["opentox-toxcreate"]
     assert page.has_content?('Upload training data')
     attach_file('file', "./data/hamster_carcinogenicity.mini.csv")
@@ -86,9 +90,8 @@ class ToxCreateTest < Test::Unit::TestCase
       find(:xpath, './/input[5]').click
       click_on "update"
     end
-    sleep 5
   end
-  
+
   def test_05_inspect_policies
     visit CONFIG[:services]["opentox-toxcreate"]
     click_on "Inspect"
@@ -99,7 +102,7 @@ class ToxCreateTest < Test::Unit::TestCase
       find(:xpath, './/input[4]').click
       click_on "update"
     end
-    sleep 5
+    
   end
   
   def test_06_inspect_policies
