@@ -4,11 +4,8 @@ require 'opentox-ruby'
 require 'test/unit'
 require 'akephalos'
 require 'capybara/dsl'
-<<<<<<< HEAD
 require 'capybara/envjs'
 
-=======
->>>>>>> development
 Capybara.default_driver = :akephalos # use this without visual inspection
 #Capybara.default_driver = :selenium # use this for visual inspection
 Capybara.run_server = false
