@@ -40,13 +40,13 @@ class FminerTest < Test::Unit::TestCase
       if c.to_s.scan('InChI=1S/C10H13N3O2/c1-13(12-15)7-3-5-10(14)9-4-2-6-11-8-9/h2,4,6,8H,3,5,7H2,1H3').size > 0
         e.each { |p,h|
           if p.to_s.scan('bbrc/40').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
           if p.to_s.scan('bbrc/29').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
           if p.to_s.scan('bbrc/18').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
         }
       end
@@ -77,13 +77,13 @@ class FminerTest < Test::Unit::TestCase
       if c.to_s.scan('InChI=1S/C5H10N2O2S/c1-4(10-3)7-9-5(8)6-2/h1-3H3,(H,6,8)').size > 0
         e.each { |p,h|
           if p.to_s.scan('bbrc/86').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
           if p.to_s.scan('bbrc/54').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
           if p.to_s.scan('bbrc/32').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
         }
       end
@@ -238,13 +238,13 @@ end
       if c.to_s.scan('InChI=1S/C10H13N3O2/c1-13(12-15)7-3-5-10(14)9-4-2-6-11-8-9/h2,4,6,8H,3,5,7H2,1H3').size > 0
         e.each { |p,h|
           if p.to_s.scan('bbrc/113').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
           if p.to_s.scan('bbrc/99').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
           if p.to_s.scan('bbrc/77').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
         }
       end
@@ -276,13 +276,13 @@ end
       if c.to_s.scan('InChI=1S/C10H7NO2/c12-11(13)10-7-3-5-8-4-1-2-6-9(8)10/h1-7H').size > 0
         e.each { |p,h|
           if p.to_s.scan('bbrc/37').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
           if p.to_s.scan('bbrc/38').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
           if p.to_s.scan('bbrc/39').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
         }
       end

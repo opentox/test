@@ -82,7 +82,6 @@ class LazarTest < Test::Unit::TestCase
 
   def test_classification_model
     create_model :dataset_uri => @@classification_training_dataset.uri
-    puts @model.uri
     # single prediction
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
     # dataset activity
