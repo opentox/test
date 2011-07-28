@@ -6,6 +6,7 @@ require 'validate-owl'
 class DatasetTest < Test::Unit::TestCase
 
   def setup
+    @@subjectid = nil
     @datasets = {
       @@regression_training_dataset.uri => nil,
       @@classification_training_dataset.uri => {
@@ -62,6 +63,17 @@ class DatasetTest < Test::Unit::TestCase
     @dataset = OpenTox::Dataset.new
     @dataset.load_yaml(File.open("data/hamster_carcinogenicity.yaml").read)
     hamster_carc?
+  end
+
+  def test_sdf_with_multiple_features
+    uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"], File.read("data/CPDBAS_v5c_1547_29Apr2008part.sdf") ,{:accept => "text/uri-list",:content_type => "chemical/x-mdl-sdfile", :subjectid => @@subjectid}).to_s.chomp
+    assert_kind_of URI::HTTP, URI.parse(uri)
+    #puts uri
+    #uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"], File.read("/dataCPDBAS_v5c_1547_29Apr2008.sdf") ,{:accept => "text/uri-list",:content_type => "chemical/x-mdl-sdfile", :subjectid => @@subjectid}).to_s.chomp
+    #@dataset = OpenTox::Dataset.find uri, @@subjectid
+    ##@dataset = OpenTox::Dataset.new uri
+    #@dataset.load_all @@subjectid
+    #hamster_carc?
   end
 
   def test_rest_csv
