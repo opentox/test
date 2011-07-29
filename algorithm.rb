@@ -75,7 +75,21 @@ class AlgorithmTest < Test::Unit::TestCase
       params[:nr_hits] = true
       assert_in_delta OpenTox::Algorithm::Similarity.tanimoto(features_a, features_c, weights, params), 0.235749338271022, 0.000001
     }
+  end
 
+  def test_clustering
+    # Parameters
+    dataset_uri         = @@classification_training_dataset.uri
+    query_compound      = OpenTox::Compound.from_smiles("O1COc2cc(ccc12)C")
+
+    c = OpenTox::Algorithm::Similarity::StructuralClustering.new dataset_uri
+    cluster_datasets = Array.new
+    if c.trained? 
+      c.get_clusters query_compound.uri 
+      cluster_datasets = c.target_clusters_array
     end
+    assert_equal cluster_datasets.size, 2
+
+  end
 
 end
