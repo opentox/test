@@ -168,6 +168,22 @@ class ToxCreateTest < Test::Unit::TestCase
       click_on "Create model"
     end
   end
+  # raises capybara errors, but gui works from browser
+  def test_11_toxcreate_sdf # works only with akephalos
+    Capybara.current_driver = :akephalos 
+    #login(@browser, @user, @password)
+    visit CONFIG[:services]["opentox-toxcreate"]
+    assert page.has_content?('Upload training data')
+    attach_file('file', "./data/hamster_carcinogenicity.sdf")
+    click_on "Create model"
+    assert first("h2").has_content? "hamster_carcinogenicity"
+    time = 0
+    while first(".model_status").has_no_content?("Completed") do
+      sleep 5
+      time +=5
+    end
+    assert first(".model_status").has_content?("Completed")
+  end
 =end
 
 
