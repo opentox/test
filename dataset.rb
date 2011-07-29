@@ -68,12 +68,6 @@ class DatasetTest < Test::Unit::TestCase
   def test_sdf_with_multiple_features
     uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"], File.read("data/CPDBAS_v5c_1547_29Apr2008part.sdf") ,{:accept => "text/uri-list",:content_type => "chemical/x-mdl-sdfile", :subjectid => @@subjectid}).to_s.chomp
     assert_kind_of URI::HTTP, URI.parse(uri)
-    #puts uri
-    #uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"], File.read("/dataCPDBAS_v5c_1547_29Apr2008.sdf") ,{:accept => "text/uri-list",:content_type => "chemical/x-mdl-sdfile", :subjectid => @@subjectid}).to_s.chomp
-    #@dataset = OpenTox::Dataset.find uri, @@subjectid
-    ##@dataset = OpenTox::Dataset.new uri
-    #@dataset.load_all @@subjectid
-    #hamster_carc?
   end
 
   def test_rest_csv
@@ -146,6 +140,16 @@ class DatasetTest < Test::Unit::TestCase
       @dataset.load_all @@subjectid
       #@dataset = YAML.load @dataset.to_yaml
       validate data
+    end
+  end
+
+  def test_sdf
+    @datasets.each do |uri,data|
+      @dataset = OpenTox::Dataset.new(uri)
+      @dataset.load_all @@subjectid
+      sdf = @dataset.to_sdf
+      size = sdf.lines.to_a.select{|i| i == "$$$$\n"}.size
+      assert_equal size, data[:nr_compounds]  if data
     end
   end
 
