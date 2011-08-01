@@ -52,7 +52,7 @@ class ToxCreateTest < Test::Unit::TestCase
     click_on "Create model"
     assert first("h2").has_content? "hamster_carcinogenicity"
     time = 0
-    while first(".model_status").has_no_content?("Completed") do
+    while (first(".model_status").has_no_content?("Completed") and first(".model_status").has_no_content?("Error")) do
       sleep 5
       time +=5
     end
