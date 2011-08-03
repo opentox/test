@@ -10,11 +10,6 @@ require 'validation_util.rb'
 #LOGGER.datetime_format = "%Y-%m-%d %H:%M:%S "
 #LOGGER.formatter = Logger::Formatter.new
 
-module Sinatra
-  set :raise_errors, false
-  set :show_exceptions, false
-end
-
 class Exception
   def message
     errorCause ? errorCause.to_yaml : to_s
@@ -260,11 +255,11 @@ class ValidationTest < Test::Unit::TestCase
           assert cv.uri.uri?
           if @@subjectid
             assert_rest_call_error OpenTox::NotAuthorizedError do
-              cv.summary(cv)
+              cv.statistics(cv)
             end
           end
-          summary = cv.summary(@@subjectid)
-          assert_kind_of Hash,summary
+          stats_val = cv.statistics(@@subjectid)
+          assert_kind_of OpenTox::Validation,stats_val
           
           algorithm = cv.metadata[OT.algorithm]
           assert algorithm.uri?

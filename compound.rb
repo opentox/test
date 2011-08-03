@@ -39,4 +39,8 @@ class CompoundTest < Test::Unit::TestCase
     assert_equal "CCC=C(CC)N(=O)=O", c.to_smiles
   end
 
+  def test_match_hits
+    c = OpenTox::Compound.from_smiles "N=C=C1CCC(=F=FO)C1"
+    assert_equal ({"FF"=>2, "CC"=>10, "C"=>6, "C1CCCC1"=>10, "C=C"=>2}), c.match_hits(['CC','F=F','C','C=C','FF','C1CCCC1','OO'])
+  end
 end
