@@ -21,17 +21,19 @@ end
 task :setup do
   @@subjectid = OpenTox::Authorization.authenticate(TEST_USER,TEST_PW) 
   @@classification_training_dataset = OpenTox::Dataset.create_from_csv_file("data/hamster_carcinogenicity.csv", @@subjectid)
+  @@multinomial_training_dataset = OpenTox::Dataset.create_from_csv_file("data/ISSCAN-multi.csv", @@subjectid)
   @@regression_training_dataset = OpenTox::Dataset.create_from_csv_file("data/EPAFHM.csv", @@subjectid)
 end
 
 task :teardown do
   @@classification_training_dataset.delete(@@subjectid)
+  @@multinomial_training_dataset.delete(@@subjectid)
   @@regression_training_dataset.delete(@@subjectid)
   OpenTox::Authorization.logout(@@subjectid)
 end
 
 #[:all, :feature, :dataset, :fminer, :lazar, :authorization, :validation].each do |t|
-[:all, :feature, :dataset, :fminer, :lazar, :authorization, :parser, :validation ].each do |t|
+[:all, :algorithm, :feature, :dataset, :fminer, :lazar, :authorization, :parser, :validation ].each do |t|
   task :teardown => t
   task t => :setup 
 end
