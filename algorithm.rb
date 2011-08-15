@@ -76,7 +76,7 @@ class AlgorithmTest < Test::Unit::TestCase
       assert_in_delta OpenTox::Algorithm::Similarity.tanimoto(features_a, features_c, weights, params), 0.235749338271022, 0.000001
     }
   end
-
+=begin
   def test_clustering
     # Parameters
     dataset_uri         = @@classification_training_dataset.uri
@@ -91,5 +91,5 @@ class AlgorithmTest < Test::Unit::TestCase
     assert_equal cluster_datasets.size, 2
 
   end
-
+=end
 end
