@@ -82,7 +82,6 @@ class LazarTest < Test::Unit::TestCase
 
   def test_classification_model
     create_model :dataset_uri => @@classification_training_dataset.uri
-    puts @model.uri
     # single prediction
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
     # dataset activity
@@ -146,6 +145,48 @@ class LazarTest < Test::Unit::TestCase
    assert_equal 41, @model.features.size
    cleanup
  end
+
+ def test_regression_mlr_prop_model
+    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop"
+    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
+    assert_equal 0.262, @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 0.168, @predictions.first.value(@compounds.first).round_to(3)
+    assert_equal 123, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 131, @model.features.size
+ end
+
+ def test_regression_mlr_prop_conf_stdev
+    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :conf_stdev => "true"
+    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
+    assert_equal 0.056, @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 0.168, @predictions.first.value(@compounds.first).round_to(3)
+    assert_equal 123, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 131, @model.features.size
+ end
+
+
+ def test_regression_mlr_prop_weighted_model
+    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :nr_hits => "true"
+    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
+    assert_equal 0.453, @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 0.265, @predictions.first.value(@compounds.first).round_to(3)
+    assert_equal 253, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 131, @model.features.size
+ end
+
+  def test_conf_stdev
+   params = {:sims => [0.6,0.72,0.8], :acts => [1,1,1], :neighbors => [1,1,1], :conf_stdev => true} # stdev = 0
+   params2 = {:sims => [0.6,0.7,0.8], :acts => [3.4,2,0.6], :neighbors => [1,1,1,1], :conf_stdev => true  }  # stev ~ 1.4
+   params3 = {:sims => [0.6,0.7,0.8], :acts => [1,1,1], :neighbors => [1,1,1], }
+   params4 = {:sims => [0.6,0.7,0.8], :acts => [3.4,2,0.6], :neighbors => [1,1,1] }
+   2.times {
+     assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params),  0.72, 0.0001 
+     assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params2), 0.172617874759125, 0.0001
+     assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params3), 0.7, 0.0001
+     assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params4), 0.7, 0.0001
+   }
+  end
+
 
 =begin
   def test_ambit_classification_model

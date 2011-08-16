@@ -10,11 +10,6 @@ require 'validation_util.rb'
 #LOGGER.datetime_format = "%Y-%m-%d %H:%M:%S "
 #LOGGER.formatter = Logger::Formatter.new
 
-module Sinatra
-  set :raise_errors, false
-  set :show_exceptions, false
-end
-
 class Exception
   def message
     errorCause ? errorCause.to_yaml : to_s
@@ -260,11 +255,11 @@ class ValidationTest < Test::Unit::TestCase
           assert cv.uri.uri?
           if @@subjectid
             assert_rest_call_error OpenTox::NotAuthorizedError do
-              cv.summary(cv)
+              cv.statistics(cv)
             end
           end
-          summary = cv.summary(@@subjectid)
-          assert_kind_of Hash,summary
+          stats_val = cv.statistics(@@subjectid)
+          assert_kind_of OpenTox::Validation,stats_val
           
           algorithm = cv.metadata[OT.algorithm]
           assert algorithm.uri?
@@ -383,6 +378,10 @@ class ValidationTest < Test::Unit::TestCase
         model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => cv.metadata[OT.dataset], :prediction_feature => prediction_feature_uri,
           :subjectid => @@subjectid}).to_s
         assert model_uri.uri?
+        # test search in cvs with model uri
+        cv_uris = OpenTox::RestClientWrapper.get(File.join(CONFIG[:services]["opentox-validation"],"/crossvalidation?model="+model_uri),
+          {:subjectid =>  @@subjectid}).chomp.split("\n")
+        assert cv_uris.size>0 and cv_uris.include?(cv.uri)
   #      validations = cv.metadata[OT.validation]
   #      assert_kind_of Array,validations
   #      assert validations.size==cv.metadata[OT.numFolds].to_i,validations.size.to_s+"!="+cv.metadata[OT.numFolds].to_s
@@ -394,6 +393,10 @@ class ValidationTest < Test::Unit::TestCase
         #  OpenTox::QMRFReport.find_for_model(model_uri, @@subjectid)
         #end
         qmrfReport = OpenTox::QMRFReport.create(model_uri, @@subjectid)
+        # test search in qmrf reports with model uri        
+        qmrf_uris = OpenTox::RestClientWrapper.get(File.join(CONFIG[:services]["opentox-validation"],"/reach_report/QMRF?model="+model_uri),
+          {:subjectid =>  @@subjectid}).chomp.split("\n")
+        assert qmrf_uris.size==1 and qmrf_uris[0]==qmrfReport.uri
         puts qmrfReport.uri unless @@delete
         @@qmrfReports << qmrfReport
       end
