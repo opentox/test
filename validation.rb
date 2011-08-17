@@ -372,7 +372,7 @@ class ValidationTest < Test::Unit::TestCase
         assert defined?cv,"no crossvalidation defined"
         assert cv.metadata[OT.validation].is_a?(Array)
         assert cv.metadata[OT.validation].first.uri?
-        validation = OpenTox::Validation.find(cv.metadata[OT.validation].first)
+        validation = OpenTox::Validation.find(cv.metadata[OT.validation].first, @@subjectid)
         prediction_feature_uri = validation.metadata[OT.predictionFeature]
         assert prediction_feature_uri.uri?
         model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => cv.metadata[OT.dataset], :prediction_feature => prediction_feature_uri,
