@@ -25,24 +25,24 @@ class ToxCreateTest < Test::Unit::TestCase
 =begin
   def test_01_login
     visit File.join(CONFIG[:services]["opentox-toxcreate"], "login")
-    click_on "Login"
-    puts "Login without credentials"    
-    assert page.has_content? "Please enter username and password."
+    click_button "Login"
+    puts "Login without credentials"
+    assert  page.has_content?("Please enter username and password.")
     fill_in('Username', :with => @user)
     fill_in('Password', :with => @password + "nonsense")
-    click_on "Login"
+    click_button "Login"
     puts "Login with wrong password"
-    assert page.has_content? "Login failed. Please try again." 
-    fill_in('Username', :with => @user)
-    fill_in('Password', :with => @password)
-    click_on "Login"
-    assert page.has_content? "Welcome #{@user}!"
+    assert page.has_content?('Login failed. Please try again.') 
+    fill_in('Username', :with => "anonymous")
+    fill_in('Password', :with => "anonymous")
+    click_button "Login"
+    assert page.has_content?("Welcome anonymous!")
     visit File.join(CONFIG[:services]["opentox-toxcreate"], "login")
-    click_on "Login as guest"
+    click_button "Login as guest"
     puts "Login as user guest"    
-    assert page.has_content? "Welcome guest!"
+    assert page.has_content?("Welcome guest!")
   end
-=end
+
   def test_02_toxcreate # works only with akephalos
     Capybara.current_driver = :akephalos 
     #login(@browser, @user, @password)
@@ -58,7 +58,7 @@ class ToxCreateTest < Test::Unit::TestCase
     end
     assert first(".model_status").has_content?("Completed")
   end
-
+=end
   def test_03_predict
     Capybara.register_driver :akephalos do |app|
       Capybara::Driver::Akephalos.new(app, :validate_scripts => false)
@@ -66,13 +66,13 @@ class ToxCreateTest < Test::Unit::TestCase
     session = Capybara::Session.new(:akephalos)
     session.visit CONFIG[:services]["opentox-toxcreate"]
     session.click_on "Predict"
-    session.fill_in "or enter a Name, InChI, Smiles, CAS, ...", :with => "NNc1ccccc1"
-    session.check "hamster_carcinogenicity"
+    session.fill_in "or enter a Smiles string", :with => "NNc1ccccc1"
+    session.check "hamster carcinogenicity"
     session.click_button "Predict"
-    assert session.has_content? "inactive"
+    assert session.has_content?("Not enough similar compounds in training dataset")
     session.click_on "Confidence"
-    assert session.has_content? "Indicates the applicability domain of a model"
-    session.click_on "Details"
+    assert session.has_content?("Indicates the applicability domain of a model")
+    session.click_button "Details"
 
     #assert page.has_content? "false"
     #assert page.has_content? "0.294"   
