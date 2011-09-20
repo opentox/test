@@ -65,7 +65,7 @@ class LazarTest < Test::Unit::TestCase
   def test_create_regression_model
     create_model :dataset_uri => @@regression_training_dataset.uri
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 0.93.round_to(2), @predictions.first.value(@compounds.first).round_to(2)
+    assert_equal 1.09.round_to(2), @predictions.first.value(@compounds.first).round_to(2)
     assert_equal 0.453.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
     assert_equal 253, @predictions.first.neighbors(@compounds.first).size
     cleanup
