@@ -6,7 +6,6 @@ require 'validate-owl'
 class DatasetTest < Test::Unit::TestCase
 
   def setup
-    @@subjectid = nil
     @datasets = {
       @@regression_training_dataset.uri => nil,
       @@classification_training_dataset.uri => {
