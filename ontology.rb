@@ -23,4 +23,13 @@ class TestOpenToxOntology < Test::Unit::TestCase
     assert_equal(false, OpenTox::Ontology::Model.exists?(uri, @@subjectid))
   end
 
+  def test_03_get_endpoint_name
+    endpoint_name = OpenTox::Ontology::Echa.get_endpoint_name('http://www.opentox.org/echaEndpoints.owl#EnvironmentalFateParameters')
+    assert_equal("Environmental fate parameters", endpoint_name.strip)
+    endpoint_name = OpenTox::Ontology::Echa.get_endpoint_name('http://www.opentox.org/echaEndpoints.owl#InexistentEndPoint')
+    assert_equal("", endpoint_name)
+  end
+
+
+
 end
