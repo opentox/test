@@ -5,22 +5,22 @@ require 'test/unit'
 
 class TransformTest < Test::Unit::TestCase
 
-def test_mlr
-  2.times {
-    n_prop = [ [1,1], [2,2], [3,3] ] # erste WH
-    acts = [ 3,2,3 ]   # should yield a constant y=2.8
-    sims = [ 4,2,4 ]   # move constant closer to 3.0
-    q_prop = [0.5,0.5] # extrapolation
-    params={:n_prop => n_prop, :q_prop => q_prop, :sims => sims, :acts => acts}
-
-    prediction = OpenTox::Algorithm::Neighbors.mlr(params)
-    assert_in_delta prediction, 2.8, 1.0E-10 # small deviations, don't know why
-
-    q_prop = [1.5,1.5] # interpolation
-    prediction = OpenTox::Algorithm::Neighbors.mlr(params)
-    assert_in_delta prediction, 2.8, 1.0E-10 # small deviations, don't know why
-  }
-end
+#def test_mlr
+#  2.times {
+#    n_prop = [ [1,1], [2,2], [3,3] ] # erste WH
+#    acts = [ 3,2,3 ]   # should yield a constant y=2.8
+#    sims = [ 4,2,4 ]   # move constant closer to 3.0
+#    q_prop = [0.5,0.5] # extrapolation
+#    params={:n_prop => n_prop, :q_prop => q_prop, :sims => sims, :acts => acts}
+#
+#    prediction = OpenTox::Algorithm::Neighbors.mlr(params)
+#    assert_in_delta prediction, 2.8, 1.0E-10 # small deviations, don't know why
+#
+#    q_prop = [1.5,1.5] # interpolation
+#    prediction = OpenTox::Algorithm::Neighbors.mlr(params)
+#    assert_in_delta prediction, 2.8, 1.0E-10 # small deviations, don't know why
+#  }
+#end
 
 def test_pca
 
@@ -34,6 +34,7 @@ def test_pca
     pca = OpenTox::Algorithm::Transform::PCA.new(d, 0.05)
     assert_equal pca.data_matrix, d
     assert_equal pca.data_transformed_matrix, td
+    assert_equal pca.transform(d), td
     assert_equal pca.eigenvector_matrix, ev
     assert_equal pca.restore, rd
   end
@@ -46,6 +47,7 @@ def test_pca
     pca = OpenTox::Algorithm::Transform::PCA.new(d, 0.0)
     assert_equal pca.data_matrix, d
     assert_equal pca.data_transformed_matrix, td
+    assert_equal pca.transform(d), td
     assert_equal pca.eigenvector_matrix, ev
     assert_equal pca.restore, d
   end
