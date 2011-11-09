@@ -56,52 +56,38 @@ class TransformTest < Test::Unit::TestCase
   
   def test_logas
   
-    d1 = [ 1,2,3 ]
-    d2 = [ -1,0,1 ]
-    d3 = [ -2,3,8 ]
-    d4 = [ -20,30,80 ]
+    d1 = [ 1,2,3 ].to_gv
+    d2 = [ -1,0,1 ].to_gv
+    d3 = [ -2,3,8 ].to_gv
+    d4 = [ -20,30,80 ].to_gv
 
+    d1la = [ -1.31668596949013, 0.211405021140643, 1.10528094834949 ].to_gv
+    d2la = d1la
+    d3la = [ -1.37180016053906, 0.388203523926062, 0.983596636612997 ].to_gv
+    d4la = [ -1.40084731572532, 0.532435269814955, 0.868412045910369 ].to_gv
 
     2.times {
 
       logas = OpenTox::Transform::LogAutoScale.new(d1)
-      d1la = logas.vs
-      d1la.each_with_index { |v,i| 
-        assert_in_delta v, [ -1.31668596949013, 0.211405021140643, 1.10528094834949 ][i], 1.0E-10
-      }
-      assert_equal logas.transform(d1), d1la
-      logas.restore(d1la).each_with_index { |v,i|
-        assert_in_delta v, d1[i], 1.0E-10
-      }
+      assert_equal logas.vs, d1la
+      assert_equal logas.transform(d1), logas.vs
+      assert_equal logas.restore(logas.vs), d1
   
       logas = OpenTox::Transform::LogAutoScale.new(d2)
-      d2la = logas.vs
-      assert_equal d2la, d1la
+      assert_equal logas.vs, d2la
       assert_equal logas.transform(d2), d2la
-      logas.restore(d2la).each_with_index { |v,i|
-        assert_in_delta v, d2[i], 1.0E-10
-      }
-  
-      logas = OpenTox::Transform::LogAutoScale.new(d3)
-      d3la = logas.vs
-      d3la.each_with_index { |v,i|
-        assert_in_delta v, [ -1.37180016053906, 0.388203523926062, 0.983596636612997 ][i], 1.0E-10
-      }
-      assert_equal logas.transform(d3), d3la
-      logas.restore(d3la).each_with_index { |v,i|
-        assert_in_delta v, d3[i], 1.0E-10
-      }
-   
-      logas = OpenTox::Transform::LogAutoScale.new(d4)
-      d4la = logas.vs
-      d4la.each_with_index { |v,i|
-        assert_in_delta v, [ -1.40084731572532, 0.532435269814955, 0.868412045910369 ][i], 1.0E-10
-      }
-      assert_equal logas.transform(d4), d4la
-      logas.restore(d4la).each_with_index { |v,i|
-        assert_in_delta v, d4[i], 1.0E-10
-      }
+      assert_equal logas.restore(logas.vs), d2
 
+      logas = OpenTox::Transform::LogAutoScale.new(d3)
+      assert_equal logas.vs, d3la
+      assert_equal logas.transform(d3), logas.vs
+      assert_equal logas.restore(logas.vs), d3
+  
+      logas = OpenTox::Transform::LogAutoScale.new(d4)
+      assert_equal logas.vs, d4la
+      assert_equal logas.transform(d4), logas.vs
+      assert_equal logas.restore(logas.vs), d4
+  
     }
  
   end
