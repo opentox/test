@@ -60,26 +60,6 @@ class LazarTest < Test::Unit::TestCase
     @model.delete(@@subjectid)
   end
 
-=begin
-=end
-  def test_create_regression_model
-    create_model :dataset_uri => @@regression_training_dataset.uri
-    predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 1.09.round_to(2), @predictions.first.value(@compounds.first).round_to(2)
-    assert_equal 0.453.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 253, @predictions.first.neighbors(@compounds.first).size
-    cleanup
-  end
-
-  def test_create_regression_prop_model
-    create_model :dataset_uri => @@regression_training_dataset.uri, :local_svm_kernel => "propositionalized"
-    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 0.453.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 253, @predictions.first.neighbors(@compounds.first).size
-    assert_equal 131, @model.features.size
-    cleanup
-  end
-
   def test_classification_model
     create_model :dataset_uri => @@classification_training_dataset.uri
     # single prediction
@@ -109,14 +89,14 @@ class LazarTest < Test::Unit::TestCase
     cleanup
   end
 
-  def test_classification_svm_model
 
+  def test_classification_svm_model
     create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification"
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
     predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
 
     assert_equal "false", @predictions[0].value(@compounds[0])
-    assert_equal 0.3952.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
+    assert_equal 0.3952, @predictions[0].confidence(@compounds[0]).round_to(4)
     assert_equal 16, @predictions[0].neighbors(@compounds[0]).size
 
     c = OpenTox::Compound.from_smiles("c1ccccc1NN")
@@ -125,111 +105,190 @@ class LazarTest < Test::Unit::TestCase
 
     assert_equal 41, @model.features.size
     cleanup
- end
+  end
 
- def test_classification_svm_prop_model
+  def test_classification_svm_prop_model
+    create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification", :local_svm_kernel => "propositionalized"
+    predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
+    predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
 
-   create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification", :local_svm_kernel => "propositionalized"
-   predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-   predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
-   
-   assert_equal "false", @predictions[0].value(@compounds[0])
-   #assert_equal 0.2938.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
-   assert_equal 0.3952.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
-   assert_equal 16, @predictions[0].neighbors(@compounds[0]).size
+    assert_equal "false", @predictions[0].value(@compounds[0])
+    assert_equal 0.3952, @predictions[0].confidence(@compounds[0]).round_to(4)
+    assert_equal 16, @predictions[0].neighbors(@compounds[0]).size
 
-   c = OpenTox::Compound.from_smiles("c1ccccc1NN")
-   assert_equal 4, @predictions[1].compounds.size
-   assert_equal "false", @predictions[1].value(c)
+    c = OpenTox::Compound.from_smiles("c1ccccc1NN")
+    assert_equal 4, @predictions[1].compounds.size
+    assert_equal "false", @predictions[1].value(c)
 
-   assert_equal 41, @model.features.size
-   cleanup
- end
+    assert_equal 41, @model.features.size
+    cleanup
+  end
 
- def test_regression_mlr_prop_model
-    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop"
-    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 0.453, @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 0.265, @predictions.first.value(@compounds.first).round_to(3)
+  def test_classification_default_nr_hits_true
+    create_model :dataset_uri => @@classification_training_dataset.uri, :nr_hits => "true"
+    predict_compound OpenTox::Compound.from_smiles("c1c[c+](O)ccc1NN")
+    assert_equal "true", @predictions.first.value(@compounds.first)
+    assert_equal 0.0749, @predictions.first.confidence(@compounds.first).round_to(4)
+    assert_equal 18, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 41, @model.features.size
+    cleanup
+  end
+
+  def test_classification_default_nr_hits_false
+    create_model :dataset_uri => @@classification_training_dataset.uri, :nr_hits => "false"
+    predict_compound OpenTox::Compound.from_smiles("NNc1cccc1")
+    assert_equal "true", @predictions.first.value(@compounds.first)
+    assert_equal 0.1339, @predictions.first.confidence(@compounds.first).round_to(4)
+    assert_equal 26, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 41, @model.features.size
+    cleanup
+  end
+
+  def test_create_regression_model
+    create_model :dataset_uri => @@regression_training_dataset.uri
+    predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
+    assert_equal 0.93.round_to(2), @predictions.first.value(@compounds.first).round_to(2)#1.09
+    assert_equal 0.154.round_to(3), @predictions.first.confidence(@compounds.first).round_to(3)
     assert_equal 253, @predictions.first.neighbors(@compounds.first).size
     assert_equal 131, @model.features.size
- end
+    cleanup
+  end
 
- def test_regression_mlr_prop_conf_stdev
-    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :conf_stdev => "true"
+  def test_create_regression_prop_model
+    create_model :dataset_uri => @@regression_training_dataset.uri, :local_svm_kernel => "propositionalized"
     predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
+    assert 0.5 || 0.6, @predictions.first.value(@compounds.first).round_to(1)
     assert_equal 0.154, @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 0.265, @predictions.first.value(@compounds.first).round_to(3)
     assert_equal 253, @predictions.first.neighbors(@compounds.first).size
     assert_equal 131, @model.features.size
- end
+    cleanup
+  end
 
-
- def test_regression_mlr_prop_weighted_model
-    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :nr_hits => "true"
-    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 0.453, @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 0.265, @predictions.first.value(@compounds.first).round_to(3)
-    assert_equal 253, @predictions.first.neighbors(@compounds.first).size
+  def test_create_regression_svm_conf_and_nr_false
+    create_model :dataset_uri => @@regression_training_dataset.uri,:prediction_algorithm => "local_svm_regression", :nr_hits => false, :conf_stdev => false
+    predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
+    assert_equal 0.42, @predictions.first.value(@compounds.first).round_to(2)#1.09.round_to(2), @predictions.first.value(@compounds.first).round_to(2)
+    assert_equal 0.262, @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 123, @predictions.first.neighbors(@compounds.first).size
     assert_equal 131, @model.features.size
- end
+    cleanup
+  end
+
+#  def test_regression_mlr_prop_default
+#    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop"
+#    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
+#    assert_equal 0.154, @predictions.first.confidence(@compounds.first).round_to(3)
+#    assert_equal 0.265, @predictions.first.value(@compounds.first).round_to(3)
+#    assert_equal 253, @predictions.first.neighbors(@compounds.first).size
+#    assert_equal 131, @model.features.size
+#    cleanup
+#  end
+#
+#  def test_regression_mlr_prop_conf_stdev_true
+#    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :conf_stdev => "true"
+#    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
+#    assert_equal 0.154, @predictions.first.confidence(@compounds.first).round_to(3)
+#    assert_equal 0.265, @predictions.first.value(@compounds.first).round_to(3)
+#    assert_equal 253, @predictions.first.neighbors(@compounds.first).size
+#    assert 132 || 131, @model.features.size
+#    cleanup
+#  end
+#
+#  def test_regression_mlr_prop_conf_stdev_false
+#    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :conf_stdev => "false"
+#    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
+#    assert_equal 0.453, @predictions.first.confidence(@compounds.first).round_to(3)
+#    assert_equal 0.265, @predictions.first.value(@compounds.first).round_to(3)
+#    assert_equal 253, @predictions.first.neighbors(@compounds.first).size
+#    assert_equal 131, @model.features.size
+#    cleanup
+#  end
+#
+#  def test_regression_mlr_prop_nr_hits_true
+#    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :nr_hits => "true"
+#    predict_compound  OpenTox::Compound.from_smiles("c1c[c+](O)ccc1NN")
+#    assert_equal 0.028, @predictions.first.confidence(@compounds.first).round_to(3)
+#    assert_equal 0.741, @predictions.first.value(@compounds.first).round_to(3)
+#    assert_equal 12, @predictions.first.neighbors(@compounds.first).size
+#    assert_equal 131, @model.features.size
+#    cleanup
+#  end
+#
+#  def test_regression_mlr_prop_nr_hits_false
+#    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :nr_hits => "false"
+#    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
+#    assert_equal 0.056, @predictions.first.confidence(@compounds.first).round_to(3)
+#    assert_equal 0.168, @predictions.first.value(@compounds.first).round_to(3)
+#    assert_equal 123, @predictions.first.neighbors(@compounds.first).size
+#    assert_equal 131, @model.features.size
+#    cleanup
+#  end
+#
+#  def test_regression_mlr_prop_conf_stdev_and_nr_hits_false
+#    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :nr_hits => "false", :conf_stdev => "false"
+#    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
+#    assert_equal 0.262, @predictions.first.confidence(@compounds.first).round_to(3)
+#    assert_equal 0.168, @predictions.first.value(@compounds.first).round_to(3)
+#    assert_equal 123, @predictions.first.neighbors(@compounds.first).size
+#    assert_equal 131, @model.features.size
+#    cleanup
+#  end
 
   def test_conf_stdev
-   params = {:sims => [0.6,0.72,0.8], :acts => [1,1,1], :neighbors => [1,1,1], :conf_stdev => true} # stdev = 0
-   params2 = {:sims => [0.6,0.7,0.8], :acts => [3.4,2,0.6], :neighbors => [1,1,1,1], :conf_stdev => true  }  # stev ~ 1.4
-   params3 = {:sims => [0.6,0.7,0.8], :acts => [1,1,1], :neighbors => [1,1,1], }
-   params4 = {:sims => [0.6,0.7,0.8], :acts => [3.4,2,0.6], :neighbors => [1,1,1] }
-   2.times {
-     assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params),  0.72, 0.0001 
-     assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params2), 0.172617874759125, 0.0001
-     assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params3), 0.7, 0.0001
-     assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params4), 0.7, 0.0001
-   }
+    params = {:sims => [0.6,0.72,0.8], :acts => [1,1,1], :neighbors => [1,1,1], :conf_stdev => true} 
+    params2 = {:sims => [0.6,0.7,0.8], :acts => [3.4,2,0.6], :neighbors => [1,1,1,1], :conf_stdev => true  }  # stev ~ 1.4
+    params3 = {:sims => [0.6,0.7,0.8], :acts => [1,1,1], :neighbors => [1,1,1], }
+    params4 = {:sims => [0.6,0.7,0.8], :acts => [3.4,2,0.6], :neighbors => [1,1,1] }
+    2.times {
+      assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params),  0.72, 0.0001 
+      assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params2), 0.172617874759125, 0.0001
+      assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params3), 0.7, 0.0001
+      assert_in_delta OpenTox::Algorithm::Neighbors::get_confidence(params4), 0.7, 0.0001
+    }
   end
-
 
 =begin
-  def test_ambit_classification_model
+   def test_ambit_classification_model
 
-    # create model
-    dataset_uri = "http://apps.ideaconsult.net:8080/ambit2/dataset/9?max=400"
-    feature_uri ="http://apps.ideaconsult.net:8080/ambit2/feature/21573"
-    #model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => dataset_uri, :prediction_feature => feature_uri}).to_s
-    #lazar = OpenTox::Model::Lazar.find model_uri
-    model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => dataset_uri, :prediction_feature => feature_uri, :subjectid => @@subjectid}).to_s
-    validate_owl model_uri,@@subjectid
-    lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
-    puts lazar.features.size
-    assert_equal lazar.features.size, 1874
-    #puts "Model: #{lazar.uri}"
-    #puts lazar.features.size
+     # create model
+     dataset_uri = "http://apps.ideaconsult.net:8080/ambit2/dataset/9?max=400"
+     feature_uri ="http://apps.ideaconsult.net:8080/ambit2/feature/21573"
+     #model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => dataset_uri, :prediction_feature => feature_uri}).to_s
+     #lazar = OpenTox::Model::Lazar.find model_uri
+     model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => dataset_uri, :prediction_feature => feature_uri, :subjectid => @@subjectid}).to_s
+     validate_owl model_uri,@@subjectid
+     lazar = OpenTox::Model::Lazar.find model_uri, @@subjectid
+     puts lazar.features.size
+     assert_equal lazar.features.size, 1874
+     #puts "Model: #{lazar.uri}"
+     #puts lazar.features.size
 
-    # single prediction
-    compound = OpenTox::Compound.from_smiles("c1ccccc1NN")
-    #prediction_uri = lazar.run(:compound_uri => compound.uri)
-    #prediction = OpenTox::LazarPrediction.find(prediction_uri)
-    prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid)
-    prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
-    #puts "Prediction: #{prediction.uri}"
-    #puts prediction.value(compound)
-    assert_equal prediction.value(compound), "3.0"
-    #puts @prediction.confidence(compound).round_to(4)
-    #assert_equal @prediction.confidence(compound).round_to(4), 0.3005.round_to(4)
-    #assert_equal @prediction.neighbors(compound).size, 15
-    #@prediction.delete(@@subjectid)
+     # single prediction
+     compound = OpenTox::Compound.from_smiles("c1ccccc1NN")
+     #prediction_uri = lazar.run(:compound_uri => compound.uri)
+     #prediction = OpenTox::LazarPrediction.find(prediction_uri)
+     prediction_uri = lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid)
+     prediction = OpenTox::LazarPrediction.find(prediction_uri, @@subjectid)
+     #puts "Prediction: #{prediction.uri}"
+     #puts prediction.value(compound)
+     assert_equal prediction.value(compound), "3.0"
+     #puts @prediction.confidence(compound).round_to(4)
+     #assert_equal @prediction.confidence(compound).round_to(4), 0.3005.round_to(4)
+     #assert_equal @prediction.neighbors(compound).size, 15
+     #@prediction.delete(@@subjectid)
 
-    # dataset activity
-    #compound = OpenTox::Compound.from_smiles("CNN")
-    #prediction_uri  = @lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid)
-    #@prediction = OpenTox::LazarPrediction.find prediction_uri, @@subjectid
-    #assert !@prediction.measured_activities(compound).empty?
-    #assert_equal @prediction.measured_activities(compound).first, true
-    #assert @prediction.value(compound).nil?
-    #@prediction.delete(@@subjectid)
+     # dataset activity
+     #compound = OpenTox::Compound.from_smiles("CNN")
+     #prediction_uri  = @lazar.run(:compound_uri => compound.uri, :subjectid => @@subjectid)
+     #@prediction = OpenTox::LazarPrediction.find prediction_uri, @@subjectid
+     #assert !@prediction.measured_activities(compound).empty?
+     #assert_equal @prediction.measured_activities(compound).first, true
+     #assert @prediction.value(compound).nil?
+     #@prediction.delete(@@subjectid)
 
-    # dataset prediction
-    #@lazar.delete(@@subjectid)
-  end
+     # dataset prediction
+     #@lazar.delete(@@subjectid)
+   end
 =end
 
 end
