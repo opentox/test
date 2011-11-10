@@ -26,7 +26,6 @@ class TransformTest < Test::Unit::TestCase
   
     d = GSL::Matrix.alloc([1.0, -5, 1.1, 2.0, -5, 1.9, 3.0, -5, 3.3], 3, 3) # 2nd col is const -5, gets removed
     rd = GSL::Matrix.alloc([1.0, 1.1, 1.9, 2.0, 3.1, 3.2], 3, 2)
-
     td = GSL::Matrix.alloc([-1.4142135623731, -0.14142135623731, 1.5556349186104],3,1)
     ev = GSL::Matrix.alloc([0.707106781186548, 0.707106781186548], 2, 1)
   
@@ -53,6 +52,20 @@ class TransformTest < Test::Unit::TestCase
       assert_equal pca.eigenvector_matrix, ev
       assert_equal pca.restore, rd
     end
+
+    rd = GSL::Matrix.alloc([1.0, 1.1, 1.9, 2.0, 3.1, 3.2], 3, 2)
+    td = GSL::Matrix.alloc([-1.4142135623731, -0.14142135623731, 1.5556349186104],3,1)
+    ev = GSL::Matrix.alloc([0.707106781186548, 0.707106781186548], 2, 1)
+    # Lossy, but using maxcols constraint
+    2.times do
+      pca = OpenTox::Transform::PCA.new(d, 0.0, 1) # 1 column
+      assert_equal pca.data_matrix, d
+      assert_equal pca.data_transformed_matrix, td
+      assert_equal pca.transform(d), td
+      assert_equal pca.eigenvector_matrix, ev
+      assert_equal pca.restore, rd
+    end
+  
   
   end
   
@@ -62,11 +75,13 @@ class TransformTest < Test::Unit::TestCase
     d2 = [ -1,0,1 ].to_gv
     d3 = [ -2,3,8 ].to_gv
     d4 = [ -20,30,80 ].to_gv
+    d5 = [ 0.707, 0.7071].to_gv
 
     d1la = [ -1.31668596949013, 0.211405021140643, 1.10528094834949 ].to_gv
     d2la = d1la
     d3la = [ -1.37180016053906, 0.388203523926062, 0.983596636612997 ].to_gv
     d4la = [ -1.40084731572532, 0.532435269814955, 0.868412045910369 ].to_gv
+    d5la = [ -1.0, 1.0 ].to_gv
 
     2.times {
 
@@ -89,6 +104,11 @@ class TransformTest < Test::Unit::TestCase
       assert_equal logas.vs, d4la
       assert_equal logas.transform(d4), logas.vs
       assert_equal logas.restore(logas.vs), d4
+
+      logas = OpenTox::Transform::LogAutoScale.new(d5)
+      assert_equal logas.vs, d5la
+      assert_equal logas.transform(d5), logas.vs
+      assert_equal logas.restore(logas.vs), d5
   
     }
  
