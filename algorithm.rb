@@ -76,6 +76,37 @@ class AlgorithmTest < Test::Unit::TestCase
       assert_in_delta OpenTox::Algorithm::Similarity.tanimoto(features_a, features_c, weights, params), 0.235749338271022, 0.000001
     }
   end
+  
+  def test_mlr
+    n_prop  = [ [ -2.0, -2.0 ], 
+                [ -1.0, -1.0 ], 
+                [  0.0,  0.0 ], 
+                [  1.0,  1.0 ], 
+                [  2.0,  2.0 ] ]
+
+    q_prop  =   [ 1.0, 1.0 ]
+
+    #acts    =   [ -2.0, 
+    #              -1.0,
+    #               0.0,
+    #               1.0,
+    #               2.0 ]
+
+    acts    =   [  0.0, 
+                   0.5,
+                   1.0,
+                   1.5,
+                   2.0 ]
+ 
+    maxcols = 2
+    res1 = OpenTox::Algorithm::Neighbors::mlr(:n_prop => n_prop, :q_prop => q_prop, :acts => acts, :maxcols => maxcols)
+    maxcols = 1
+    res2 = OpenTox::Algorithm::Neighbors::mlr(:n_prop => n_prop, :q_prop => q_prop, :acts => acts, :maxcols => maxcols)
+    assert_in_delta res1, 1.4958008960423, 10E-06
+    assert_equal res1, res2
+  end
+  
+
 =begin
   def test_clustering
     # Parameters
