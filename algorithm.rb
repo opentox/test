@@ -105,6 +105,38 @@ class AlgorithmTest < Test::Unit::TestCase
     assert_in_delta res1, 1.4958008960423, 10E-06
     assert_equal res1, res2
   end
+
+  def test_pcr
+    n_prop  = [ [ -2.0, -2.0 ], 
+                [ -1.0, -1.0 ], 
+                [  0.0,  0.0 ], 
+                [  1.0,  1.0 ], 
+                [  2.0,  2.0 ] ]
+
+    q_prop  =   [ 1.0, 1.0 ]
+
+    #acts    =   [ -2.0, 
+    #              -1.0,
+    #               0.0,
+    #               1.0,
+    #               2.0 ]
+
+    acts    =   [  0.0, 
+                   0.5,
+                   1.0,
+                   1.5,
+                   2.0 ]
+ 
+    maxcols = 2
+    res1 = OpenTox::Algorithm::Neighbors::pcr(:n_prop => n_prop, :q_prop => q_prop, :acts => acts, :maxcols => maxcols)
+    #puts res1
+    #maxcols = 1
+    #res2 = OpenTox::Algorithm::Neighbors::pcr(:n_prop => n_prop, :q_prop => q_prop, :acts => acts, :maxcols => maxcols)
+    #puts res2
+    assert_in_delta res1, 1.51255020120858, 10E-06
+    #assert_equal res1, res2
+  end
+ 
   
 
 =begin
