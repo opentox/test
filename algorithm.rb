@@ -129,12 +129,12 @@ class AlgorithmTest < Test::Unit::TestCase
  
     maxcols = 2
     res1 = OpenTox::Algorithm::Neighbors::pcr(:n_prop => n_prop, :q_prop => q_prop, :acts => acts, :maxcols => maxcols)
-    #puts res1
-    #maxcols = 1
-    #res2 = OpenTox::Algorithm::Neighbors::pcr(:n_prop => n_prop, :q_prop => q_prop, :acts => acts, :maxcols => maxcols)
-    #puts res2
-    assert_in_delta res1, 1.51255020120858, 10E-06
-    #assert_equal res1, res2
+
+    maxcols = 1
+    res2 = OpenTox::Algorithm::Neighbors::pcr(:n_prop => n_prop, :q_prop => q_prop, :acts => acts, :maxcols => maxcols)
+
+    assert_in_delta res1, 1.4958008960423, 10E-06
+    assert_equal res1, res2
   end
  
   
