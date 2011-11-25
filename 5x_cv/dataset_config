@@ -1,0 +1,13 @@
+#CPDBAS_v5d_20Nov2008_rat_TD50
+http://toxcreate3.in-silico.ch:8080/dataset/1408
+#CPDBAS_v5d_20Nov2008_mouse_TD50
+http://toxcreate3.in-silico.ch:8080/dataset/1384
+#EPA v4b Fathead Minnow Acute Toxicity LC50_mmol
+#http://toxcreate3.in-silico.ch:8080/dataset/2093
+#MultiCellCall: DSSTox Carcinogenic Potency DBS MultiCellCall_no_duplicates.csv
+#http://toxcreate3.in-silico.ch:8080/dataset/130
+#Bloodbarr: bloodbarr_no_duplicate.csv
+#http://toxcreate3.in-silico.ch:8080/dataset/271
+#Salmonella Mutagenicity: DSSTox Carcinogenic Potency DBS Mutagenicity_no_duplicates.csv
+#http://toxcreate3.in-silico.ch:8080/dataset/233
+
