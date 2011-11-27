@@ -1,0 +1,4 @@
+feature_generation_uri=http://toxcreate3.in-silico.ch:8082/algorithm/fminer/bbrc;prediction_algorithm=local_mlr_prop;pc_type=electronic
+feature_generation_uri=http://toxcreate3.in-silico.ch:8082/algorithm/fminer/bbrc;prediction_algorithm=local_mlr_prop;pc_type=topological
+feature_generation_uri=http://toxcreate3.in-silico.ch:8082/algorithm/fminer/bbrc;prediction_algorithm=local_mlr_prop;pc_type=geometrical
+feature_generation_uri=http://toxcreate3.in-silico.ch:8082/algorithm/fminer/bbrc;prediction_algorithm=local_mlr_prop;pc_type=constitutional
