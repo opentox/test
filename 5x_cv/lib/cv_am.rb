@@ -99,8 +99,8 @@ def cv (args)
   end
 
   if ! args[11] == ""
-    if ! (args[11] == "electronic" || args[11] == "geometrical" || args[11] == "topological" || args[11] == "constitutional")
-      puts "pc_type must be \"electronic\", \"geometrical\", \"topological\" or \"constitutional\""
+    if ! (args[11] == "electronic" || args[11] == "geometrical" || args[11] == "topological" || args[11] == "constitutional" || args[11] == "hybrid")
+      puts "pc_type must be \"electronic\", \"geometrical\", \"topological\", \"hybrid\" or \"constitutional\""
       exit 1
     end
   end
