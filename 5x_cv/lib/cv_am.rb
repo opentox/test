@@ -131,7 +131,7 @@ def cv (args)
   alg_params = alg_params << ";local_svm_kernel=#{args[8]}" unless args[8]==""   
   alg_params = alg_params << ";nr_hits=#{args[9]}" unless args[9]==""
   alg_params = alg_params << ";conf_stdev=#{args[10]}" unless args[10]==""
-  alg_params = alg_params << ";pc_type=#{args[11]}" unless args[10]==""
+  alg_params = alg_params << ";pc_type=#{args[11]}" unless args[11]==""
 
   stratified_param = args[5]
   random_seed_param = args[6]
@@ -151,7 +151,7 @@ def cv (args)
     lazar_single_args[:local_svm_kernel] = args[8] unless args[8]==""   
     lazar_single_args[:nr_hits] = args[9] unless args[9]==""
     lazar_single_args[:conf_stdev] = args[10] unless args[10]==""
-    lazar_single_args[:pc_type] = args[11] unless args[10]==""
+    lazar_single_args[:pc_type] = args[11] unless args[11]==""
     #m = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => training_dataset_uri, :subjectid => subjectid}.merge lazar_single_args ).to_s
     #puts m
     cv = OpenTox::Crossvalidation.create(cv_args).uri
