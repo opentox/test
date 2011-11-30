@@ -7,9 +7,9 @@ def cv (args)
   #subjectid = OpenTox::Authorization.authenticate("guest","guest") 
   subjectid = nil
 
-  if args.size != 12 
+  if args.size != 13 
     puts
-    puts "Error! Arguments: file_or_dataset_uri feature_generation min_frequency min_chisq_significance backbone stratified random_seed prediction_algorithm local_svm_kernel nr_hits conf_stdev pc_type"
+    puts "Error! Arguments: file_or_dataset_uri feature_generation min_frequency min_chisq_significance backbone stratified random_seed prediction_algorithm local_svm_kernel nr_hits conf_stdev pc_type max_perc_neighbors"
     exit 1
   end
 
@@ -105,6 +105,13 @@ def cv (args)
     end
   end
 
+  if ! args[12] == ""
+    if ! (args[12].to_i <= 100 && args[12].to_i >= 1)
+      puts "max_perc_neighbors must be a integer between 1 and 100"
+      exit 1
+    end
+  end
+
 
   #if !dataset_is_uri 
   #  # Upload a dataset
@@ -132,6 +139,7 @@ def cv (args)
   alg_params = alg_params << ";nr_hits=#{args[9]}" unless args[9]==""
   alg_params = alg_params << ";conf_stdev=#{args[10]}" unless args[10]==""
   alg_params = alg_params << ";pc_type=#{args[11]}" unless args[11]==""
+  alg_params = alg_params << ";max_perc_neighbors=#{args[12]}" unless args[12]==""
 
   stratified_param = args[5]
   random_seed_param = args[6]
@@ -152,6 +160,7 @@ def cv (args)
     lazar_single_args[:nr_hits] = args[9] unless args[9]==""
     lazar_single_args[:conf_stdev] = args[10] unless args[10]==""
     lazar_single_args[:pc_type] = args[11] unless args[11]==""
+    lazar_single_args[:max_perc_neighbors] = args[12] unless args[12]==""
     #m = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => training_dataset_uri, :subjectid => subjectid}.merge lazar_single_args ).to_s
     #puts m
     cv = OpenTox::Crossvalidation.create(cv_args).uri

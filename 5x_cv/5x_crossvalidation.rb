@@ -14,7 +14,7 @@ if ARGV.size != 1
   exit 1
 end
 
-# Arguments for lib/cv.rb: file_or_dataset_uri feature_generation min_frequency min_chisq_significance backbone stratified random_seed prediction_algorithm local_svm_kernel nr_hits conf_stdev pc_type
+# Arguments for lib/cv.rb: file_or_dataset_uri feature_generation min_frequency min_chisq_significance backbone stratified random_seed prediction_algorithm local_svm_kernel nr_hits conf_stdev pc_type max_perc_neighbors
 position_mapper={
   "dataset_uri" => 0, 
   "feature_generation_uri" => 1,
@@ -27,7 +27,8 @@ position_mapper={
   "local_svm_kernel" => 8,
   "nr_hits" => 9,
   "conf_stdev" => 10,
-  "pc_type" => 11
+  "pc_type" => 11,
+  "max_perc_neighbors" => 12
 }
 
 param_str=$ARGV[0]
