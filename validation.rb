@@ -120,6 +120,7 @@ class ValidationTest < Test::Unit::TestCase
         v = OpenTox::Validation.find(v.uri, @@subjectid)
         assert_valid_date v
         assert v.uri.uri?
+        assert_prob_correct(v)
         model = v.metadata[OT.model]
         assert model.uri?
         v_list = OpenTox::Validation.list( {:model => model} )
@@ -161,6 +162,7 @@ class ValidationTest < Test::Unit::TestCase
         v = OpenTox::Validation.find(v.uri, @@subjectid)
         assert_valid_date v
         assert v.uri.uri?
+        assert_prob_correct(v)
         model = v.metadata[OT.model]
         assert model.uri?
         v_list = OpenTox::Validation.list( {:model => model} )
@@ -260,6 +262,7 @@ class ValidationTest < Test::Unit::TestCase
           end
           stats_val = cv.statistics(@@subjectid)
           assert_kind_of OpenTox::Validation,stats_val
+          assert_prob_correct(stats_val)
           
           algorithm = cv.metadata[OT.algorithm]
           assert algorithm.uri?
@@ -441,6 +444,18 @@ class ValidationTest < Test::Unit::TestCase
     assert time>Time.new-(10*60),opentox_object.uri.to_s+" took longer than 10 minutes "+time.to_s
 =end
   end
+
+  def assert_prob_correct( validation )
+    class_stats = validation.metadata[OT.classificationStatistics]
+    if class_stats != nil
+      class_value_stats = class_stats[OT.classValueStatistics]
+      class_value_stats.each do |cs|
+        #puts cs[OT.positivePredictiveValue]
+        #puts validation.probabilities(0,cs[OT.classValue]).inspect
+        assert cs[OT.positivePredictiveValue]==validation.probabilities(0,cs[OT.classValue])[:probs][cs[OT.classValue]]
+      end
+    end
+  end
   
   # hack to have a global_setup and global_teardown 
   def teardown
@@ -457,4 +472,3 @@ class ValidationTest < Test::Unit::TestCase
 
 end
 
-  
