@@ -125,7 +125,7 @@ def cv (args)
   prediction_feature = OpenTox::Dataset.find(training_dataset_uri).features.keys.first
   puts prediction_feature
   # end
-  puts training_dataset_uri
+  #puts training_dataset_uri
 
 
   # Crossvalidation
@@ -146,7 +146,9 @@ def cv (args)
 
   cv_args = {:dataset_uri => training_dataset_uri, :prediction_feature => prediction_feature, :algorithm_uri => args[1].split('fminer')[0] + "lazar", :algorithm_params => alg_params, :stratified => stratified_param }
   cv_args[:random_seed] = random_seed_param unless random_seed_param == ""
-  puts file
+  #puts file
+  puts
+  puts "Crossvalidation parameters:"
   puts cv_args.to_yaml
   puts
   begin
