@@ -117,7 +117,7 @@ class LazarTest < Test::Unit::TestCase
      create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :pc_type => "electronic", :max_perc_neighbors => "5"
      predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
      assert_equal 0.76, @predictions.first.confidence(@compounds.first).round_to(2)
-     assert_equal 0.59, @predictions.first.value(@compounds.first).round_to(2)
+     assert_equal 0.57, @predictions.first.value(@compounds.first).round_to(2)
      assert_equal 24, @predictions.first.neighbors(@compounds.first).size
      assert_equal 131, @model.features.size
   end
