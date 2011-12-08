@@ -452,7 +452,7 @@ class ValidationTest < Test::Unit::TestCase
       class_value_stats.each do |cs|
         #puts cs[OT.positivePredictiveValue]
         #puts validation.probabilities(0,cs[OT.classValue]).inspect
-        assert cs[OT.positivePredictiveValue]==validation.probabilities(0,cs[OT.classValue])[:probs][cs[OT.classValue]]
+        assert cs[OT.positivePredictiveValue]==validation.probabilities(0,cs[OT.classValue],@@subjectid)[:probs][cs[OT.classValue]]
       end
     end
   end
