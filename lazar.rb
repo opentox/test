@@ -97,7 +97,7 @@ class LazarTest < Test::Unit::TestCase
     create_model :dataset_uri => @@regression_training_dataset.uri, :local_svm_kernel => "propositionalized", :pc_type => "electronic"
     predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
     assert_in_delta @predictions.first.value(@compounds.first), 0.35, 0.1
-    assert_in_delta @predictions.first.confidence(@compounds.first), 0.38, 0.03 
+    assert_in_delta @predictions.first.confidence(@compounds.first), 0.38, 0.05 
     assert_equal 253, @predictions.first.neighbors(@compounds.first).size
     assert_equal 131, @model.features.size
     cleanup
@@ -106,8 +106,8 @@ class LazarTest < Test::Unit::TestCase
   def test_regression_mlr_prop_pc_model
      create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :pc_type => "electronic"
      predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
-     assert_in_delta @predictions.first.confidence(@compounds.first), 0.38, 0.03
-     assert_in_delta @predictions.first.value(@compounds.first), 0.57, 0.03
+     assert_in_delta @predictions.first.confidence(@compounds.first), 0.38, 0.05
+     assert_in_delta @predictions.first.value(@compounds.first), 0.57, 0.05
      assert_equal 253, @predictions.first.neighbors(@compounds.first).size
      assert_equal 131, @model.features.size
   end
