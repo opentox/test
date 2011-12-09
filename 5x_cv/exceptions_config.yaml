@@ -1,3 +1,11 @@
+http://toxcreate3.in-silico.ch:8080/dataset/2366
+  max_perc_neighbors: 5
+http://toxcreate3.in-silico.ch:8080/dataset/2133
+  max_perc_neighbors: 10
+http://toxcreate3.in-silico.ch:8080/dataset/1408
+  max_perc_neighbors: 10
+http://toxcreate3.in-silico.ch:8080/dataset/1384
+  max_perc_neighbors: 13
 http://toxcreate3.in-silico.ch:8080/dataset/271:
   min_frequency: 12
 http://x61s.fdm.uni-freiburg.de/dataset/3546:
