@@ -1,2 +1,4 @@
-feature_generation_uri=http://toxcreate3.in-silico.ch:8083/algorithm/fminer/bbrc
-#feature_generation_uri=http://toxcreate3.in-silico.ch:8082/algorithm/fminer/bbrc;prediction_algorithm=local_mlr_prop;pc_type=electronic;max_perc_neighbors=20
+feature_generation_uri=http://toxcreate3.in-silico.ch:808X/algorithm/fminer/bbrc;prediction_algorithm=local_mlr_prop;pc_type=electronic
+feature_generation_uri=http://toxcreate3.in-silico.ch:808X/algorithm/fminer/bbrc;prediction_algorithm=local_mlr_prop;pc_type=constitutional
+#feature_generation_uri=http://toxcreate3.in-silico.ch:808X/algorithm/fminer/bbrc;prediction_algorithm=local_svm_regression;local_svm_kernel=propositionalized;pc_type=electronic
+#feature_generation_uri=http://toxcreate3.in-silico.ch:808X/algorithm/fminer/bbrc;prediction_algorithm=local_svm_regression;local_svm_kernel=propositionalized;pc_type=constitutional

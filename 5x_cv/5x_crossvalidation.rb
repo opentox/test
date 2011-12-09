@@ -48,8 +48,8 @@ if ! exception_config[params[0]].nil?
   }
 end
 
-#i=1
-for i in 1..5
+i=1
+#for i in 1..5
   begin
     puts
     puts "Round #{i.to_s}."
@@ -58,7 +58,7 @@ for i in 1..5
   rescue Exception => e
     puts "Error in 5xCV: #{e.message}: #{e.backtrace}"
   end
-end
+#end
 puts 
 puts "--- Validation of dataset (#{params[0]}) finished."
 puts
