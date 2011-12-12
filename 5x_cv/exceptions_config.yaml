@@ -1,3 +1,11 @@
+http://toxcreate3.in-silico.ch:8080/dataset/2930:
+  max_perc_neighbors: 5
+http://toxcreate3.in-silico.ch:8080/dataset/2928:
+  max_perc_neighbors: 10
+http://toxcreate3.in-silico.ch:8080/dataset/2926:
+  max_perc_neighbors: 10
+http://toxcreate3.in-silico.ch:8080/dataset/2924:
+  max_perc_neighbors: 13
 http://toxcreate3.in-silico.ch:8080/dataset/2366:
   max_perc_neighbors: 5
 http://toxcreate3.in-silico.ch:8080/dataset/2133:
