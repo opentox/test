@@ -19,8 +19,7 @@ end
 class ValidationTest < Test::Unit::TestCase
 
   @@delete = true
-  #@@feature_types = ["bbrc", "last"]
-  @@feature_types = ["bbrc"]
+  @@hamster_cv_feature_types = ["bbrc", "last"]
   @@qmrf_test = true
   @@data = []
   @@data << { :type => :crossvalidation,
@@ -37,7 +36,8 @@ class ValidationTest < Test::Unit::TestCase
       :test_data => "http://apps.ideaconsult.net:8080/ambit2/dataset/435293?page=30&pagesize=10",
       :feat => "http://apps.ideaconsult.net:8080/ambit2/feature/533748",
       :info => "http://apps.ideaconsult.net:8080/ambit2/dataset/435293?page=0&pagesize=300" }     
-  @@files = { File.new("data/hamster_carcinogenicity.csv") => :crossvalidation,  
+  @@files = { 
+             File.new("data/hamster_carcinogenicity.csv") => :crossvalidation,  
              #File.new("data/hamster_carcinogenicity.mini.csv") => :crossvalidation,
              #File.new("data/EPAFHM.csv") => :crossvalidation,
              File.new("data/EPAFHM.mini.csv") => :crossvalidation,
@@ -91,7 +91,7 @@ class ValidationTest < Test::Unit::TestCase
  
   def test_training_test_split
     
-    @@vs = []
+    @@vs = [] unless defined?@@vs
     @@data.each do |data|
       if data[:type]==:split_validation
         puts "test_training_test_split "+data[:info].to_s
@@ -134,7 +134,7 @@ class ValidationTest < Test::Unit::TestCase
   
   def test_training_test_validation
     
-    @@vs = []
+    @@vs = [] unless defined?@@vs
     @@data.each do |data|
       if data[:type]==:training_test_validation
         puts "test_training_test_validation "+data[:info].to_s
@@ -189,7 +189,8 @@ class ValidationTest < Test::Unit::TestCase
       end
       report = OpenTox::ValidationReport.find_for_validation(v.uri,@@subjectid)
       assert report==nil,"report already exists for validation\nreport: "+(report ? report.uri.to_s : "")+"\nvalidation: "+v.uri.to_s
-      report = OpenTox::ValidationReport.create(v.uri,@@subjectid)
+      params = {:min_confidence => 0.05}
+      report = OpenTox::ValidationReport.create(v.uri,params,@@subjectid)
       assert report.uri.uri?
       if @@subjectid
         assert_rest_call_error OpenTox::NotAuthorizedError do
@@ -227,7 +228,8 @@ class ValidationTest < Test::Unit::TestCase
     @@cv_identifiers = []
     @@data.each do |data|
       if data[:type]==:crossvalidation
-        @@feature_types.each do |fminer|
+        @@hamster_cv_feature_types.each do |fminer|
+          next unless (fminer==@@hamster_cv_feature_types[0] or data[:info].to_s =~ /hamster_carcinogenicity.csv/)
           puts "test_crossvalidation "+data[:info].to_s+" "+fminer
           p = { 
             :dataset_uri => data[:data],
@@ -344,7 +346,9 @@ class ValidationTest < Test::Unit::TestCase
           end
           assert OpenTox::AlgorithmComparisonReport.find_for_crossvalidation(@@cvs[i].uri,@@subjectid)==nil
           assert OpenTox::AlgorithmComparisonReport.find_for_crossvalidation(@@cvs[j].uri,@@subjectid)==nil
-          report = OpenTox::AlgorithmComparisonReport.create hash,@@subjectid
+          
+          params = {:ttest_significance => 0.95, :ttest_attributes => "real_runtime,percent_unpredicted", :max_num_predictions => 5}
+          report = OpenTox::AlgorithmComparisonReport.create hash,params,@@subjectid
           assert report.uri.uri?
           if @@subjectid
             assert_rest_call_error OpenTox::NotAuthorizedError do
