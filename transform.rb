@@ -2,6 +2,11 @@ require 'rubygems'
 require 'opentox-ruby'
 require 'test/unit'
 
+class Float
+  def round_to(x)
+    (self * 10**x).round.to_f / 10**x
+  end
+end
 
 class TransformTest < Test::Unit::TestCase
 
@@ -68,6 +73,42 @@ class TransformTest < Test::Unit::TestCase
   
   
   end
+
+  def test_svd
+
+    m = GSL::Matrix[
+            [5,5,0,5],
+            [5,0,3,4],
+            [3,4,0,3],
+            [0,0,5,3],
+            [5,4,4,5],
+            [5,4,5,5] 
+     ]
+     svd = OpenTox::Algorithm::Transform::SVD.new m
+
+     foo = svd.transform_feature GSL::Matrix[[5,5,3,0,5,5]]
+     sim = []
+     svd.vk.each_row { |x|
+       sim << OpenTox::Algorithm::Similarity.cosine_num(x,foo.row(0))
+     }
+     assert_equal sim[0].round_to(3), 1.000
+     assert_equal sim[1].round_to(3), 0.874
+     assert_equal sim[2].round_to(3), 0.064
+     assert_equal sim[3].round_to(3), 0.895
+
+     bar = svd.transform_instance GSL::Matrix[[5,4,5,5]]
+     sim = []
+     svd.uk.each_row { |x|
+       sim << OpenTox::Algorithm::Similarity.cosine_num(x,bar.row(0))
+     }
+
+     assert_equal sim[0].round_to(3), 0.346
+     assert_equal sim[1].round_to(3), 0.966
+     assert_equal sim[2].round_to(3), 0.282
+     assert_equal sim[3].round_to(3), 0.599
+     assert_equal sim[4].round_to(3), 0.975
+     assert_equal sim[5].round_to(3), 1.000 
+  end
   
   def test_logas
   
@@ -87,27 +128,22 @@ class TransformTest < Test::Unit::TestCase
 
       logas = OpenTox::Transform::LogAutoScale.new(d1)
       assert_equal logas.vs, d1la
-      assert_equal logas.transform(d1), logas.vs
       assert_equal logas.restore(logas.vs), d1
   
       logas = OpenTox::Transform::LogAutoScale.new(d2)
       assert_equal logas.vs, d2la
-      assert_equal logas.transform(d2), d2la
       assert_equal logas.restore(logas.vs), d2
 
       logas = OpenTox::Transform::LogAutoScale.new(d3)
       assert_equal logas.vs, d3la
-      assert_equal logas.transform(d3), logas.vs
       assert_equal logas.restore(logas.vs), d3
   
       logas = OpenTox::Transform::LogAutoScale.new(d4)
       assert_equal logas.vs, d4la
-      assert_equal logas.transform(d4), logas.vs
       assert_equal logas.restore(logas.vs), d4
 
       logas = OpenTox::Transform::LogAutoScale.new(d5)
       assert_equal logas.vs, d5la
-      assert_equal logas.transform(d5), logas.vs
       assert_equal logas.restore(logas.vs), d5
   
     }
