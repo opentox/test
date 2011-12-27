@@ -1,0 +1,27 @@
+{
+
+  "MDD": {
+    "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/1571",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/1577",
+    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/1578"
+  },
+  
+  "FHM": {
+    "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/1572",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/1575",
+    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/1576"
+  },
+  
+  "RAT": {
+    "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/1573",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/1583",
+    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/1582"
+  },
+  
+  "MOU": {
+  "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/1574",
+  "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/1585",
+  "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/1584"
+  }
+
+}
