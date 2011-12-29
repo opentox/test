@@ -6,3 +6,15 @@ curl -H 'accept:text/csv' http://toxcreate3.in-silico.ch:8086/dataset/1583 > RAT
 curl -H 'accept:text/csv' http://toxcreate3.in-silico.ch:8086/dataset/1582 > RAT_constitutional.csv
 curl -H 'accept:text/csv' http://toxcreate3.in-silico.ch:8086/dataset/1585 > MOU_electronic,cpsa.csv
 curl -H 'accept:text/csv' http://toxcreate3.in-silico.ch:8086/dataset/1584 > MOU_constitutional.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1905 > MDD_geometrical.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1906 > MDD_topological.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1907 > MDD_hybrid.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1908 > FHM_geometrical.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1909 > FHM_topological.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1910 > FHM_hybrid.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1911 > RAT_geometrical.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1912 > RAT_topological.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1913 > RAT_hybrid.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1914 > MOU_geometrical.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1915 > MOU_topological.csv
+curl -H "accept:text/csv" http://toxcreate3.in-silico.ch:8086/dataset/1916 > MOU_hybrid.csv
