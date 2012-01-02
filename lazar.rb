@@ -60,8 +60,25 @@ class LazarTest < Test::Unit::TestCase
     #@model.delete(@@subjectid)
   end
 
-=begin
-=end
+  def test_create_regression_pc_model
+    create_model :dataset_uri => @@regression_training_dataset.uri, :feature_dataset_uri => @@regression_feature_dataset.uri, :pc_type => "constitutional"
+    predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
+    assert_in_delta @predictions.first.value(@compounds.first), 1.18, 0.2
+    assert_equal 0.557, @predictions.first.confidence(@compounds.first).round_to(3)
+    #assert_equal 253, @predictions.first.neighbors(@compounds.first).size
+    cleanup
+  end
+
+  def test_create_regression_pc_prop_model
+    create_model :dataset_uri => @@regression_training_dataset.uri, :feature_dataset_uri => @@regression_feature_dataset.uri, :pc_type => "constitutional", :local_svm_kernel => "propositionalized"
+    predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
+    assert_in_delta @predictions.first.value(@compounds.first), 0.43, 0.2
+    assert_equal 0.557, @predictions.first.confidence(@compounds.first).round_to(3)
+    #assert_equal 253, @predictions.first.neighbors(@compounds.first).size
+    cleanup
+  end
+
+
   def test_create_regression_model
     create_model :dataset_uri => @@regression_training_dataset.uri
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
@@ -209,7 +226,7 @@ class LazarTest < Test::Unit::TestCase
 
      # create model
      dataset_uri = "http://apps.ideaconsult.net:8080/ambit2/dataset/9?max=400"
-     feature_uri ="http://apps.ideaconsult.net:8080/ambit2/feature/21573"
+     feature_uri ="http://apps.ideaconsult.net:8080/ambit2/feature/2153"
      #model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => dataset_uri, :prediction_feature => feature_uri}).to_s
      #lazar = OpenTox::Model::Lazar.find model_uri
      model_uri = OpenTox::Algorithm::Lazar.new.run({:dataset_uri => dataset_uri, :prediction_feature => feature_uri, :subjectid => @@subjectid}).to_s
