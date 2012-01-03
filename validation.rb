@@ -188,7 +188,7 @@ class ValidationTest < Test::Unit::TestCase
         end
       end
       report = OpenTox::ValidationReport.find_for_validation(v.uri,@@subjectid)
-      assert report==nil,"report already exists for validation\nreport: "+(report ? report.uri.to_s : "")+"\nvalidation: "+v.uri.to_s
+      assert_nil report,"report already exists for validation\nreport: "+(report ? report.uri.to_s : "")+"\nvalidation: "+v.uri.to_s
       params = {:min_confidence => 0.05}
       report = OpenTox::ValidationReport.create(v.uri,params,@@subjectid)
       assert report.uri.uri?
@@ -425,6 +425,7 @@ class ValidationTest < Test::Unit::TestCase
     end
     begin
       yield
+      assert false,"no rest-call error thrown"
     rescue OpenTox::RestCallError => e
       raise "error Report of RestCallError is no errorReport: "+e.errorCause.class.to_s+":\n"+e.errorCause.to_yaml  unless e.errorCause.is_a?(OpenTox::ErrorReport)
       report = e.errorCause
