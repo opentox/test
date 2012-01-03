@@ -112,7 +112,7 @@ class ValidationTest < Test::Unit::TestCase
         def t.waiting_for(task_uri); end
         v = OpenTox::Validation.create_training_test_split(p, @@subjectid, t)
         assert v.uri.uri?
-        if @@subjectid
+        if AA_SERVER
           assert_rest_call_error OpenTox::NotAuthorizedError do
             OpenTox::Validation.find(v.uri)
           end
@@ -154,7 +154,7 @@ class ValidationTest < Test::Unit::TestCase
         def t.waiting_for(task_uri); end
         v = OpenTox::Validation.create_training_test_validation(p, @@subjectid, t)
         assert v.uri.uri?
-        if @@subjectid
+        if AA_SERVER
           assert_rest_call_error OpenTox::NotAuthorizedError do
             OpenTox::Validation.find(v.uri)
           end
@@ -182,7 +182,7 @@ class ValidationTest < Test::Unit::TestCase
       puts "test_validation_report"
       assert defined?v,"no validation defined"
       assert_kind_of OpenTox::Validation,v
-      if @@subjectid
+      if AA_SERVER
         assert_rest_call_error OpenTox::NotAuthorizedError do
           OpenTox::ValidationReport.create(v.uri)
         end
@@ -192,7 +192,7 @@ class ValidationTest < Test::Unit::TestCase
       params = {:min_confidence => 0.05}
       report = OpenTox::ValidationReport.create(v.uri,params,@@subjectid)
       assert report.uri.uri?
-      if @@subjectid
+      if AA_SERVER
         assert_rest_call_error OpenTox::NotAuthorizedError do
           OpenTox::ValidationReport.find(report.uri)
         end
@@ -249,7 +249,7 @@ class ValidationTest < Test::Unit::TestCase
           def t.waiting_for(task_uri); end
           cv = OpenTox::Crossvalidation.create(p, @@subjectid, t)
           assert cv.uri.uri?
-          if @@subjectid
+          if AA_SERVER
             assert_rest_call_error OpenTox::NotAuthorizedError do
               OpenTox::Crossvalidation.find(cv.uri)
             end
@@ -257,7 +257,7 @@ class ValidationTest < Test::Unit::TestCase
           cv = OpenTox::Crossvalidation.find(cv.uri, @@subjectid)
           assert_valid_date cv
           assert cv.uri.uri?
-          if @@subjectid
+          if AA_SERVER
             assert_rest_call_error OpenTox::NotAuthorizedError do
               cv.statistics(cv)
             end
@@ -304,7 +304,7 @@ class ValidationTest < Test::Unit::TestCase
       #assert_rest_call_error OpenTox::NotFoundError do 
       #  OpenTox::CrossvalidationReport.find_for_crossvalidation(cv.uri)
       #end
-      if @@subjectid
+      if AA_SERVER
         assert_rest_call_error OpenTox::NotAuthorizedError do
           OpenTox::CrossvalidationReport.create(cv.uri)
         end
@@ -312,7 +312,7 @@ class ValidationTest < Test::Unit::TestCase
       assert OpenTox::CrossvalidationReport.find_for_crossvalidation(cv.uri,@@subjectid)==nil
       report = OpenTox::CrossvalidationReport.create(cv.uri,@@subjectid)
       assert report.uri.uri?
-      if @@subjectid
+      if AA_SERVER
         assert_rest_call_error OpenTox::NotAuthorizedError do
           OpenTox::CrossvalidationReport.find(report.uri)
         end
@@ -339,7 +339,7 @@ class ValidationTest < Test::Unit::TestCase
           assert_kind_of OpenTox::Crossvalidation,@@cvs[j]
           hash = { @@cv_identifiers[i] => [@@cvs[i].uri],
                    @@cv_identifiers[j] => [@@cvs[j].uri] }
-          if @@subjectid
+          if AA_SERVER
             assert_rest_call_error OpenTox::NotAuthorizedError do
               OpenTox::AlgorithmComparisonReport.create hash,@@subjectid
             end
@@ -350,7 +350,7 @@ class ValidationTest < Test::Unit::TestCase
           params = {:ttest_significance => 0.95, :ttest_attributes => "real_runtime,percent_unpredicted", :max_num_predictions => 5}
           report = OpenTox::AlgorithmComparisonReport.create hash,params,@@subjectid
           assert report.uri.uri?
-          if @@subjectid
+          if AA_SERVER
             assert_rest_call_error OpenTox::NotAuthorizedError do
               OpenTox::AlgorithmComparisonReport.find(report.uri)
             end
@@ -419,7 +419,7 @@ class ValidationTest < Test::Unit::TestCase
   
   # checks RestCallError type
   def assert_rest_call_error( ex )
-    if ex==OpenTox::NotAuthorizedError and @@subjectid==nil
+    if ex==OpenTox::NotAuthorizedError and AA_SERVER==nil
       puts "AA disabled: skipping test for not authorized"
       return
     end
