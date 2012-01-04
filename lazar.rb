@@ -189,24 +189,14 @@ class LazarTest < Test::Unit::TestCase
     cleanup
   end
 
-
-#  def test_regression_mlr_prop_model
-#     create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop"
-#     predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
-#     assert_equal 0.610, @predictions.first.confidence(@compounds.first).round_to(3)
-#     assert_equal 0.615, @predictions.first.value(@compounds.first).round_to(3)
-#     assert_equal 253, @predictions.first.neighbors(@compounds.first).size
-#     assert_equal 131, @model.features.size
-#  end
-
-# def test_regression_mlr_prop_conf_stdev
-#    create_model :dataset_uri => @@regression_training_dataset.uri, :prediction_algorithm => "local_mlr_prop", :conf_stdev => "true"
-#    predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
-#    assert_equal 0.154, @predictions.first.confidence(@compounds.first).round_to(3)
-#    assert_equal 0.265, @predictions.first.value(@compounds.first).round_to(3)
-#    assert_equal 253, @predictions.first.neighbors(@compounds.first).size
-#    assert_equal 131, @model.features.size
-# end
+  def test_create_regression_pc_mlr_prop_model
+    create_model :dataset_uri => @@regression_training_dataset.uri, :feature_dataset_uri => @@regression_feature_dataset.uri, :pc_type => "constitutional", :prediction_algorithm => "local_mlr_prop"
+    predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
+    assert_in_delta @predictions.first.value(@compounds.first), 1.05, 0.2
+    assert_equal 0.557, @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 157, @predictions.first.neighbors(@compounds.first).size
+    cleanup
+  end
 
 #  def test_conf_stdev
 #    params = {:sims => [0.6,0.72,0.8], :acts => [1,1,1], :neighbors => [1,1,1], :conf_stdev => true} 
