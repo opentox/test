@@ -341,7 +341,7 @@ class ValidationTest < Test::Unit::TestCase
                    @@cv_identifiers[j] => [@@cvs[j].uri] }
           if AA_SERVER
             assert_rest_call_error OpenTox::NotAuthorizedError do
-              OpenTox::AlgorithmComparisonReport.create hash,@@subjectid
+              OpenTox::AlgorithmComparisonReport.create hash,{}
             end
           end
           assert OpenTox::AlgorithmComparisonReport.find_for_crossvalidation(@@cvs[i].uri,@@subjectid)==nil
@@ -427,7 +427,8 @@ class ValidationTest < Test::Unit::TestCase
       yield
       assert false,"no rest-call error thrown"
     rescue OpenTox::RestCallError => e
-      raise "error Report of RestCallError is no errorReport: "+e.errorCause.class.to_s+":\n"+e.errorCause.to_yaml  unless e.errorCause.is_a?(OpenTox::ErrorReport)
+      raise "error Report of RestCallError is no errorReport: "+
+         e.errorCause.class.to_s+":\n"+e.errorCause.to_yaml unless e.errorCause.is_a?(OpenTox::ErrorReport)
       report = e.errorCause
       while report.errorCause
         report = report.errorCause
