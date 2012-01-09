@@ -63,18 +63,18 @@ class LazarTest < Test::Unit::TestCase
   def test_create_regression_pc_model
     create_model :dataset_uri => @@regression_training_dataset.uri, :feature_dataset_uri => @@regression_feature_dataset.uri, :pc_type => "constitutional"
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_in_delta @predictions.first.value(@compounds.first), 1.18, 0.2
-    assert_equal 0.557, @predictions.first.confidence(@compounds.first).round_to(3)
-    #assert_equal 253, @predictions.first.neighbors(@compounds.first).size
+    assert_in_delta @predictions.first.value(@compounds.first), 1.41, 0.2
+    assert_equal 0.728, @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 63, @predictions.first.neighbors(@compounds.first).size
     cleanup
   end
 
   def test_create_regression_pc_prop_model
-    create_model :dataset_uri => @@regression_training_dataset.uri, :feature_dataset_uri => @@regression_feature_dataset.uri, :pc_type => "constitutional", :local_svm_kernel => "propositionalized"
+    create_model :dataset_uri => @@regression_training_dataset.uri, :feature_dataset_uri => @@regression_feature_dataset.uri, :pc_type => "constitutional", :propositionalized => "true"
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_in_delta @predictions.first.value(@compounds.first), 0.43, 0.2
-    assert_equal 0.557, @predictions.first.confidence(@compounds.first).round_to(3)
-    #assert_equal 253, @predictions.first.neighbors(@compounds.first).size
+    assert_in_delta @predictions.first.value(@compounds.first), 0.52, 0.2
+    assert_equal 0.728, @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 63, @predictions.first.neighbors(@compounds.first).size
     cleanup
   end
 
@@ -89,7 +89,7 @@ class LazarTest < Test::Unit::TestCase
   end
 
   def test_create_regression_prop_model
-    create_model :dataset_uri => @@regression_training_dataset.uri, :local_svm_kernel => "propositionalized"
+    create_model :dataset_uri => @@regression_training_dataset.uri, :propositionalized => "true"
     predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
     assert_equal 0.610, @predictions.first.confidence(@compounds.first).round_to(3)
     assert_equal 253, @predictions.first.neighbors(@compounds.first).size
@@ -98,7 +98,7 @@ class LazarTest < Test::Unit::TestCase
   end
 
   def test_create_regression_prop_nr_hits_model
-    create_model :dataset_uri => @@regression_training_dataset.uri, :local_svm_kernel => "propositionalized", :nr_hits => "false"
+    create_model :dataset_uri => @@regression_training_dataset.uri, :propositionalized => "true", :nr_hits => "false"
     predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
     assert_equal 0.478, @predictions.first.confidence(@compounds.first).round_to(3)
     assert_equal 123, @predictions.first.neighbors(@compounds.first).size
@@ -156,7 +156,7 @@ class LazarTest < Test::Unit::TestCase
 
 
   def test_classification_svm_prop_model
-    create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification", :local_svm_kernel => "propositionalized"
+    create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification", :propositionalized => "true"
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
     predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
 
@@ -173,7 +173,7 @@ class LazarTest < Test::Unit::TestCase
   end
 
   def test_classification_svm_prop_nr_hits_model
-    create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification", :local_svm_kernel => "propositionalized", :nr_hits => "true"
+    create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification", :propositionalized => "true", :nr_hits => "true"
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
     predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
 
@@ -192,9 +192,9 @@ class LazarTest < Test::Unit::TestCase
   def test_create_regression_pc_mlr_prop_model
     create_model :dataset_uri => @@regression_training_dataset.uri, :feature_dataset_uri => @@regression_feature_dataset.uri, :pc_type => "constitutional", :prediction_algorithm => "local_mlr_prop"
     predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_in_delta @predictions.first.value(@compounds.first), 1.05, 0.2
-    assert_equal 0.557, @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 157, @predictions.first.neighbors(@compounds.first).size
+    assert_in_delta @predictions.first.value(@compounds.first), 1.02, 0.2
+    assert_equal 0.728, @predictions.first.confidence(@compounds.first).round_to(3)
+    #assert_equal 34, @predictions.first.neighbors(@compounds.first).size
     cleanup
   end
 
