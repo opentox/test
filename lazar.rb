@@ -100,8 +100,8 @@ class LazarTest < Test::Unit::TestCase
   def test_create_regression_prop_nr_hits_model
     create_model :dataset_uri => @@regression_training_dataset.uri, :propositionalized => "true", :nr_hits => "false"
     predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
-    assert_equal 0.478, @predictions.first.confidence(@compounds.first).round_to(3)
-    assert_equal 123, @predictions.first.neighbors(@compounds.first).size
+    assert_equal 0.610, @predictions.first.confidence(@compounds.first).round_to(3)
+    assert_equal 253, @predictions.first.neighbors(@compounds.first).size
     assert_equal 131, @model.features.size
     cleanup
   end
