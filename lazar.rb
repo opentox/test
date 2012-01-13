@@ -93,7 +93,7 @@ class LazarTest < Test::Unit::TestCase
     predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
     assert_equal 0.61, @predictions.first.confidence(@compounds.first).round_to(2)
     assert_equal 253, @predictions.first.neighbors(@compounds.first).size
-    assert_equal 132, @model.features.size
+    assert_equal 131, @model.features.size
     cleanup
   end
 
@@ -102,7 +102,7 @@ class LazarTest < Test::Unit::TestCase
     predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
     assert_equal 0.61, @predictions.first.confidence(@compounds.first).round_to(2)
     assert_equal 253, @predictions.first.neighbors(@compounds.first).size
-    assert_equal 132, @model.features.size
+    assert_equal 131, @model.features.size
     cleanup
   end
 
