@@ -112,8 +112,13 @@ class TransformTest < Test::Unit::TestCase
 
 
      # run SVD
-     svd = OpenTox::Algorithm::Transform::SVD.new m
+     svd = OpenTox::Algorithm::Transform::SVD.new m, 0.2
+     #puts
+     #puts svd.restore.to_a.collect { |r| r.collect{ |v| sprintf("%.2f", v) }.join(", ") }.join("\n")
 
+
+     #puts
+     #puts svd.data_transformed_matrix.to_a.collect { |r| r.collect{ |v| sprintf("%.2f", v) }.join(", ") }.join("\n")
 
      # instance transform
      bar = svd.transform bar # alias for svd.transform_instance bar 
@@ -121,7 +126,7 @@ class TransformTest < Test::Unit::TestCase
      svd.uk.each_row { |x|
        sim << OpenTox::Algorithm::Similarity.cosine_num(x,bar.row(0))
      }
-
+     
      # # # NO AUTOSCALE
      #assert_equal sim[0].round_to(3), 0.346
      #assert_equal sim[1].round_to(3), 0.966
@@ -138,10 +143,7 @@ class TransformTest < Test::Unit::TestCase
      assert_equal sim[4].round_to(3), 0.972
      assert_equal sim[5].round_to(3), 1.000 
 
-     #puts
-     #puts svd.restore.to_a.collect { |r| r.collect{ |v| sprintf("%.2f", v) }.join(", ") }.join("\n")
-
- 
+      
      # feature transform, only for demonstration of concept
      foo = svd.transform_feature foo
      sim = []
