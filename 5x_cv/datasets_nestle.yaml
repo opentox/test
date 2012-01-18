@@ -3,8 +3,8 @@
   "MDD": {
     "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/5474",
     "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/5478",
-    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/5475" #,
-#    "constitutional,electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/"
+    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/5475",
+    "constitutional,electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/5479"
   },
   
   "FHM": {
