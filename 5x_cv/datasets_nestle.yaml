@@ -18,22 +18,6 @@
   
   "RAT": {
     "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/5458",
-    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/5463",
-    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/5462",
-    "topological": "http://toxcreate3.in-silico.ch:8086/dataset/5671",
-    "constitutional,electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/5464"
-  },
-
-  "MOU": {
-    "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/5457",
-    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/5460",
-    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/5459",
-    "topological": "http://toxcreate3.in-silico.ch:8086/dataset/5672",
-    "constitutional,electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/5461"
-  },
-
-  "RAT_pTD": {
-    "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/5458",
     "training": "http://toxcreate3.in-silico.ch:8086/dataset/5465",
     "test": "http://toxcreate3.in-silico.ch:8086/dataset/5466",
     "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/5463",
@@ -42,7 +26,7 @@
     "constitutional,electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/5464"
   },
 
-  "MOU_pTD": {
+  "MOU": {
     "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/5457",
     "training": "http://toxcreate3.in-silico.ch:8086/dataset/5467",
     "test": "http://toxcreate3.in-silico.ch:8086/dataset/5468",
