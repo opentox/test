@@ -153,9 +153,9 @@ class RUtilTest < Test::Unit::TestCase
       stratified_file = "/tmp/feature_value_plot_stratified_fast#{fast_embedding}.svg"
       pre_files [random_file, stratified_file]
       @@rutil.feature_value_plot([random_file], dataset1.uri, dataset2.uri,
-         "first five", "rest", fast_embedding, @@subjectid)
+         "first five", "rest", nil, fast_embedding, @@subjectid)
       @@rutil.feature_value_plot([stratified_file], split[:split1].uri, split[:split2].uri,
-          "five percent stratified", "rest", fast_embedding, @@subjectid)
+          "five percent stratified", "rest", nil, fast_embedding, @@subjectid)
       files += [random_file, stratified_file]
     end
     #cleanup
