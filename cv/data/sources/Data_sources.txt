@@ -1,0 +1,16 @@
+CPDBAS_v5d_1547_20Nov2008_nostructures.xls 
+from:
+http://www.epa.gov/ncct/dsstox/sdf_cpdbas.html
+
+Bercu_CPDB_9March2010_mouseTD50_mgkg_pTD50.xls initially mmc1.xls
+Bercu_CPDB_9March2010_ratTD50_mgkg_pTD50.xls initially mmc1.xls
+both from: 
+http://www.sciencedirect.com/science/article/pii/S0273230010000589
+
+FDAMDD_v3b_1216_15Feb2008_nostructures.xls
+from:
+http://www.epa.gov/ncct/dsstox/sdf_fdamdd.html
+
+EPAFHM_v4b_617_15Feb2008_nostructures.xls
+from:
+http://www.epa.gov/ncct/dsstox/sdf_epafhm.html
