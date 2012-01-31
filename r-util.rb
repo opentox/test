@@ -16,7 +16,12 @@ class RUtilTest < Test::Unit::TestCase
     end 
     @@rutil = OpenTox::RUtil.new
     @@hamster = OpenTox::Dataset.create_from_csv_file(File.new("data/hamster_carcinogenicity.csv").path, @@subjectid)
-    @@resources = [@@hamster.uri]
+    pred_feature = @@hamster.features.keys[0]
+    fminer = File.join(CONFIG[:services]["opentox-algorithm"],"fminer/bbrc")
+    hamster_features_uri = OpenTox::RestClientWrapper.post(fminer,
+      {:dataset_uri=>@@hamster.uri,:prediction_feature=>pred_feature,:subjectid=>@@subjectid}).to_s
+    @@hamster_features = OpenTox::Dataset.find(hamster_features_uri,@@subjectid)
+    @@resources = [@@hamster.uri, hamster_features_uri]
   end
 
   def global_teardown
@@ -87,13 +92,32 @@ class RUtilTest < Test::Unit::TestCase
 
   def test_dataset_to_dataframe
     puts "dataset_to_dataframe"
-    dataset = @@hamster
-    dataframe = @@rutil.dataset_to_dataframe(dataset,0,@@subjectid)
+    dataframe = @@rutil.dataset_to_dataframe(@@hamster,"NA",@@subjectid)
     dataset_conv = @@rutil.dataframe_to_dataset(dataframe,@@subjectid)
     dataset_conv_reloaded = OpenTox::Dataset.find(dataset_conv.uri,@@subjectid)
     @@resources << dataset_conv.uri
-    dataset_equal(dataset,dataset_conv)
-    dataset_equal(dataset,dataset_conv_reloaded)
+    dataset_equal(@@hamster,dataset_conv)
+    dataset_equal(@@hamster,dataset_conv_reloaded)
+    
+    feats = @@hamster_features.features.keys[0..(@@hamster_features.features.keys.size/2)]
+    dataframe = @@rutil.dataset_to_dataframe(@@hamster_features,"NA",@@subjectid,feats)
+    dataset_conv = @@rutil.dataframe_to_dataset(dataframe,@@subjectid)
+    dataset_conv_reloaded = OpenTox::Dataset.find(dataset_conv.uri,@@subjectid)
+    @@resources << dataset_conv.uri
+    [dataset_conv, dataset_conv_reloaded].each do |d|
+      assert_equal d.compounds.sort,@@hamster_features.compounds.sort
+      assert_equal d.features.keys.sort,feats.sort
+      d.compounds.each do |c|
+        d.features.keys.each do |f|
+          if @@hamster_features.data_entries[c]==nil || @@hamster_features.data_entries[c][f]==nil
+            assert d.data_entries[c]==nil || d.data_entries[c][f]==nil
+          else
+            assert_not_nil d.data_entries[c]
+            assert_equal @@hamster_features.data_entries[c][f],d.data_entries[c][f]
+          end 
+        end
+      end
+    end
   end
 
   def stratified_split
@@ -103,14 +127,9 @@ class RUtilTest < Test::Unit::TestCase
 #     res = @@rutil.stratified_split(@@hamster,0,@@split_ratio,1)
 #     @@resources += [ res[0].uri, res[1].uri ]
 #     @@strat = { :data => @@hamster, :split1 => res[0], :split2 => res[1] }
-      pred_feature = @@hamster.features.keys[0]
-      fminer = File.join(CONFIG[:services]["opentox-algorithm"],"fminer/bbrc")
-      feature_dataset_uri = OpenTox::RestClientWrapper.post(fminer,
-        {:dataset_uri=>@@hamster.uri,:prediction_feature=>pred_feature,:subjectid=>@@subjectid}).to_s
-      feature_dataset = OpenTox::Dataset.find(feature_dataset_uri,@@subjectid)
-      data_combined = OpenTox::Dataset.merge(@@hamster,feature_dataset,{},@@subjectid)
+      data_combined = OpenTox::Dataset.merge(@@hamster,@@hamster_features,{},@@subjectid)
       res = @@rutil.stratified_split(data_combined,0,@@split_ratio,@@subjectid,1)
-      @@resources += [ feature_dataset_uri, data_combined.uri, res[0].uri, res[1].uri ]
+      @@resources += [ data_combined.uri, res[0].uri, res[1].uri ]
       @@strat = {:data => data_combined, :split1 => res[0], :split2 => res[1] }
     end
     @@strat
