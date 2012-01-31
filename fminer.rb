@@ -363,5 +363,20 @@ end
     #}
     cleanup
   end
+  
+  def test_match
+    feature = @@classification_training_dataset.features.keys.first
+    feature_dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({
+      :dataset_uri => @@classification_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid}).to_s
+    feature_dataset = OpenTox::Dataset.find(feature_dataset_uri,@@subjectid)
+    matched_dataset_uri = OpenTox::RestClientWrapper.post(File.join(CONFIG[:services]["opentox-algorithm"],"fminer","bbrc","match"),
+     {:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@multinomial_training_dataset.uri, :subjectid => @@subjectid}).to_s
+    matched_dataset = OpenTox::Dataset.find(matched_dataset_uri,@@subjectid)
+    # matched dataset should have same features as feature dataset
+    assert_equal feature_dataset.features.keys.sort,matched_dataset.features.keys.sort
+    # matched datset should have same compounds as input dataset for matching
+    assert_equal matched_dataset.compounds.sort,@@multinomial_training_dataset.compounds.sort
+    [feature_dataset_uri, matched_dataset_uri].each{|uri| OpenTox::RestClientWrapper.delete(uri,{:subjectid=>@@subjectid})}
+  end
 
 end
