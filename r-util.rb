@@ -168,6 +168,7 @@ class RUtilTest < Test::Unit::TestCase
     files = []
     #plot
     [true,false].each do |fast_embedding|
+      next if fast_embedding==false and !@@rutil.package_installed?("smacof")
       random_file = "/tmp/feature_value_plot_random_fast#{fast_embedding}.svg"
       stratified_file = "/tmp/feature_value_plot_stratified_fast#{fast_embedding}.svg"
       pre_files [random_file, stratified_file]
