@@ -1,6 +1,6 @@
 #!/bin/bash
 # Wrapper Skript for CV
-# Reads factors_config, dataset_nestle.yaml and performs cv's
+# Reads factors_config, ../data/datasets.yaml and performs cv's
 # Andreas Maunz, David Vorgrimmler,  2012
 
 if [ $# -lt 1 ]; then
@@ -10,9 +10,9 @@ fi
 
 PWD=`pwd`
 echo $PWD
-if [ ! -f $PWD/datasets_nestle.yaml ] 
+if [ ! -f $PWD/../data/datasets.yaml ] 
 then
-  echo "datasets_nestle.yaml does not exist."
+  echo "datasets.yaml does not exist."
   exit
 fi
 
@@ -20,7 +20,7 @@ fi
 source $HOME/.bash_aliases
 otconfig
 THIS_DATE=`date +%Y%m%d_%H_`
-CV="CV_ds_pctype_prop_algo_rseed.rb"
+CV="CV_ds_pctype_algo_rseed.rb"
 FACTORS="$1"
 
 # Don't start when running
