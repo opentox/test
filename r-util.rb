@@ -118,6 +118,29 @@ class RUtilTest < Test::Unit::TestCase
         end
       end
     end
+    
+    dataframe = @@rutil.dataset_to_dataframe(@@hamster_features,"NA",@@subjectid)
+    @@rutil.r.eval "#{dataframe} <- #{dataframe}[2:10,10:20]"
+    dataset_conv = @@rutil.dataframe_to_dataset(dataframe,@@subjectid)
+    dataset_conv_reloaded = OpenTox::Dataset.find(dataset_conv.uri,@@subjectid)
+    @@resources << dataset_conv.uri
+    [dataset_conv,dataset_conv_reloaded].each do |d|
+      assert_equal d.compounds.size,9
+      d.compounds.size.times do |i| 
+        assert_equal d.compounds[i],@@hamster_features.compounds[i+1]
+      end
+      assert_equal d.features.size,11
+      d.compounds.each do |c|
+        d.features.keys.each do |f|
+          if @@hamster_features.data_entries[c]==nil || @@hamster_features.data_entries[c][f]==nil
+            assert d.data_entries[c]==nil || d.data_entries[c][f]==nil
+          else
+            assert_not_nil d.data_entries[c]
+            assert_equal @@hamster_features.data_entries[c][f],d.data_entries[c][f]
+          end 
+        end
+      end
+    end
   end
 
   def stratified_split
