@@ -30,6 +30,15 @@
     "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/6254", # A
     "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/6253", # ALL
     "topological": "http://toxcreate3.in-silico.ch:8086/dataset/6256"  # A
+  },
+
+  "LOAEL": {
+    "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/6576",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/6714",
+    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/6672",
+    "topological": "http://toxcreate3.in-silico.ch:8086/dataset/6673"
   }
+
+
 
 }
