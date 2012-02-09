@@ -54,9 +54,9 @@ class LazarTest < Test::Unit::TestCase
       FileUtils.cp f, reference
       FileUtils.rm f
     end
-    @predictions.each do |dataset|
-      dataset.delete(@@subjectid)
-    end
+    #@predictions.each do |dataset|
+    #  dataset.delete(@@subjectid)
+    #end
     @model.delete(@@subjectid)
   end
 
@@ -71,18 +71,8 @@ def test_create_regression_svm_pc_model
   cleanup
 end
 
-def test_create_regression_svm_model
-  create_model :dataset_uri => @@regression_training_dataset.uri, :min_train_performance => 0.0001
-  predict_compound  OpenTox::Compound.from_smiles("c1ccccc1NN")
-  assert_in_delta @predictions.first.value(@compounds.first), 0.6, 0.5
-  assert_equal 0.61, @predictions.first.confidence(@compounds.first).round_to(2)
-  assert_equal 253, @predictions.first.neighbors(@compounds.first).size
-  assert_equal 131, @model.features.size
-  cleanup
-end
 
-
-#Classification
+##Classification
 def test_classification_model
   create_model :dataset_uri => @@classification_training_dataset.uri
   # single prediction
@@ -112,19 +102,6 @@ def test_classification_model
   cleanup
 end
  
-def test_classification_svm_model
-  create_model :dataset_uri => @@classification_training_dataset.uri, :prediction_algorithm => "local_svm_classification"
-  predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-  predict_dataset OpenTox::Dataset.create_from_csv_file("data/multicolumn.csv", @@subjectid)
-
-  assert_equal "false", @predictions[0].value(@compounds[0])
-  assert_equal 0.5358, @predictions[0].confidence(@compounds[0]).round_to(4)
-  assert_equal 22, @predictions[0].neighbors(@compounds[0]).size
-  assert_equal 41, @model.features.size
-  cleanup
-end
-
-
 # DISABLED TEMPORARILY
 #   def test_ambit_classification_model
 #
