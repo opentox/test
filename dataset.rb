@@ -2,6 +2,7 @@ require 'rubygems'
 require 'opentox-ruby'
 require 'test/unit'
 require 'validate-owl'
+require 'test-util'
 
 class DatasetTest < Test::Unit::TestCase
   include TestUtil
@@ -164,7 +165,7 @@ class DatasetTest < Test::Unit::TestCase
       @dataset.load_all @@subjectid
       csv = @dataset.to_csv.split("\n")
       assert_equal csv.size, data[:nr_compounds]+1  if data
-      assert_equal csv.first.split(", ").size, data[:nr_dataset_features]+1 if data
+      assert_equal csv.first.split(",").size, data[:nr_dataset_features]+1 if data
     end
   end
 
