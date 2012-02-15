@@ -54,9 +54,9 @@ class LazarTest < Test::Unit::TestCase
       FileUtils.cp f, reference
       FileUtils.rm f
     end
-    #@predictions.each do |dataset|
-    #  dataset.delete(@@subjectid)
-    #end
+    @predictions.each do |dataset|
+      dataset.delete(@@subjectid)
+    end
     @model.delete(@@subjectid)
   end
 
