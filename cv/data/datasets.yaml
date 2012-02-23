@@ -28,7 +28,7 @@
 
   "MOU": {
     "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/6252",
-    "training": "http://toxcreate3.in-silico.ch:8086/dataset/6257",
+    "training": "http://toxcreate3.in-silico.ch:8086/dataset/24814",
     "test": "http://toxcreate3.in-silico.ch:8086/dataset/6255",
     "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/6254", # A
     "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/6884", # ALL
