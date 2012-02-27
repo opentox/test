@@ -23,9 +23,9 @@
 #MOU hybrid local_svm_regression
 #MOU joelib local_svm_regression
 #MOU nil local_svm_regression
-#LOAEL constitutional local_svm_regression
-#LOAEL electronic,cpsa local_svm_regression
-#LOAEL topological local_svm_regression
-#LOAEL hybrid local_svm_regression
-#LOAEL joelib local_svm_regression
-#LOAEL nil local_svm_regressioni
+LOAEL constitutional local_svm_regression
+LOAEL electronic,cpsa local_svm_regression
+LOAEL topological local_svm_regression
+LOAEL hybrid local_svm_regression
+LOAEL joelib local_svm_regression
+LOAEL nil local_svm_regressioni

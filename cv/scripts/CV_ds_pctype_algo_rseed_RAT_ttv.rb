@@ -31,6 +31,9 @@ r_seed = ARGV[3]  # 1, 2, ..., 10
 
 ds = YAML::load_file("../data/datasets.yaml")
 ds_uri = ds[ds_name]["dataset"]
+#ds_test_target_uri = ds[ds_name]["dataset"]
+ds_test_uri = ds[ds_name]["test"]
+ds_training_uri = ds[ds_name]["training"]
 pc_ds_uri = ds[ds_name][pc_type]
 
 algo_params = "prediction_algorithm=#{algo}"
@@ -42,21 +45,24 @@ algo_params += ";feature_dataset_uri=#{pc_ds_uri}" unless pc_type == "nil"
 
 puts algo_params.to_yaml
 
-prediction_feature = OpenTox::Dataset.find(ds_uri).features.keys.first
+prediction_feature = OpenTox::Dataset.find(ds_training_uri).features.keys.first
 
 
 # Ready
 cv_args = {}
-cv_args[:dataset_uri] = ds_uri
+#cv_args[:dataset_uri] = ds_uri
+cv_args[:test_dataset_uri] = ds_test_uri
+cv_args[:training_dataset_uri] = ds_training_uri
+#cv_args[:test_target_dataset_uri] = ds_test_target_uri
 cv_args[:prediction_feature] = prediction_feature
 cv_args[:algorithm_uri] = "http://toxcreate3.in-silico.ch:8080/algorithm/lazar"
 cv_args[:algorithm_params] = algo_params
-cv_args[:stratified] = false
-cv_args[:random_seed] = r_seed
+#cv_args[:stratified] = false
+#cv_args[:random_seed] = r_seed
 puts cv_args.to_yaml
 
-cv = OpenTox::Crossvalidation.create(cv_args).uri
-puts cv
+ttv = OpenTox::RestClientWrapper.post( File.join(CONFIG[:services]["opentox-validation"],"training_test_validation"), cv_args )
+puts ttv
 
-cvr = OpenTox::CrossvalidationReport.create( cv , subjectid).uri
-puts cvr
+vr = OpenTox::ValidationReport.create( ttv , subjectid).uri
+puts vr

@@ -51,12 +51,11 @@ cv_args[:dataset_uri] = ds_uri
 cv_args[:prediction_feature] = prediction_feature
 cv_args[:algorithm_uri] = "http://toxcreate3.in-silico.ch:8080/algorithm/lazar"
 cv_args[:algorithm_params] = algo_params
-cv_args[:stratified] = false
-cv_args[:random_seed] = r_seed
+cv_args[:loo] = true
 puts cv_args.to_yaml
 
-cv = OpenTox::Crossvalidation.create(cv_args).uri
-puts cv
+loo = OpenTox::RestClientWrapper.post( File.join(CONFIG[:services]["opentox-validation"],"crossvalidation/loo"), cv_args )
+puts loo
 
-cvr = OpenTox::CrossvalidationReport.create( cv , subjectid).uri
+cvr = OpenTox::CrossvalidationReport.create( loo , subjectid).uri
 puts cvr
