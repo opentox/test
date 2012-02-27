@@ -35,10 +35,11 @@ ds = YAML::load_file("../datasets.yaml")
 ds.keys.each { |dataset|
   puts "----------------- next dataset -----------------"
   ds[dataset].keys.each { |pc|
-    puts pc unless pc == "dataset"
-    [false, true].each { |del_missing|
+    puts pc unless (pc == "dataset") || (pc == "test") || (pc == "training")
+    #[false, true].each { |del_missing| 
+    [false].each { |del_missing| #false is default 
       begin
-        create_f_ds(ds[dataset]["dataset"], ds[dataset][pc], del_missing) unless pc == "dataset"
+        create_f_ds(ds[dataset]["dataset"], ds[dataset][pc], del_missing) unless (pc == "dataset") || (pc == "test") || (pc == "training")
       rescue
       end
     }
