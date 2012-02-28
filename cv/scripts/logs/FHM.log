@@ -1,0 +1,89 @@
+20120227_13_: FHM constitutional local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_FHM.rb FHM constitutional local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/87
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/87
+:stratified: false
+:random_seed: "1"
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/6
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/6/feature/LOGINV_TD50_mmol
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/4
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/15
+
+20120227_13_: FHM electronic,cpsa local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_FHM.rb FHM electronic,cpsa local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/83
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/83
+:stratified: false
+:random_seed: "1"
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/6
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/6/feature/LOGINV_TD50_mmol
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/6
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/17
+
+20120227_13_: FHM topological local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_FHM.rb FHM topological local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/96
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/96
+:stratified: false
+:random_seed: "1"
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/6
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/6/feature/LOGINV_TD50_mmol
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/9
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/19
+
+20120227_13_: FHM hybrid local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_FHM.rb FHM hybrid local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=hybrid;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/100
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=hybrid;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/100
+:stratified: false
+:random_seed: "1"
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/6
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/6/feature/LOGINV_TD50_mmol
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/11
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/22
+
+20120227_13_: FHM joelib local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_FHM.rb FHM joelib local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84
+:stratified: false
+:random_seed: "1"
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/6
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/6/feature/LOGINV_TD50_mmol
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/14
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/26
+
+20120227_13_: FHM nil local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_FHM.rb FHM nil local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression
+:stratified: false
+:random_seed: "1"
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/6
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/6/feature/LOGINV_TD50_mmol
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/17
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/29

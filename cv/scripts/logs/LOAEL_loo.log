@@ -1,0 +1,82 @@
+20120227_12_: LOAEL constitutional local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_LOAEL_loo.rb LOAEL constitutional local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/114
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/114
+:loo: true
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/9
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/9/feature/LOAEL_mol/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/1
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/13
+
+20120227_12_: LOAEL electronic,cpsa local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_LOAEL_loo.rb LOAEL electronic,cpsa local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/98
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/98
+:loo: true
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/9
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/9/feature/LOAEL_mol/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/2
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/28
+
+20120227_12_: LOAEL topological local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_LOAEL_loo.rb LOAEL topological local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/110
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/110
+:loo: true
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/9
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/9/feature/LOAEL_mol/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/7
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/20
+
+20120227_12_: LOAEL hybrid local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_LOAEL_loo.rb LOAEL hybrid local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=hybrid;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/111
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=hybrid;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/111
+:loo: true
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/9
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/9/feature/LOAEL_mol/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/12
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/24
+
+20120227_12_: LOAEL joelib local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_LOAEL_loo.rb LOAEL joelib local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/92
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/92
+:loo: true
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/9
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/9/feature/LOAEL_mol/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/16
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/27
+
+20120227_23_: LOAEL nil local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_LOAEL_loo.rb LOAEL nil local_svm_regression 1
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression
+--- 
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression
+:loo: true
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/9
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/9/feature/LOAEL_mol/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/21
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/31

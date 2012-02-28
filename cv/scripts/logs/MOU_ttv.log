@@ -1,0 +1,84 @@
+20120227_12_: MOU constitutional local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_MOU_ttv.rb MOU constitutional local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/102
+--- 
+:test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/11
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/10/feature/pTD50
+:training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/10
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/102
+http://toxcreate3.in-silico.ch:8080/validation/1
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/1
+
+20120227_12_: MOU electronic,cpsa local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_MOU_ttv.rb MOU electronic,cpsa local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/97
+--- 
+:test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/11
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/10/feature/pTD50
+:training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/10
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/97
+http://toxcreate3.in-silico.ch:8080/validation/4
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/3
+
+20120227_12_: MOU topological local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_MOU_ttv.rb MOU topological local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/108
+--- 
+:test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/11
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/10/feature/pTD50
+:training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/10
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/108
+http://toxcreate3.in-silico.ch:8080/validation/47
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/5
+
+20120227_12_: MOU hybrid local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_MOU_ttv.rb MOU hybrid local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=hybrid;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/103
+--- 
+:test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/11
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/10/feature/pTD50
+:training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/10
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=hybrid;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/103
+http://toxcreate3.in-silico.ch:8080/validation/124
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/6
+
+20120227_12_: MOU joelib local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_MOU_ttv.rb MOU joelib local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/94
+--- 
+:test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/11
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/10/feature/pTD50
+:training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/10
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/94
+http://toxcreate3.in-silico.ch:8080/validation/163
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/8
+
+20120227_12_: MOU nil local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_MOU_ttv.rb MOU nil local_svm_regression 1
+/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression
+--- 
+:test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/11
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/10/feature/pTD50
+:training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/10
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression
+http://toxcreate3.in-silico.ch:8080/validation/202
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/9
+
