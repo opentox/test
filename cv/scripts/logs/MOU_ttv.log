@@ -1,0 +1,65 @@
+20120228_22_: MOU constitutional local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_MOU_ttv.rb MOU constitutional local_svm_regression 1
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/7052
+--- 
+:test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/11
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/10/feature/pTD50
+:training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/10
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/7052
+http://toxcreate3.in-silico.ch:8080/validation/5140
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/44
+
+20120228_22_: MOU electronic,cpsa local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_MOU_ttv.rb MOU electronic,cpsa local_svm_regression 1
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/7048
+--- 
+:test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/11
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/10/feature/pTD50
+:training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/10
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/7048
+http://toxcreate3.in-silico.ch:8080/validation/5142
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/46
+
+20120228_22_: MOU topological local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_MOU_ttv.rb MOU topological local_svm_regression 1
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/7085
+--- 
+:test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/11
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/10/feature/pTD50
+:training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/10
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/7085
+http://toxcreate3.in-silico.ch:8080/validation/5144
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/48
+
+20120228_22_: MOU joelib local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_MOU_ttv.rb MOU joelib local_svm_regression 1
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/7050
+--- 
+:test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/11
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/10/feature/pTD50
+:training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/10
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/7050
+http://toxcreate3.in-silico.ch:8080/validation/5146
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/49
+
+20120302_15_: MOU all_pc local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_MOU_ttv.rb MOU all_pc local_svm_regression 1
+datasets.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/12944
+--- 
+:test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/11
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/10/feature/pTD50
+:training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/10
+:algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/12944
+http://toxcreate3.in-silico.ch:8080/validation/5602
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/57
+
