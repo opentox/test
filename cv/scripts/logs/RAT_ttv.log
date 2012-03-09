@@ -1,76 +1,70 @@
-20120227_12_: RAT constitutional local_svm_regression 1
+20120308_19_: RAT constitutional local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_RAT_ttv.rb RAT constitutional local_svm_regression 1
-/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
 datasets.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/112
+--- prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/46361
 --- 
 :test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/13
 :prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/12/feature/pTD50
 :training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/12
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/112
-http://toxcreate3.in-silico.ch:8080/validation/2
-http://toxcreate3.in-silico.ch:8080/validation/report/validation/2
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/46361
+http://toxcreate3.in-silico.ch:8080/validation/15976
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/166
 
-20120227_12_: RAT electronic,cpsa local_svm_regression 1
+20120308_19_: RAT electronic,cpsa local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_RAT_ttv.rb RAT electronic,cpsa local_svm_regression 1
-/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
 datasets.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/99
+--- prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/46273
 --- 
 :test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/13
 :prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/12/feature/pTD50
 :training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/12
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/99
-http://toxcreate3.in-silico.ch:8080/validation/12
-http://toxcreate3.in-silico.ch:8080/validation/report/validation/4
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/46273
+http://toxcreate3.in-silico.ch:8080/validation/15979
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/168
 
-20120227_12_: RAT topological local_svm_regression 1
+20120309_09_: RAT topological local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_RAT_ttv.rb RAT topological local_svm_regression 1
-/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
 datasets.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/109
+--- prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/49540
 --- 
 :test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/13
 :prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/12/feature/pTD50
 :training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/12
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/109
-http://toxcreate3.in-silico.ch:8080/validation/68
-http://toxcreate3.in-silico.ch:8080/validation/report/validation/7
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/49540
+http://toxcreate3.in-silico.ch:8080/validation/17914
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/183
 
-20120227_12_: RAT hybrid local_svm_regression 1
+20120309_09_: RAT hybrid local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_RAT_ttv.rb RAT hybrid local_svm_regression 1
-/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
 datasets.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=hybrid;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/107
+--- prediction_algorithm=local_svm_regression;pc_type=hybrid;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/52151
 --- 
 :test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/13
 :prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/12/feature/pTD50
 :training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/12
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=hybrid;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/107
-http://toxcreate3.in-silico.ch:8080/validation/192
-http://toxcreate3.in-silico.ch:8080/validation/report/validation/10
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=hybrid;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/52151
+http://toxcreate3.in-silico.ch:8080/validation/17939
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/185
 
-20120227_12_: RAT joelib local_svm_regression 1
+20120308_19_: RAT joelib local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_RAT_ttv.rb RAT joelib local_svm_regression 1
-/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
 datasets.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/90
+--- prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/46365
 --- 
 :test_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/13
 :prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/12/feature/pTD50
 :training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/12
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/90
-http://toxcreate3.in-silico.ch:8080/validation/243
-http://toxcreate3.in-silico.ch:8080/validation/report/validation/11
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/46365
+http://toxcreate3.in-silico.ch:8080/validation/15984
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/171
 
-20120227_12_: RAT nil local_svm_regression 1
+20120308_19_: RAT nil local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_RAT_ttv.rb RAT nil local_svm_regression 1
-/home/ot0/opentox-ruby/ruby-enterprise-1.8.7-2011.03/lib/ruby/gems/1.8/gems/opentox-ruby-3.0.1/lib/utils.rb:28: warning: don't put space before argument parentheses
 datasets.yaml exists
 --- prediction_algorithm=local_svm_regression
 --- 
@@ -79,6 +73,6 @@ datasets.yaml exists
 :training_dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/12
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
 :algorithm_params: prediction_algorithm=local_svm_regression
-http://toxcreate3.in-silico.ch:8080/validation/294
-http://toxcreate3.in-silico.ch:8080/validation/report/validation/12
+http://toxcreate3.in-silico.ch:8080/validation/16012
+http://toxcreate3.in-silico.ch:8080/validation/report/validation/172
 
