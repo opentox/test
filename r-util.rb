@@ -25,7 +25,6 @@ class RUtilTest < Test::Unit::TestCase
   end
 
   def global_teardown
-    OpenTox::Authorization.logout(@@subjectid) if defined?(@@signout)
     @@rutil.quit_r
     if DELETE
       @@resources.each do |uri|
@@ -34,6 +33,7 @@ class RUtilTest < Test::Unit::TestCase
     else
       puts "Resources "+@@resources.to_yaml
     end
+    OpenTox::Authorization.logout(@@subjectid) if defined?(@@signout)
   end
   
   def pre_files(files)
