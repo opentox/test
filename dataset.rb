@@ -2,9 +2,11 @@ require 'rubygems'
 require 'opentox-ruby'
 require 'test/unit'
 require 'validate-owl'
+require 'test-util'
 
 class DatasetTest < Test::Unit::TestCase
-
+  include TestUtil
+  
   def setup
     @datasets = {
       @@regression_training_dataset.uri => nil,
@@ -27,8 +29,13 @@ class DatasetTest < Test::Unit::TestCase
     #@new_dataset.delete
   end
 
-=begin
-=end
+#  def test_get_pc
+#    ds_uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"], {:file => File.new("data/EPAFHM.csv")} ,{:accept => "text/uri-list", :subjectid => @@subjectid}).to_s.chomp
+#    puts "DS: #{ds_uri}"
+#    fds_uri = OpenTox::Algorithm.pc_descriptors( { :dataset_uri => ds_uri, :pc_type => "constitutional" } )
+#    puts "FDS: #{fds_uri}"
+#  end
+
   def test_save_external
 
     @dataset = OpenTox::Dataset.find "http://apps.ideaconsult.net:8080/ambit2/dataset/2698"
@@ -158,7 +165,7 @@ class DatasetTest < Test::Unit::TestCase
       @dataset.load_all @@subjectid
       csv = @dataset.to_csv.split("\n")
       assert_equal csv.size, data[:nr_compounds]+1  if data
-      assert_equal csv.first.split(", ").size, data[:nr_dataset_features]+1 if data
+      assert_equal csv.first.split(",").size, data[:nr_dataset_features]+1 if data
     end
   end
 
@@ -219,39 +226,47 @@ class DatasetTest < Test::Unit::TestCase
     end
   end
   
-=begin
-=end
-  
-  def dataset_equal(d,d2)
-    assert d.compounds.sort==d2.compounds.sort,
-      d.compounds.sort.to_yaml+"\n!=\n"+d2.compounds.sort.to_yaml
-    assert d.features.keys.size==d2.features.keys.size,
-      d.features.keys.to_yaml+"\n!=\n"+d2.features.keys.to_yaml
-    assert d.features.keys.sort==d2.features.keys.sort,
-      d.features.keys.sort.to_yaml+"\n!=\n"+d2.features.keys.sort.to_yaml
-    d.compounds.each do |c|
-      d.features.keys.each do |f|
-        assert_array_about_equal d.data_entries[c][f],d2.data_entries[c][f]
+ 
+  def test_merge()
+    #upload
+    dataset1 = OpenTox::Dataset.create_from_csv_file(File.new("data/hamster_carcinogenicity.csv").path, @@subjectid)
+    dataset2 = OpenTox::Dataset.create_from_csv_file(File.new("data/multi_cell_call.csv").path, @@subjectid)
+    #merge1
+    title = "test merge"
+    dataset_merge1 = OpenTox::Dataset.merge(dataset1, dataset2, { DC.title => title,DC.creator => "testsuite"}, @@subjectid )
+    dataset_reloaded1 = OpenTox::Dataset.find(dataset_merge1.uri, @@subjectid)
+    #test1
+    [dataset_merge1, dataset_reloaded1].each do |d|
+      assert_equal d.metadata[DC.title],title
+      assert_equal d.features.size,(dataset1.features.size+dataset2.features.size)
+      assert_equal d.compounds.size,(dataset1.compounds+dataset2.compounds).uniq.size
+      [dataset1, dataset2].each do |d_i|
+        d_i.compounds.each{|c| assert d.compounds.include?(c)}
+        d_i.features.keys.each{|f| assert d.features.keys.include?(f)}
+        d_i.features.keys.each do |f|
+          assert_equal d_i.features[f],d.features[f]
+          d_i.compounds do |c|
+            assert_equal d_i.data_entries[c][f],d.data_entries[c][f]
+          end
+        end  
       end
+    end
+    #merge2
+    compounds1 = dataset1.compounds[0..dataset1.compounds.size/2]
+    features1 = []
+    dataset_merge2 = OpenTox::Dataset.merge(dataset1, dataset2, {}, @@subjectid, features1, nil, compounds1 )
+    dataset_reloaded2 = OpenTox::Dataset.find(dataset_merge2.uri, @@subjectid)
+    #test2
+    [dataset_merge2, dataset_reloaded2].each do |d|
+      assert_equal d.features.size,dataset2.features.size
+      assert_equal d.compounds.size,(compounds1+dataset2.compounds).uniq.size
+    end
+    #cleanup
+    [dataset_merge1, dataset_merge2, dataset1, dataset2].each do |d|
+      OpenTox::RestClientWrapper.delete(d.uri,{:subjectid => @@subjectid})
     end
   end
   
-  def assert_array_about_equal(a,a2)
-    if (a!=nil || a2!=nil)
-      raise "no arrays #{a.class} #{a2.class}" unless a.is_a?(Array) and a2.is_a?(Array)
-      assert a.size==a2.size
-      a.sort! 
-      a2.sort!
-      a.size.times do |i|
-        if (a[i].is_a?(Float) and a2[i].is_a?(Float))
-          assert (a[i]-a2[i]).abs<0.0000001,"#{a[i]}(#{a[i].class}) != #{a2[i]}(#{a2[i].class})"
-        else
-          assert a[i]==a2[i],"#{a[i]}(#{a[i].class}) != #{a2[i]}(#{a2[i].class})"
-        end
-      end
-    end
-  end
-
   def validate(data)
     assert_kind_of OpenTox::Dataset, @dataset
     assert_equal @dataset.data_entries.size, data[:nr_data_entries] if data

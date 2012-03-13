@@ -19,8 +19,7 @@ end
 class ValidationTest < Test::Unit::TestCase
 
   @@delete = true
-  #@@feature_types = ["bbrc", "last"]
-  @@feature_types = ["bbrc"]
+  @@hamster_cv_feature_types = ["bbrc", "last"]
   @@qmrf_test = true
   @@data = []
   @@data << { :type => :crossvalidation,
@@ -37,7 +36,8 @@ class ValidationTest < Test::Unit::TestCase
       :test_data => "http://apps.ideaconsult.net:8080/ambit2/dataset/435293?page=30&pagesize=10",
       :feat => "http://apps.ideaconsult.net:8080/ambit2/feature/533748",
       :info => "http://apps.ideaconsult.net:8080/ambit2/dataset/435293?page=0&pagesize=300" }     
-  @@files = { File.new("data/hamster_carcinogenicity.csv") => :crossvalidation,  
+  @@files = { 
+             File.new("data/hamster_carcinogenicity.csv") => :crossvalidation,  
              #File.new("data/hamster_carcinogenicity.mini.csv") => :crossvalidation,
              #File.new("data/EPAFHM.csv") => :crossvalidation,
              File.new("data/EPAFHM.mini.csv") => :crossvalidation,
@@ -69,7 +69,7 @@ class ValidationTest < Test::Unit::TestCase
     if @@delete
       [:data, :train_data, :test_data].each do |d|
         @@data.each do |data| 
-          OpenTox::Dataset.find(data[d],@@subjectid).delete(@@subjectid) if data[d] and data[:delete] and OpenTox::Dataset.exist?(data[d])
+          OpenTox::Dataset.find(data[d],@@subjectid).delete(@@subjectid) if data[d] and data[:delete] and OpenTox::Dataset.exist?(data[d], @@subjectid)
         end
       end
       @@vs.each{|v| v.delete(@@subjectid)} if defined?@@vs
@@ -91,7 +91,7 @@ class ValidationTest < Test::Unit::TestCase
  
   def test_training_test_split
     
-    @@vs = []
+    @@vs = [] unless defined?@@vs
     @@data.each do |data|
       if data[:type]==:split_validation
         puts "test_training_test_split "+data[:info].to_s
@@ -112,7 +112,7 @@ class ValidationTest < Test::Unit::TestCase
         def t.waiting_for(task_uri); end
         v = OpenTox::Validation.create_training_test_split(p, @@subjectid, t)
         assert v.uri.uri?
-        if @@subjectid
+        if AA_SERVER
           assert_rest_call_error OpenTox::NotAuthorizedError do
             OpenTox::Validation.find(v.uri)
           end
@@ -120,6 +120,7 @@ class ValidationTest < Test::Unit::TestCase
         v = OpenTox::Validation.find(v.uri, @@subjectid)
         assert_valid_date v
         assert v.uri.uri?
+        assert_prob_correct(v)
         model = v.metadata[OT.model]
         assert model.uri?
         v_list = OpenTox::Validation.list( {:model => model} )
@@ -133,7 +134,7 @@ class ValidationTest < Test::Unit::TestCase
   
   def test_training_test_validation
     
-    @@vs = []
+    @@vs = [] unless defined?@@vs
     @@data.each do |data|
       if data[:type]==:training_test_validation
         puts "test_training_test_validation "+data[:info].to_s
@@ -153,7 +154,7 @@ class ValidationTest < Test::Unit::TestCase
         def t.waiting_for(task_uri); end
         v = OpenTox::Validation.create_training_test_validation(p, @@subjectid, t)
         assert v.uri.uri?
-        if @@subjectid
+        if AA_SERVER
           assert_rest_call_error OpenTox::NotAuthorizedError do
             OpenTox::Validation.find(v.uri)
           end
@@ -161,6 +162,7 @@ class ValidationTest < Test::Unit::TestCase
         v = OpenTox::Validation.find(v.uri, @@subjectid)
         assert_valid_date v
         assert v.uri.uri?
+        assert_prob_correct(v)
         model = v.metadata[OT.model]
         assert model.uri?
         v_list = OpenTox::Validation.list( {:model => model} )
@@ -180,16 +182,17 @@ class ValidationTest < Test::Unit::TestCase
       puts "test_validation_report"
       assert defined?v,"no validation defined"
       assert_kind_of OpenTox::Validation,v
-      if @@subjectid
+      if AA_SERVER
         assert_rest_call_error OpenTox::NotAuthorizedError do
           OpenTox::ValidationReport.create(v.uri)
         end
       end
       report = OpenTox::ValidationReport.find_for_validation(v.uri,@@subjectid)
-      assert report==nil,"report already exists for validation\nreport: "+(report ? report.uri.to_s : "")+"\nvalidation: "+v.uri.to_s
-      report = OpenTox::ValidationReport.create(v.uri,@@subjectid)
+      assert_nil report,"report already exists for validation\nreport: "+(report ? report.uri.to_s : "")+"\nvalidation: "+v.uri.to_s
+      params = {:min_confidence => 0.05}
+      report = OpenTox::ValidationReport.create(v.uri,params,@@subjectid)
       assert report.uri.uri?
-      if @@subjectid
+      if AA_SERVER
         assert_rest_call_error OpenTox::NotAuthorizedError do
           OpenTox::ValidationReport.find(report.uri)
         end
@@ -225,7 +228,8 @@ class ValidationTest < Test::Unit::TestCase
     @@cv_identifiers = []
     @@data.each do |data|
       if data[:type]==:crossvalidation
-        @@feature_types.each do |fminer|
+        @@hamster_cv_feature_types.each do |fminer|
+          next unless (fminer==@@hamster_cv_feature_types[0] or data[:info].to_s =~ /hamster_carcinogenicity.csv/)
           puts "test_crossvalidation "+data[:info].to_s+" "+fminer
           p = { 
             :dataset_uri => data[:data],
@@ -245,7 +249,7 @@ class ValidationTest < Test::Unit::TestCase
           def t.waiting_for(task_uri); end
           cv = OpenTox::Crossvalidation.create(p, @@subjectid, t)
           assert cv.uri.uri?
-          if @@subjectid
+          if AA_SERVER
             assert_rest_call_error OpenTox::NotAuthorizedError do
               OpenTox::Crossvalidation.find(cv.uri)
             end
@@ -253,13 +257,14 @@ class ValidationTest < Test::Unit::TestCase
           cv = OpenTox::Crossvalidation.find(cv.uri, @@subjectid)
           assert_valid_date cv
           assert cv.uri.uri?
-          if @@subjectid
+          if AA_SERVER
             assert_rest_call_error OpenTox::NotAuthorizedError do
               cv.statistics(cv)
             end
           end
           stats_val = cv.statistics(@@subjectid)
           assert_kind_of OpenTox::Validation,stats_val
+          assert_prob_correct(stats_val)
           
           algorithm = cv.metadata[OT.algorithm]
           assert algorithm.uri?
@@ -299,7 +304,7 @@ class ValidationTest < Test::Unit::TestCase
       #assert_rest_call_error OpenTox::NotFoundError do 
       #  OpenTox::CrossvalidationReport.find_for_crossvalidation(cv.uri)
       #end
-      if @@subjectid
+      if AA_SERVER
         assert_rest_call_error OpenTox::NotAuthorizedError do
           OpenTox::CrossvalidationReport.create(cv.uri)
         end
@@ -307,7 +312,7 @@ class ValidationTest < Test::Unit::TestCase
       assert OpenTox::CrossvalidationReport.find_for_crossvalidation(cv.uri,@@subjectid)==nil
       report = OpenTox::CrossvalidationReport.create(cv.uri,@@subjectid)
       assert report.uri.uri?
-      if @@subjectid
+      if AA_SERVER
         assert_rest_call_error OpenTox::NotAuthorizedError do
           OpenTox::CrossvalidationReport.find(report.uri)
         end
@@ -334,16 +339,18 @@ class ValidationTest < Test::Unit::TestCase
           assert_kind_of OpenTox::Crossvalidation,@@cvs[j]
           hash = { @@cv_identifiers[i] => [@@cvs[i].uri],
                    @@cv_identifiers[j] => [@@cvs[j].uri] }
-          if @@subjectid
+          if AA_SERVER
             assert_rest_call_error OpenTox::NotAuthorizedError do
-              OpenTox::AlgorithmComparisonReport.create hash,@@subjectid
+              OpenTox::AlgorithmComparisonReport.create hash,{}
             end
           end
           assert OpenTox::AlgorithmComparisonReport.find_for_crossvalidation(@@cvs[i].uri,@@subjectid)==nil
           assert OpenTox::AlgorithmComparisonReport.find_for_crossvalidation(@@cvs[j].uri,@@subjectid)==nil
-          report = OpenTox::AlgorithmComparisonReport.create hash,@@subjectid
+          
+          params = {:ttest_significance => 0.95, :ttest_attributes => "real_runtime,percent_unpredicted", :max_num_predictions => 5}
+          report = OpenTox::AlgorithmComparisonReport.create hash,params,@@subjectid
           assert report.uri.uri?
-          if @@subjectid
+          if AA_SERVER
             assert_rest_call_error OpenTox::NotAuthorizedError do
               OpenTox::AlgorithmComparisonReport.find(report.uri)
             end
@@ -412,14 +419,16 @@ class ValidationTest < Test::Unit::TestCase
   
   # checks RestCallError type
   def assert_rest_call_error( ex )
-    if ex==OpenTox::NotAuthorizedError and @@subjectid==nil
+    if ex==OpenTox::NotAuthorizedError and AA_SERVER==nil
       puts "AA disabled: skipping test for not authorized"
       return
     end
     begin
       yield
+      assert false,"no rest-call error thrown"
     rescue OpenTox::RestCallError => e
-      raise "error Report of RestCallError is no errorReport: "+e.errorCause.class.to_s+":\n"+e.errorCause.to_yaml  unless e.errorCause.is_a?(OpenTox::ErrorReport)
+      raise "error Report of RestCallError is no errorReport: "+
+         e.errorCause.class.to_s+":\n"+e.errorCause.to_yaml unless e.errorCause.is_a?(OpenTox::ErrorReport)
       report = e.errorCause
       while report.errorCause
         report = report.errorCause
@@ -441,6 +450,18 @@ class ValidationTest < Test::Unit::TestCase
     assert time>Time.new-(10*60),opentox_object.uri.to_s+" took longer than 10 minutes "+time.to_s
 =end
   end
+
+  def assert_prob_correct( validation )
+    class_stats = validation.metadata[OT.classificationStatistics]
+    if class_stats != nil
+      class_value_stats = class_stats[OT.classValueStatistics]
+      class_value_stats.each do |cs|
+        #puts cs[OT.positivePredictiveValue]
+        #puts validation.probabilities(0,cs[OT.classValue]).inspect
+        assert cs[OT.positivePredictiveValue]==validation.probabilities(0,cs[OT.classValue],@@subjectid)[:probs][cs[OT.classValue]]
+      end
+    end
+  end
   
   # hack to have a global_setup and global_teardown 
   def teardown
@@ -457,4 +478,3 @@ class ValidationTest < Test::Unit::TestCase
 
 end
 
-  

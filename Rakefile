@@ -23,12 +23,14 @@ task :setup do
   @@classification_training_dataset = OpenTox::Dataset.create_from_csv_file("data/hamster_carcinogenicity.csv", @@subjectid)
   @@multinomial_training_dataset = OpenTox::Dataset.create_from_csv_file("data/ISSCAN-multi.csv", @@subjectid)
   @@regression_training_dataset = OpenTox::Dataset.create_from_csv_file("data/EPAFHM.csv", @@subjectid)
+  @@regression_feature_dataset = OpenTox::Dataset.create_from_csv_file("data/EPAFHM-constitutional.csv", @@subjectid)
 end
 
 task :teardown do
   @@classification_training_dataset.delete(@@subjectid)
   @@multinomial_training_dataset.delete(@@subjectid)
   @@regression_training_dataset.delete(@@subjectid)
+  @@regression_feature_dataset.delete(@@subjectid)
   OpenTox::Authorization.logout(@@subjectid)
 end
 
