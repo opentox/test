@@ -11,7 +11,7 @@ FHM electronic,cpsa local_svm_regression
 FHM topological local_svm_regression
 #FHM hybrid local_svm_regression
 FHM joelib local_svm_regression
-#FHM all_pc local_svm_regression
+FHM all_pc local_svm_regression
 #FHM nil local_svm_regression
 #RAT constitutional local_svm_regression
 #RAT electronic,cpsa local_svm_regression
