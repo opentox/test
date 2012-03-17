@@ -1,70 +1,69 @@
-20120312_10_: FHM constitutional local_svm_regression 1
+20120313_21_: FHM constitutional local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_FHM.rb FHM constitutional local_svm_regression 1
 datasets.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/57984
+--- prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/76156
 --- 
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/57984
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/76156
 :stratified: false
 :random_seed: "1"
 :dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/6
 :prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/6/feature/LOGINV_TD50_mmol
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/145
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/206
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/173
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/251
 
-20120312_11_: FHM electronic,cpsa local_svm_regression 1
+20120313_21_: FHM electronic,cpsa local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_FHM.rb FHM electronic,cpsa local_svm_regression 1
 datasets.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/57980
+--- prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/76153
 --- 
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/57980
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/76153
 :stratified: false
 :random_seed: "1"
 :dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/6
 :prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/6/feature/LOGINV_TD50_mmol
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/149
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/209
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/175
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/250
 
-20120309_17_: FHM topological local_svm_regression 1
+20120313_21_: FHM topological local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_FHM.rb FHM topological local_svm_regression 1
 datasets.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/57981
+--- prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/76154
 --- 
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/57981
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/76154
 :stratified: false
 :random_seed: "1"
 :dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/6
 :prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/6/feature/LOGINV_TD50_mmol
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/141
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/192
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/178
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/252
 
-20120309_17_: FHM joelib local_svm_regression 1
+20120313_21_: FHM joelib local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_FHM.rb FHM joelib local_svm_regression 1
 datasets.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/57982
+--- prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/76155
 --- 
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/57982
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/76155
 :stratified: false
 :random_seed: "1"
 :dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/6
 :prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/6/feature/LOGINV_TD50_mmol
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/142
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/193
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/181
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/253
 
-20120309_17_: FHM all_pc local_svm_regression 1
+20120313_21_: FHM all_pc local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_FHM.rb FHM all_pc local_svm_regression 1
 datasets.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/57985
+--- prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/76157
 --- 
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/57985
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/76157
 :stratified: false
 :random_seed: "1"
 :dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/6
 :prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/6/feature/LOGINV_TD50_mmol
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/143
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/194
-
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/183
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/254
