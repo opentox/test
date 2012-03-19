@@ -25,7 +25,7 @@
     "LOAEL": {
       "electronic,cpsa": "http://toxcreate3.in-silico.ch:8080/dataset/84465",
       "topological": "http://toxcreate3.in-silico.ch:8080/dataset/84466",
-      "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/9",
+      "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/84400",
       "joelib": "http://toxcreate3.in-silico.ch:8080/dataset/84467",
       "hybrid": "http://toxcreate3.in-silico.ch:8080/dataset/49285",
       "constitutional": "http://toxcreate3.in-silico.ch:8080/dataset/84468",

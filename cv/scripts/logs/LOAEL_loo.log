@@ -1,4 +1,4 @@
-20120318_12_: LOAEL constitutional local_svm_regression 1
+20120319_09_: LOAEL constitutional local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_LOAEL_loo.rb LOAEL constitutional local_svm_regression 1
 datasets.yaml exists
 --- prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84468
@@ -6,12 +6,12 @@ datasets.yaml exists
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
 :algorithm_params: prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84468
 :loo: true
-:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/9
-:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/9/feature/LOAEL_mol/kg_bw/day
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/225
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/328
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/84400
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/84400/feature/LOAEL_log_mg/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/264
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/346
 
-20120318_12_: LOAEL electronic,cpsa local_svm_regression 1
+20120319_09_: LOAEL electronic,cpsa local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_LOAEL_loo.rb LOAEL electronic,cpsa local_svm_regression 1
 datasets.yaml exists
 --- prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84465
@@ -19,12 +19,12 @@ datasets.yaml exists
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
 :algorithm_params: prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84465
 :loo: true
-:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/9
-:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/9/feature/LOAEL_mol/kg_bw/day
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/229
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/332
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/84400
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/84400/feature/LOAEL_log_mg/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/265
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/349
 
-20120318_12_: LOAEL topological local_svm_regression 1
+20120318_23_: LOAEL topological local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_LOAEL_loo.rb LOAEL topological local_svm_regression 1
 datasets.yaml exists
 --- prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84466
@@ -32,12 +32,12 @@ datasets.yaml exists
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
 :algorithm_params: prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84466
 :loo: true
-:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/9
-:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/9/feature/LOAEL_mol/kg_bw/day
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/233
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/336
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/84400
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/84400/feature/LOAEL_log_mg/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/255
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/340
 
-20120319_12_: LOAEL joelib local_svm_regression 1
+20120318_23_: LOAEL joelib local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_LOAEL_loo.rb LOAEL joelib local_svm_regression 1
 datasets.yaml exists
 --- prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84467
@@ -45,12 +45,12 @@ datasets.yaml exists
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
 :algorithm_params: prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84467
 :loo: true
-:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/9
-:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/9/feature/LOAEL_mol/kg_bw/day
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/267
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/350
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/84400
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/84400/feature/LOAEL_log_mg/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/257
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/341
 
-20120318_12_: LOAEL all_pc local_svm_regression 1
+20120318_23_: LOAEL all_pc local_svm_regression 1
 ruby CV_ds_pctype_algo_rseed_LOAEL_loo.rb LOAEL all_pc local_svm_regression 1
 datasets.yaml exists
 --- prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84469
@@ -58,8 +58,8 @@ datasets.yaml exists
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
 :algorithm_params: prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/84469
 :loo: true
-:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/9
-:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/9/feature/LOAEL_mol/kg_bw/day
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/238
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/338
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/84400
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/84400/feature/LOAEL_log_mg/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/258
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/342
 
