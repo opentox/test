@@ -267,7 +267,6 @@ class DatasetTest < Test::Unit::TestCase
     end
   end
   
-=begin
   def test_multithreading
     dataset = OpenTox::Dataset.find(@datasets.keys[0],@@subjectid)
     assert dataset!=nil && dataset.compounds.size>0 && dataset.features.size > 0
@@ -298,7 +297,6 @@ class DatasetTest < Test::Unit::TestCase
     #puts uris.sort.to_yaml
     assert_equal uris.size,uris.uniq.size
   end
-=end  
 
   def validate(data)
     assert_kind_of OpenTox::Dataset, @dataset
