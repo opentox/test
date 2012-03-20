@@ -69,7 +69,7 @@ class ValidationTest < Test::Unit::TestCase
     if @@delete
       [:data, :train_data, :test_data].each do |d|
         @@data.each do |data| 
-          OpenTox::Dataset.find(data[d],@@subjectid).delete(@@subjectid) if data[d] and data[:delete] and OpenTox::Dataset.exist?(data[d])
+          OpenTox::Dataset.find(data[d],@@subjectid).delete(@@subjectid) if data[d] and data[:delete] and OpenTox::Dataset.exist?(data[d], @@subjectid)
         end
       end
       @@vs.each{|v| v.delete(@@subjectid)} if defined?@@vs

@@ -1,0 +1,49 @@
+{
+
+  "MDD": {
+    "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/6248",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/6848",
+    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/6903",
+    "topological": "http://toxcreate3.in-silico.ch:8086/dataset/6251",
+    "all_pc": "http://toxcreate3.in-silico.ch:8086/dataset/21621"
+  },
+  
+  "FHM": {
+    "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/6244",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/6841",
+    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/6899",
+    "topological": "http://toxcreate3.in-silico.ch:8086/dataset/6847",
+    "all_pc": "http://toxcreate3.in-silico.ch:8086/dataset/21639"
+  },
+  
+  "RAT": {
+    "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/6258",
+    "training": "http://toxcreate3.in-silico.ch:8086/dataset/6263",
+    "test": "http://toxcreate3.in-silico.ch:8086/dataset/6261",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/6260", # A
+    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/6259", # A
+    "topological": "http://toxcreate3.in-silico.ch:8086/dataset/6262",  # N
+    "all_pc": "http://toxcreate3.in-silico.ch:8086/dataset/21640"
+  },
+
+  "MOU": {
+    "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/6252",
+    "training": "http://toxcreate3.in-silico.ch:8086/dataset/24814",
+    "test": "http://toxcreate3.in-silico.ch:8086/dataset/6255",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/6254", # A
+    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/6884", # ALL
+    "topological": "http://toxcreate3.in-silico.ch:8086/dataset/6256",  # A
+    "all_pc": "http://toxcreate3.in-silico.ch:8086/dataset/21641"
+  },
+
+  "LOAEL": {
+    "dataset": "http://toxcreate3.in-silico.ch:8086/dataset/6981",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8086/dataset/6835",
+    "constitutional": "http://toxcreate3.in-silico.ch:8086/dataset/6833",
+    "topological": "http://toxcreate3.in-silico.ch:8086/dataset/6905",
+    "all_pc": "http://toxcreate3.in-silico.ch:8086/dataset/21642"
+  }
+
+
+
+}

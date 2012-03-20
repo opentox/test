@@ -2,7 +2,7 @@ require 'rubygems'
 require 'opentox-ruby'
 require 'test/unit'
 require 'validate-owl'
-require 'test-util.rb'
+require 'test-util'
 
 class DatasetTest < Test::Unit::TestCase
   include TestUtil
@@ -29,8 +29,13 @@ class DatasetTest < Test::Unit::TestCase
     #@new_dataset.delete
   end
 
-=begin
-=end
+#  def test_get_pc
+#    ds_uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"], {:file => File.new("data/EPAFHM.csv")} ,{:accept => "text/uri-list", :subjectid => @@subjectid}).to_s.chomp
+#    puts "DS: #{ds_uri}"
+#    fds_uri = OpenTox::Algorithm.pc_descriptors( { :dataset_uri => ds_uri, :pc_type => "constitutional" } )
+#    puts "FDS: #{fds_uri}"
+#  end
+
   def test_save_external
 
     @dataset = OpenTox::Dataset.find "http://apps.ideaconsult.net:8080/ambit2/dataset/2698"
@@ -160,7 +165,7 @@ class DatasetTest < Test::Unit::TestCase
       @dataset.load_all @@subjectid
       csv = @dataset.to_csv.split("\n")
       assert_equal csv.size, data[:nr_compounds]+1  if data
-      assert_equal csv.first.split(", ").size, data[:nr_dataset_features]+1 if data
+      assert_equal csv.first.split(",").size, data[:nr_dataset_features]+1 if data
     end
   end
 
@@ -221,9 +226,7 @@ class DatasetTest < Test::Unit::TestCase
     end
   end
   
-=begin
-=end  
-  
+ 
   def test_merge()
     #upload
     dataset1 = OpenTox::Dataset.create_from_csv_file(File.new("data/hamster_carcinogenicity.csv").path, @@subjectid)
