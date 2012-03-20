@@ -2,6 +2,7 @@ require 'rubygems'
 require 'opentox-ruby'
 require 'test/unit'
 require 'validate-owl'
+require 'test-util.rb'
 
 class DatasetTest < Test::Unit::TestCase
   include TestUtil
@@ -263,6 +264,39 @@ class DatasetTest < Test::Unit::TestCase
     end
   end
   
+=begin
+  def test_multithreading
+    dataset = OpenTox::Dataset.find(@datasets.keys[0],@@subjectid)
+    assert dataset!=nil && dataset.compounds.size>0 && dataset.features.size > 0
+    uris = []
+    
+    num = 20
+    num.times do |i|
+      Thread.new do
+        d = OpenTox::Dataset.new
+        dataset.compounds.each do |c|
+          d.add_compound c
+        end
+        dataset.features.each do |f,m|
+          d.add_feature f,m
+        end
+        dataset.compounds.each do |c|
+          dataset.features.keys.each do |f|
+            dataset.add c,f,rand
+          end
+        end
+        d.save @@subjectid
+        uris << d.uri
+      end
+    end
+    
+    sleep 1 while (uris.size < num)
+    uris.uniq.each{|uri| OpenTox::RestClientWrapper.delete uri,@@subjectid}
+    #puts uris.sort.to_yaml
+    assert_equal uris.size,uris.uniq.size
+  end
+=end  
+
   def validate(data)
     assert_kind_of OpenTox::Dataset, @dataset
     assert_equal @dataset.data_entries.size, data[:nr_data_entries] if data
