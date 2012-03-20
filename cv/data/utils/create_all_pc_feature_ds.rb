@@ -5,9 +5,10 @@ require 'yaml'
 @subjectid = nil
 
 ds = YAML::load_file("../datasets_new_LOAEL.yaml")
-ds.keys.each { |dataset|
+#ds.keys.each { |dataset|
+["LOAEL"].each { |dataset|
   puts "----------------- next dataset -----------------"
-  ["electronic,cpsa", "constitutional", "topological", "hybrid", "joelib"].each { |pc|
+  ["electronic,cpsa,constitutional,topological,hybrid,joelib"].each { |pc|
     puts "#{dataset}, #{pc}"
 
     args = {}
