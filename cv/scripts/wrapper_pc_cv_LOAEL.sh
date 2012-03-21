@@ -3,14 +3,15 @@
 # Reads factors_config, ../data/datasets.yaml and performs cv's
 # Andreas Maunz, David Vorgrimmler,  2012
 
-if [ $# -lt 1 ]; then
-  echo "Usage: $0 factors"
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 factors path/to/dataset.yaml"
   exit
 fi
 
-PWD=`pwd`
-echo $PWD
-if [ ! -f $PWD/../data/datasets.yaml ] 
+#PWD=`pwd`
+#echo $PWD
+#if [ ! -f $PWD/../data/datasets.yaml ] 
+if [ ! -f $2 ] 
 then
   echo "datasets.yaml does not exist."
   exit
@@ -36,8 +37,8 @@ cat $FACTORS | while read factor; do
     do
       factor="$factor $r_seed"
       echo "${THIS_DATE}: $factor" >> $LOGFILE>&1
-      echo "ruby $CV $factor" >> $LOGFILE 2>&1
-      ruby $CV $factor >> $LOGFILE 2>&1
+      echo "ruby $CV $factor $2" >> $LOGFILE 2>&1
+      ruby $CV $factor $2>> $LOGFILE 2>&1
       echo >> $LOGFILE 2>&1
     done
   fi

@@ -2,15 +2,18 @@
 # # Author: Andreas Maunz, David Vorgrimmler
 # # @params: Dataset_name(see dataset_nestle.yaml), pc_type(electronic,cpsa or constitutional ... or nil to disable), prediction_algorithm(local_mlr_prop or local_svm_regression ...)
 
-if ARGV.size != 4 
-  puts "Args: ds_name, pc_type, algo, random_seed"
+if ARGV.size != 5 
+  puts "Args: ds_name, pc_type, algo, random_seed, path/to/dataset.yaml"
   puts ARGV.size
   exit
 end
 
-ds_file = "datasets.yaml"
-pwd=`pwd`
-path = "#{pwd.chop}/../data/#{ds_file}"
+#ds_file = "datasets.yaml"
+#pwd=`pwd`
+#path = "#{pwd.chop}/../data/#{ds_file}"
+path = ARGV[4]
+ds_file = path.split("/").last
+
 if File.exists?(path)
   puts "#{ds_file} exists"
 else
@@ -29,7 +32,7 @@ pc_type = ARGV[1] # e.g. electronic,cpsa or nil to disable
 algo = ARGV[2]    # e.g. local_svm_regression, local_mlr_prop
 r_seed = ARGV[3]  # 1, 2, ..., 10
 
-ds = YAML::load_file("../data/datasets.yaml")
+ds = YAML::load_file("#{path}")
 ds_uri = ds[ds_name]["dataset"]
 pc_ds_uri = ds[ds_name][pc_type]
 
