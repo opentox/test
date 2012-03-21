@@ -4,7 +4,15 @@ require 'yaml'
 
 @subjectid = nil
 
-ds = YAML::load_file("../datasets_new_LOAEL.yaml")
+if ARGV.size != 1
+  puts "Args: path/to/dataset.yaml"
+  puts ARGV.size
+  exit
+end
+
+path = ARGV[0]
+puts path
+ds = YAML::load_file("#{path}")
 #ds.keys.each { |dataset|
 ["LOAEL"].each { |dataset|
   puts "----------------- next dataset -----------------"

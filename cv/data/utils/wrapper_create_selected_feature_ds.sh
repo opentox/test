@@ -20,7 +20,7 @@ SFD="create_selected_feature_ds.rb"
 # Don't start when running
 while ps x | grep $SFD | grep -v grep >/dev/null 2>&1; do sleep 5; done
 
-for i in 1 #2 3
+for i in 1 2 3
 do
   otreload
   sleep 5

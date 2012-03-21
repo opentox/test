@@ -4,7 +4,11 @@ require 'yaml'
 
 @subjectid = nil
 
-
+if ARGV.size != 1
+  puts "Args: path/to/dataset.yaml"
+  puts ARGV.size
+  exit
+end
 
 def check_ds(t_ds_uri, f_ds_uri)
   puts t_ds_uri
@@ -87,9 +91,10 @@ def check_ds(t_ds_uri, f_ds_uri)
 end
 
 
+path = ARGV[0]
+puts path
+ds = YAML::load_file("#{path}")
 
-
-ds = YAML::load_file("../datasets.yaml")
 ds.keys.each { |dataset|
   ds[dataset].keys.each { |pc|
     puts pc

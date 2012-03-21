@@ -4,10 +4,19 @@ require 'yaml'
 
 @subjectid = nil
 
+@subjectid = nil
+
+if ARGV.size != 1
+  puts "Args: path/to/dataset.yaml"
+  puts ARGV.size
+  exit
+end
+
 @dataset = []
 
 def create_f_ds(t_ds_uri, f_ds_uri, del)
 
+  start_time = Time.new
   regression_training_dataset = OpenTox::Dataset.find(t_ds_uri, @subjectid)
   prediction_feature = regression_training_dataset.features.keys.first
   regression_feature_dataset = OpenTox::Dataset.find(f_ds_uri, @subjectid)
@@ -24,14 +33,17 @@ def create_f_ds(t_ds_uri, f_ds_uri, del)
 
   result = OpenTox::RestClientWrapper.post( feature_selection_algo_uri, params)
   puts result
+  stop_time = Time.new
+  puts "Duration: #{stop_time - start_time}"
   puts
   result
 end
 
 
+path = ARGV[0]
+puts path
+ds = YAML::load_file("#{path}")
 
-
-ds = YAML::load_file("../datasets_jl1_allnum.yaml")
 #ds.keys.each { |dataset|
 ["LOAEL"].each { |dataset|
   puts "----------------- next dataset -----------------"
