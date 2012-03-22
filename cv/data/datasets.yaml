@@ -1,45 +1,57 @@
 {
-    "FHM": {
-      "electronic,cpsa": "http://toxcreate3.in-silico.ch:8080/dataset/94027",
-      "topological": "http://toxcreate3.in-silico.ch:8080/dataset/94028",
-      "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/6",
-      "joelib": "http://toxcreate3.in-silico.ch:8080/dataset/94029",
-      "hybrid": "http://toxcreate3.in-silico.ch:8080/dataset/46238",
-      "constitutional": "http://toxcreate3.in-silico.ch:8080/dataset/94030",
-      "all_pc": "http://toxcreate3.in-silico.ch:8080/dataset/94031"
-    },
-    "MDD": {
-      "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/14"
-    },
-    "RAT": {
-      "electronic,cpsa": "http://toxcreate3.in-silico.ch:8080/dataset/94032",
-      "topological": "http://toxcreate3.in-silico.ch:8080/dataset/94033",
-      "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/7",
-      "joelib": "http://toxcreate3.in-silico.ch:8080/dataset/94034",
-      "hybrid": "http://toxcreate3.in-silico.ch:8080/dataset/52151",
-      "training": "http://toxcreate3.in-silico.ch:8080/dataset/12",
-      "constitutional": "http://toxcreate3.in-silico.ch:8080/dataset/94035",
-      "test": "http://toxcreate3.in-silico.ch:8080/dataset/13",
-      "all_pc": "http://toxcreate3.in-silico.ch:8080/dataset/94036"
-    },
-    "LOAEL": {
-      "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/9",
-      "electronic,cpsa": "http://toxcreate3.in-silico.ch:8080/dataset/130523",
-      "constitutional": "http://toxcreate3.in-silico.ch:8080/dataset/130605",
-      "topological": "http://toxcreate3.in-silico.ch:8080/dataset/130603",
-      "hybrid": "http://toxcreate3.in-silico.ch:8080/dataset/111",
-      "joelib": "http://toxcreate3.in-silico.ch:8080/dataset/130604",
-      "all_pc": "http://toxcreate3.in-silico.ch:8080/dataset/130606"
-    },
-    "MOU": {
-      "electronic,cpsa": "http://toxcreate3.in-silico.ch:8080/dataset/94042",
-      "topological": "http://toxcreate3.in-silico.ch:8080/dataset/94043",
-      "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/8",
-      "joelib": "http://toxcreate3.in-silico.ch:8080/dataset/94044",
-      "hybrid": "http://toxcreate3.in-silico.ch:8080/dataset/49337",
-      "training": "http://toxcreate3.in-silico.ch:8080/dataset/10",
-      "constitutional": "http://toxcreate3.in-silico.ch:8080/dataset/94045",
-      "test": "http://toxcreate3.in-silico.ch:8080/dataset/11",
-      "all_pc": "http://toxcreate3.in-silico.ch:8080/dataset/94046"
-    }
+
+  "MDD": {
+    "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/14"  #,
+#    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8080/dataset/",
+#    "constitutional": "http://toxcreate3.in-silico.ch:8080/dataset/",
+#    "topological": "http://toxcreate3.in-silico.ch:8080/dataset/",
+#    "hybrid": "http://toxcreate3.in-silico.ch:8080/dataset/",
+#    "joelib": "http://toxcreate3.in-silico.ch:8080/dataset/",
+#    "all_pc": "http://toxcreate3.in-silico.ch:8080/dataset/"
+  },
+  
+  "FHM": {
+    "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/6",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8080/dataset/46234",
+    "constitutional": "http://toxcreate3.in-silico.ch:8080/dataset/46235",
+    "topological": "http://toxcreate3.in-silico.ch:8080/dataset/46237",
+    "hybrid": "http://toxcreate3.in-silico.ch:8080/dataset/46238",
+    "joelib": "http://toxcreate3.in-silico.ch:8080/dataset/46239",
+    "all_pc": "http://toxcreate3.in-silico.ch:8080/dataset/46236"
+  },
+  
+  "RAT": {
+    "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/7",
+    "training": "http://toxcreate3.in-silico.ch:8080/dataset/12",
+    "test": "http://toxcreate3.in-silico.ch:8080/dataset/13",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8080/dataset/46273",
+    "constitutional": "http://toxcreate3.in-silico.ch:8080/dataset/46361",
+    "topological": "http://toxcreate3.in-silico.ch:8080/dataset/49540",
+    "hybrid": "http://toxcreate3.in-silico.ch:8080/dataset/52151",
+    "joelib": "http://toxcreate3.in-silico.ch:8080/dataset/46365",
+    "all_pc": "http://toxcreate3.in-silico.ch:8080/dataset/46240"
+  },
+
+  "MOU": {
+    "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/8",
+    "training": "http://toxcreate3.in-silico.ch:8080/dataset/10",
+    "test": "http://toxcreate3.in-silico.ch:8080/dataset/11",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8080/dataset/46264",
+    "constitutional": "http://toxcreate3.in-silico.ch:8080/dataset/46289",
+    "topological": "http://toxcreate3.in-silico.ch:8080/dataset/46366",
+    "hybrid": "http://toxcreate3.in-silico.ch:8080/dataset/49337",
+    "joelib": "http://toxcreate3.in-silico.ch:8080/dataset/46363",
+    "all_pc": "http://toxcreate3.in-silico.ch:8080/dataset/46242"
+  },
+
+  "LOAEL": {
+    "dataset": "http://toxcreate3.in-silico.ch:8080/dataset/120088",
+    "electronic,cpsa": "http://toxcreate3.in-silico.ch:8080/dataset/140901",
+    "constitutional": "http://toxcreate3.in-silico.ch:8080/dataset/141117",
+    "topological": "http://toxcreate3.in-silico.ch:8080/dataset/141115",
+#    "hybrid": "http://toxcreate3.in-silico.ch:8080/dataset/",
+    "joelib": "http://toxcreate3.in-silico.ch:8080/dataset/141116",
+    "all_pc": "http://toxcreate3.in-silico.ch:8080/dataset/141121"
+  }
+
 }
