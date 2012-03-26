@@ -25,10 +25,14 @@ CV="CV_ds_pctype_algo_rseed_LOAEL.rb"
 FACTORS="$1"
 
 # Don't start when running
-while ps x | grep $CV | grep -v grep >/dev/null 2>&1; do sleep 3; done
+while ps x | grep $CV | grep -v grep >/dev/null 2>&1; do sleep 30; done
 
 LOGFILE="$THIS_DATE""$USER""_wrapper_pc_cv_LOAEL.log"
-rm "$LOGFILE" >/dev/null 2>&1
+#rm "$LOGFILE" >/dev/null 2>&1
+if [ -f $LOGFILE ]
+then
+  LOGFILE="$LOGFILE`date +%M%S`"
+fi
 
 
 cat $FACTORS | while read factor; do
