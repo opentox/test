@@ -1,70 +1,70 @@
-20120322_00_: LOAEL constitutional local_svm_regression 1
-ruby CV_ds_pctype_algo_rseed_LOAEL.rb LOAEL constitutional local_svm_regression 1 ../data/datasets_new_LOAEL_mol_allnum_rfe.yaml
-datasets_new_LOAEL_mol_allnum_rfe.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141117
+20120322_10_: LOAEL constitutional local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_LOAEL.rb LOAEL constitutional local_svm_regression 1 ../data/datasets_old_LOAEL_mg_allnum_rfe.yaml
+datasets_old_LOAEL_mg_allnum_rfe.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141120
 --- 
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141117
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=constitutional;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141120
 :stratified: false
 :random_seed: "1"
-:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/120088
-:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/120088/feature/LOAEL_log_mmol_kg_bw_day
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/300
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/375
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/84400
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/84400/feature/LOAEL_log_mg/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/310
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/386
 
-20120322_00_: LOAEL electronic,cpsa local_svm_regression 1
-ruby CV_ds_pctype_algo_rseed_LOAEL.rb LOAEL electronic,cpsa local_svm_regression 1 ../data/datasets_new_LOAEL_mol_allnum_rfe.yaml
-datasets_new_LOAEL_mol_allnum_rfe.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/140901
+20120322_10_: LOAEL electronic,cpsa local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_LOAEL.rb LOAEL electronic,cpsa local_svm_regression 1 ../data/datasets_old_LOAEL_mg_allnum_rfe.yaml
+datasets_old_LOAEL_mg_allnum_rfe.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141114
 --- 
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/140901
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=electronic,cpsa;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141114
 :stratified: false
 :random_seed: "1"
-:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/120088
-:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/120088/feature/LOAEL_log_mmol_kg_bw_day
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/301
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/377
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/84400
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/84400/feature/LOAEL_log_mg/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/311
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/383
 
-20120322_00_: LOAEL topological local_svm_regression 1
-ruby CV_ds_pctype_algo_rseed_LOAEL.rb LOAEL topological local_svm_regression 1 ../data/datasets_new_LOAEL_mol_allnum_rfe.yaml
-datasets_new_LOAEL_mol_allnum_rfe.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141115
+20120322_10_: LOAEL topological local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_LOAEL.rb LOAEL topological local_svm_regression 1 ../data/datasets_old_LOAEL_mg_allnum_rfe.yaml
+datasets_old_LOAEL_mg_allnum_rfe.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141118
 --- 
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141115
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=topological;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141118
 :stratified: false
 :random_seed: "1"
-:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/120088
-:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/120088/feature/LOAEL_log_mmol_kg_bw_day
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/303
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/379
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/84400
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/84400/feature/LOAEL_log_mg/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/313
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/387
 
-20120322_00_: LOAEL joelib local_svm_regression 1
-ruby CV_ds_pctype_algo_rseed_LOAEL.rb LOAEL joelib local_svm_regression 1 ../data/datasets_new_LOAEL_mol_allnum_rfe.yaml
-datasets_new_LOAEL_mol_allnum_rfe.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141116
+20120322_10_: LOAEL joelib local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_LOAEL.rb LOAEL joelib local_svm_regression 1 ../data/datasets_old_LOAEL_mg_allnum_rfe.yaml
+datasets_old_LOAEL_mg_allnum_rfe.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141119
 --- 
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141116
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=joelib;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141119
 :stratified: false
 :random_seed: "1"
-:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/120088
-:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/120088/feature/LOAEL_log_mmol_kg_bw_day
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/305
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/380
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/84400
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/84400/feature/LOAEL_log_mg/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/315
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/388
 
-20120322_00_: LOAEL all_pc local_svm_regression 1
-ruby CV_ds_pctype_algo_rseed_LOAEL.rb LOAEL all_pc local_svm_regression 1 ../data/datasets_new_LOAEL_mol_allnum_rfe.yaml
-datasets_new_LOAEL_mol_allnum_rfe.yaml exists
---- prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141121
+20120322_10_: LOAEL all_pc local_svm_regression 1
+ruby CV_ds_pctype_algo_rseed_LOAEL.rb LOAEL all_pc local_svm_regression 1 ../data/datasets_old_LOAEL_mg_allnum_rfe.yaml
+datasets_old_LOAEL_mg_allnum_rfe.yaml exists
+--- prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/143723
 --- 
 :algorithm_uri: http://toxcreate3.in-silico.ch:8080/algorithm/lazar
-:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/141121
+:algorithm_params: prediction_algorithm=local_svm_regression;pc_type=all_pc;feature_dataset_uri=http://toxcreate3.in-silico.ch:8080/dataset/143723
 :stratified: false
 :random_seed: "1"
-:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/120088
-:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/120088/feature/LOAEL_log_mmol_kg_bw_day
-http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/307
-http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/382
+:dataset_uri: http://toxcreate3.in-silico.ch:8080/dataset/84400
+:prediction_feature: http://toxcreate3.in-silico.ch:8080/dataset/84400/feature/LOAEL_log_mg/kg_bw/day
+http://toxcreate3.in-silico.ch:8080/validation/crossvalidation/320
+http://toxcreate3.in-silico.ch:8080/validation/report/crossvalidation/394
 
