@@ -1,0 +1,30 @@
+Compound 1:
+
+Isopropylthioxanthone (ITX), CAS: 5495-84-1, SMILES: O=C1c3c(Sc2c1cc(cc2)C(C)C)cccc3
+http://toxcreate3.in-silico.ch:8086/compound/InChI=1S/C16H14OS/c1-10(2)11-7-8-15-13(9-11)16(17)12-5-3-4-6-14(12)18-15/h3-10H,1-2H3
+
+MOU model from TD50 report (27.01.12)
+curl -X POST -d "compound_uri=http://toxcreate3.in-silico.ch:8086/compound/InChI=1S/C16H14OS/c1-10(2)11-7-8-15-13(9-11)16(17)12-5-3-4-6-14(12)18-15/h3-10H,1-2H3" http://toxcreate3.in-silico.ch:8086/model/10
+http://toxcreate3.in-silico.ch:8086/dataset/20
+
+RAT model from TD50 report (27.01.12)
+curl -X POST -d "compound_uri=http://toxcreate3.in-silico.ch:8086/compound/InChI=1S/C16H14OS/c1-10(2)11-7-8-15-13(9-11)16(17)12-5-3-4-6-14(12)18-15/h3-10H,1-2H3" http://toxcreate3.in-silico.ch:8086/model/11
+http://toxcreate3.in-silico.ch:8086/dataset/22
+
+
+
+Compound 2/3:
+
+2,5,6-triaminopyrimidin-4(1H)-one Smiles: O=C1N=C(N)NC(N)=C1N
+http://toxcreate3.in-silico.ch:8086/compound/InChI=1S/C4H7N5O/c5-1-2(6)8-4(7)9-3(1)10/h5H2,(H5,6,7,8,9,10)
+2,4,5-triamono-6-hydroxypyrimidine, Smiles: OC1=C(N)C(N)=NC(N)=N1
+http://toxcreate3.in-silico.ch:8086/compound/InChI=1S/C4H7N5O/c5-1-2(6)8-4(7)9-3(1)10/h5H2,(H5,6,7,8,9,10)
+Both have same InChi -> same compound in lazar.
+
+MOU model from TD50 report (27.01.12)
+curl -X POST -d "compound_uri=http://toxcreate3.in-silico.ch:8086/compound/InChI=1S/C4H7N5O/c5-1-2(6)8-4(7)9-3(1)10/h5H2,(H5,6,7,8,9,10)" http://toxcreate3.in-silico.ch:8086/model/10
+http://toxcreate3.in-silico.ch:8086/dataset/24
+
+RAT model from TD50 report (27.01.12)
+curl -X POST -d "compound_uri=http://toxcreate3.in-silico.ch:8086/compound/InChI=1S/C4H7N5O/c5-1-2(6)8-4(7)9-3(1)10/h5H2,(H5,6,7,8,9,10)" http://toxcreate3.in-silico.ch:8086/model/11
+http://toxcreate3.in-silico.ch:8086/dataset/26

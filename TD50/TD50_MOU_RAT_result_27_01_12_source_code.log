@@ -1,0 +1,170 @@
+Install System with opentox/install branch pc_new_1
+
+cd ~/opentox-ruby/www/opentox/
+for d in `find -maxdepth 1 -type d`; do echo ; echo $d; cd $d; git fetch ; git status  ; cd -; done
+for d in `find -maxdepth 1 -type d`; do echo ; echo $d; cd $d; git checkout pc_new_1 ; git status  ; cd -; done
+
+Check commits:
+for d in `find -maxdepth 1 -type d`; do echo ; echo $d; cd $d; git status ; cd - ; cd $d/.git/ ; cat ORIG_HEAD ; cd -  ; done
+
+Select correct one with "git reset --hard HEAD(e.g. ("d09179be7f08c341b871b2b17e7c105bf1548f1d")"
+
+Check R packages:
+for d in `find -maxdepth 1 -type d`; do echo ; echo $d; cd $d; cat DESCRIPTION | grep Version  ; cd -; done
+
+If "gem list" shows different versions for "rack", uninstall all but "1.3.5" with "gem uninstall rack" -> choose wrong version.
+
+cd ~/opentox-ruby/www/opentox/opentox-ruby/
+otconfig
+rake install
+
+otstart
+
+
+
+-------------------------------------------------------------------------
+
+ot6@toxcreate3:~/opentox-ruby/www/opentox$ for d in `find -maxdepth 1 -type d`; do echo ; echo $d; cd $d; git status ; cd - ; cd $d/.git/ ; cat ORIG_HEAD ; cd -  ; done
+
+.
+fatal: Not a git repository (or any of the parent directories): .git
+/home/ot6/opentox-ruby/www/opentox
+-bash: cd: ./.git/: No such file or directory
+cat: ORIG_HEAD: No such file or directory
+/home/ot6/opentox-ruby/www/opentox
+
+./model
+# On branch pc_new_1
+nothing to commit (working directory clean)
+/home/ot6/opentox-ruby/www/opentox
+d09179be7f08c341b871b2b17e7c105bf1548f1d
+/home/ot6/opentox-ruby/www/opentox
+
+./opentox-ruby
+# On branch pc_new_1
+nothing to commit (working directory clean)
+/home/ot6/opentox-ruby/www/opentox
+c4d79f636827def2b6ac288275570ecfc7187bf1
+/home/ot6/opentox-ruby/www/opentox
+
+./task
+# On branch development
+nothing to commit (working directory clean)
+/home/ot6/opentox-ruby/www/opentox
+4059b9ca4f768db6a1dece477b7d49be2e68d1dc
+/home/ot6/opentox-ruby/www/opentox
+
+./algorithm
+# On branch pc_new_1
+# Changed but not updated:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#   (commit or discard the untracked or modified content in submodules)
+#
+#    modified:   libfminer (new commits, modified content, untracked content)
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#    fminer_debug.txt
+no changes added to commit (use "git add" and/or "git commit -a")
+/home/ot6/opentox-ruby/www/opentox
+49eb76b0f2c2037e4a1e664752271b7e4a955f72
+/home/ot6/opentox-ruby/www/opentox
+
+./validation
+# On branch development
+nothing to commit (working directory clean)
+/home/ot6/opentox-ruby/www/opentox
+63320057e2a2b2121c5c405c31e2e7b709fa9e44 / 8a199a09a6d9ac8b0349af0d7c5b5320bdcec9b5
+/home/ot6/opentox-ruby/www/opentox
+
+./compound
+# On branch development
+nothing to commit (working directory clean)
+/home/ot6/opentox-ruby/www/opentox
+334568e596442d13e884dcabda3b1769bdfd898c
+/home/ot6/opentox-ruby/www/opentox
+
+./dataset
+# On branch development
+nothing to commit (working directory clean)
+/home/ot6/opentox-ruby/www/opentox
+e145f4add589228ee9b2aa5500396035668b5085
+/home/ot6/opentox-ruby/www/opentox
+
+./toxcreate
+# On branch development
+nothing to commit (working directory clean)
+/home/ot6/opentox-ruby/www/opentox
+2860c89ea31dc81e2493acbbc735361f9fd00c2d
+/home/ot6/opentox-ruby/www/opentox
+
+
+
+
+-------------------------------------------------------------------------
+
+ot6@toxcreate3:~/opentox-ruby/r-packages$ for d in `find -maxdepth 1 -type d`; do echo ; echo $d; cd $d; cat DESCRIPTION | grep Version  ; cd -; done
+
+.
+cat: DESCRIPTION: No such file or directory
+/home/ot6/opentox-ruby/r-packages
+
+./iterators
+Version: 1.0.5
+/home/ot6/opentox-ruby/r-packages
+
+./sampling
+Version: 2.5
+/home/ot6/opentox-ruby/r-packages
+
+./lpSolve
+Version: 5.6.6
+/home/ot6/opentox-ruby/r-packages
+
+./foreach
+Version: 1.3.5
+/home/ot6/opentox-ruby/r-packages
+
+./reshape
+Version: 0.8.4
+/home/ot6/opentox-ruby/r-packages
+
+./multicore
+Version: 0.1-7
+/home/ot6/opentox-ruby/r-packages
+
+./vegan
+Version: 2.0-3
+/home/ot6/opentox-ruby/r-packages
+
+./e1071
+Version: 1.6
+/home/ot6/opentox-ruby/r-packages
+
+./caret
+Version: 5.15-023
+/home/ot6/opentox-ruby/r-packages
+
+./doMC
+Version: 1.2.4
+/home/ot6/opentox-ruby/r-packages
+
+./plyr
+Version: 1.7.1
+/home/ot6/opentox-ruby/r-packages
+
+./gam
+Version: 1.06.2
+/home/ot6/opentox-ruby/r-packages
+
+./permute
+Version: 0.6-3
+/home/ot6/opentox-ruby/r-packages
+
+./kernlab
+Version: 0.9-14
+/home/ot6/opentox-ruby/r-packages
+
+
