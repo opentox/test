@@ -93,7 +93,7 @@ class RUtilTest < Test::Unit::TestCase
   def test_dataset_to_dataframe
     puts "dataset_to_dataframe"
     dataframe = @@rutil.dataset_to_dataframe(@@hamster,"NA",@@subjectid)
-    dataset_conv = @@rutil.dataframe_to_dataset(dataframe,@@subjectid)
+    dataset_conv = @@rutil.dataframe_to_dataset(dataframe,{},@@subjectid)
     dataset_conv_reloaded = OpenTox::Dataset.find(dataset_conv.uri,@@subjectid)
     @@resources << dataset_conv.uri
     dataset_equal(@@hamster,dataset_conv)
@@ -101,7 +101,7 @@ class RUtilTest < Test::Unit::TestCase
     
     feats = @@hamster_features.features.keys[0..(@@hamster_features.features.keys.size/2)]
     dataframe = @@rutil.dataset_to_dataframe(@@hamster_features,"NA",@@subjectid,feats)
-    dataset_conv = @@rutil.dataframe_to_dataset(dataframe,@@subjectid)
+    dataset_conv = @@rutil.dataframe_to_dataset(dataframe,{},@@subjectid)
     dataset_conv_reloaded = OpenTox::Dataset.find(dataset_conv.uri,@@subjectid)
     @@resources << dataset_conv.uri
     [dataset_conv, dataset_conv_reloaded].each do |d|
@@ -121,7 +121,7 @@ class RUtilTest < Test::Unit::TestCase
     
     dataframe = @@rutil.dataset_to_dataframe(@@hamster_features,"NA",@@subjectid)
     @@rutil.r.eval "#{dataframe} <- #{dataframe}[2:10,10:20]"
-    dataset_conv = @@rutil.dataframe_to_dataset(dataframe,@@subjectid)
+    dataset_conv = @@rutil.dataframe_to_dataset(dataframe,{},@@subjectid)
     dataset_conv_reloaded = OpenTox::Dataset.find(dataset_conv.uri,@@subjectid)
     @@resources << dataset_conv.uri
     [dataset_conv,dataset_conv_reloaded].each do |d|
@@ -151,9 +151,9 @@ class RUtilTest < Test::Unit::TestCase
 #     @@resources += [ res[0].uri, res[1].uri ]
 #     @@strat = { :data => @@hamster, :split1 => res[0], :split2 => res[1] }
       data_combined = OpenTox::Dataset.merge(@@hamster,@@hamster_features,{},@@subjectid)
-      res = @@rutil.stratified_split(data_combined,0,@@split_ratio,@@subjectid,1)
-      @@resources += [ data_combined.uri, res[0].uri, res[1].uri ]
-      @@strat = {:data => data_combined, :split1 => res[0], :split2 => res[1] }
+      res1, res2 = @@rutil.stratified_split(data_combined,{},0,@@split_ratio,@@subjectid,1)
+      @@resources += [ data_combined.uri, res1.uri, res2.uri ]
+      @@strat = {:data => data_combined, :split1 => res1, :split2 => res2 }
     end
     @@strat
   end
@@ -180,6 +180,45 @@ class RUtilTest < Test::Unit::TestCase
       end
     end
   end
+  
+  def test_k_fold_stratified_split
+    puts "test_k_fold_stratified_split"
+    data_combined = OpenTox::Dataset.merge(@@hamster,@@hamster_features,{},@@subjectid)
+    num_duplicates = 0 #hamster has no duplicates
+    num_folds = 10
+    avg_split_size = (data_combined.compounds.size+num_duplicates)/num_folds.to_f
+    
+    @@resources += [ data_combined.uri ]
+    train, test = @@rutil.stratified_k_fold_split(data_combined,{},0,num_folds,@@subjectid,1)
+    @@resources += (train + test).collect{ |r| r.uri }
+    [train, test].each do |result|
+      assert result.is_a?(Array)
+      assert result.size==num_folds
+    end
+    sum_test = 0
+    compounds_test = []
+    num_folds.times do |i|
+      assert test[i].is_a?(OpenTox::Dataset)
+      assert test[i].compounds.size==avg_split_size.to_i || 
+             test[i].compounds.size==(avg_split_size+1).to_i
+      sum_test+=test[i].compounds.size
+      compounds_test += test[i].compounds
+      
+      assert_equal (test[i].compounds.size+train[i].compounds.size),(data_combined.compounds.size+num_duplicates)
+      compounds = (test[i].compounds + train[i].compounds)
+      if num_duplicates==0
+        assert_equal compounds.sort,data_combined.compounds.sort
+      else
+        assert_equal compounds.uniq.sort,data_combined.compounds.sort
+      end   
+    end
+    assert_equal sum_test,(data_combined.compounds.size+num_duplicates)
+    if num_duplicates==0
+      assert_equal compounds_test.sort,data_combined.compounds.sort
+    else
+      assert_equal compounds_test.uniq.sort,data_combined.compounds.sort
+    end
+  end  
 
   def test_feature_value_plot
     puts "feature_value_plot"
