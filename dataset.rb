@@ -293,7 +293,7 @@ class DatasetTest < Test::Unit::TestCase
     end
     
     sleep 1 while (uris.size < num)
-    uris.uniq.each{|uri| OpenTox::RestClientWrapper.delete uri,@@subjectid}
+    uris.uniq.each{|uri| OpenTox::RestClientWrapper.delete(uri,{:subjectid=>@@subjectid})}
     #puts uris.sort.to_yaml
     assert_equal uris.size,uris.uniq.size
   end
