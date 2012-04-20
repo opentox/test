@@ -29,13 +29,6 @@ class DatasetTest < Test::Unit::TestCase
     #@new_dataset.delete
   end
 
-#  def test_get_pc
-#    ds_uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"], {:file => File.new("data/EPAFHM.csv")} ,{:accept => "text/uri-list", :subjectid => @@subjectid}).to_s.chomp
-#    puts "DS: #{ds_uri}"
-#    fds_uri = OpenTox::Algorithm.pc_descriptors( { :dataset_uri => ds_uri, :pc_type => "constitutional" } )
-#    puts "FDS: #{fds_uri}"
-#  end
-
   def test_save_external
 
     @dataset = OpenTox::Dataset.find "http://apps.ideaconsult.net:8080/ambit2/dataset/2698"
