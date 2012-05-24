@@ -41,6 +41,7 @@ algo_params = "prediction_algorithm=#{algo}"
 algo_params += ";pc_type=#{pc_type}" unless (pc_type == "nil") || (pc_ds_uri.include? 'pc_type') 
 algo_params += ";feature_dataset_uri=#{pc_ds_uri}" unless (pc_type == "nil") || (pc_ds_uri.include? 'feature_dataset_uri') 
 algo_params += "#{user_algo_params}" unless user_algo_params == "nil"
+algo_params += ";lib=cdk"
 #algo_params += ";min_chisq_significance=0.9"
 #algo_params += ";min_frequency=6"
 #algo_params += ";feature_type=trees"
@@ -54,7 +55,7 @@ prediction_feature = OpenTox::Dataset.find(ds_uri).features.keys.first
 cv_args = {}
 cv_args[:dataset_uri] = ds_uri
 cv_args[:prediction_feature] = prediction_feature
-cv_args[:algorithm_uri] = "http://toxcreate3.in-silico.ch:8085/algorithm/lazar"
+cv_args[:algorithm_uri] = File.join(CONFIG[:services]["opentox-algorithm"],"lazar")
 cv_args[:algorithm_params] = algo_params
 cv_args[:loo] = true
 puts "[#{Time.now.utc.iso8601(4).to_s}] #{cv_args.to_yaml}"

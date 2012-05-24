@@ -39,6 +39,7 @@ pc_ds_uri = ds[ds_name][pc_type]
 algo_params = "prediction_algorithm=#{algo}"
 algo_params += ";pc_type=#{pc_type}" unless pc_type == "nil" 
 algo_params += ";feature_dataset_uri=#{pc_ds_uri}" unless pc_type == "nil" 
+algo_params += ";lib=cdk"
 #algo_params += ";min_sim=0.3"
 #algo_params += ";min_chisq_significance=0.9"
 #algo_params += ";min_frequency=6"
@@ -56,7 +57,7 @@ cv_args[:test_dataset_uri] = ds_test_uri
 cv_args[:training_dataset_uri] = ds_training_uri
 #cv_args[:test_target_dataset_uri] = ds_test_target_uri
 cv_args[:prediction_feature] = prediction_feature
-cv_args[:algorithm_uri] = "http://toxcreate3.in-silico.ch:8086/algorithm/lazar"
+cv_args[:algorithm_uri] = File.join(CONFIG[:services]["opentox-algorithm"],"lazar") 
 cv_args[:algorithm_params] = algo_params
 #cv_args[:stratified] = false
 #cv_args[:random_seed] = r_seed
