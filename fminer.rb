@@ -30,22 +30,22 @@ class FminerTest < Test::Unit::TestCase
 
   def test_bbrc
     feature = @@classification_training_dataset.features.keys.first
-    @dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({:dataset_uri => @@classification_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid}).to_s
+    @dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({:dataset_uri => @@classification_training_dataset.uri, :prediction_feature => feature, :min_frequency => "10pm", :subjectid => @@subjectid}).to_s
     dump 
-    assert_equal 41, @dataset.features.size # 32 bit
-    #assert_equal 52, @dataset.features.size
+    assert_equal 53, @dataset.features.size # 32 bit
+    
     # assert no hit counts present
     count=0
     @dataset.data_entries.each { |c,e|
       if c.to_s.scan('InChI=1S/C10H13N3O2/c1-13(12-15)7-3-5-10(14)9-4-2-6-11-8-9/h2,4,6,8H,3,5,7H2,1H3').size > 0
         e.each { |p,h|
-          if p.to_s.scan('bbrc/40').size>0
+          if p.to_s.scan('bbrc/26').size>0
             count += 1 if h[0] == 1
           end
-          if p.to_s.scan('bbrc/29').size>0
+          if p.to_s.scan('bbrc/49').size>0
             count += 1 if h[0] == 1
           end
-          if p.to_s.scan('bbrc/18').size>0
+          if p.to_s.scan('bbrc/27').size>0
             count += 1 if h[0] == 1
           end
         }
@@ -56,9 +56,9 @@ class FminerTest < Test::Unit::TestCase
     # assert some values
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/bbrc/31').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], 2
-        assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.97
-        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]-[#6&a]:[#6&a]:[#6&a]:[#6&a]-[#7&A]"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 1
+        assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.98
+        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]:[#6&a](-[#6&A]-[#6&A])(:[#6&a]:[#6&a])"
       end
     }
     cleanup
@@ -66,23 +66,22 @@ class FminerTest < Test::Unit::TestCase
 
   def test_regression_bbrc
     feature = File.join @@regression_training_dataset.uri,"feature/LC50_mmol" 
-    @dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({:dataset_uri => @@regression_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid, :feature_type=>"paths"}).to_s
+    @dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({:dataset_uri => @@regression_training_dataset.uri, :prediction_feature => feature, :min_frequency => "10pm", :subjectid => @@subjectid, :feature_type=>"paths"}).to_s
     dump
-    assert_equal 131, @dataset.features.size # 32 bit
-    #assert_equal 219, @dataset.features.size
+    assert_equal 90, @dataset.features.size # 32 bit
     
     # assert no hit counts present
     count = 0
     @dataset.data_entries.each { |c,e|
-      if c.to_s.scan('InChI=1S/C5H10N2O2S/c1-4(10-3)7-9-5(8)6-2/h1-3H3,(H,6,8)').size > 0
+      if c.to_s.scan('InChI=1S/C5H4ClNO/c6-4-1-2-5(8)7-3-4/h1-3H,(H,7,8)').size > 0
         e.each { |p,h|
-          if p.to_s.scan('bbrc/86').size>0
+          if p.to_s.scan('bbrc/81').size>0
             count += 1 if h[0] == 1
           end
-          if p.to_s.scan('bbrc/54').size>0
+          if p.to_s.scan('bbrc/5').size>0
             count += 1 if h[0] == 1
           end
-          if p.to_s.scan('bbrc/32').size>0
+          if p.to_s.scan('bbrc/82').size>0
             count += 1 if h[0] == 1
           end
         }
@@ -92,10 +91,10 @@ class FminerTest < Test::Unit::TestCase
 
     # assert some values
     @dataset.features.each { |c,e|
-      if c.to_s.scan('feature/bbrc/188').size > 0
+      if c.to_s.scan('feature/bbrc/83').size > 0
         assert_equal e['http://www.opentox.org/api/1.1#effect'], "activating"
         assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 1.0
-        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]:[#6&a]:[#8&a]:[#6&a]:[#6&a]"
+        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#17&A]-[#6&a]:[#6&a]:[#6&a]:[#6&a]"
       end
     }
 
@@ -105,7 +104,7 @@ class FminerTest < Test::Unit::TestCase
   def test_last
 
     feature = @@classification_training_dataset.features.keys.first
-    @dataset_uri = OpenTox::Algorithm::Fminer::LAST.new.run({:dataset_uri => @@classification_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid}).to_s
+    @dataset_uri = OpenTox::Algorithm::Fminer::LAST.new.run({:dataset_uri => @@classification_training_dataset.uri, :prediction_feature => feature, :min_frequency => "75pm", :subjectid => @@subjectid}).to_s
     dump
     assert_in_delta 21, @dataset.features.size, 2 # 32 bit
 
@@ -114,68 +113,66 @@ class FminerTest < Test::Unit::TestCase
     @dataset.data_entries.each { |c,e|
       if c.to_s.scan('InChI=1S/C5H10N2O/c8-6-7-4-2-1-3-5-7/h1-5H2').size > 0
         e.each { |p,h|
-          if p.to_s.scan('last/11').size>0
-            count += 1 if h[0] == true
+          if p.to_s.scan('last/21').size>0
+            count += 1 if h[0] == 1
           end
-          if p.to_s.scan('last/5').size>0
-            count += 1 if h[0] == true
+          if p.to_s.scan('last/10').size>0
+            count += 1 if h[0] == 1
           end
           if p.to_s.scan('last/13').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
         }
       end
     }
-    #assert_equal 3, count
+    assert_equal 3, count
 
     # assert some values
-    #@dataset.features.each { |c,e|
-    #  if c.to_s.scan('feature/last/3').size > 0
-    #    assert_equal e['http://www.opentox.org/api/1.1#effect'], 2
-    #    assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
-    #    assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#8&A]=[#6&A]-[#6&A]-[#6&A]"
-    #  end
-    #}
+    @dataset.features.each { |c,e|
+      if c.to_s.scan('feature/last/3').size > 0
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 1 
+        assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(3), 0.995
+        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#8&A]=[#6&A]-[#6&A]-[#6&A]"
+      end
+    }
     cleanup
   end
 
 
 def test_regression_last
   feature = File.join @@regression_training_dataset.uri,"feature/LC50_mmol" 
-  @dataset_uri = OpenTox::Algorithm::Fminer::LAST.new.run({:dataset_uri => @@regression_training_dataset.uri, :prediction_feature => feature, 
-                                                          :min_frequency => 40,
-                                                          :subjectid => @@subjectid}).to_s
+  @dataset_uri = OpenTox::Algorithm::Fminer::LAST.new.run({:dataset_uri => @@regression_training_dataset.uri, :prediction_feature => feature, :min_frequency => "40", :subjectid => @@subjectid}).to_s
   dump
-  assert_in_delta 16, @dataset.features.size, 8
+  assert_in_delta 16, @dataset.features.size, 8 
 
   
   # assert no hit counts present
-  #count=0
-  #@dataset.data_entries.each { |c,e|
-  #  if c.to_s.scan('InChI=1S/C9H10O3/c1-2-12-9-5-7(6-10)3-4-8(9)11/h3-6,11H,2H2,1H3').size > 0
-  #    e.each { |p,h|
-  #      if p.to_s.scan('last/5').size>0
-  #        count += 1 if h[0] == true
-  #      end
-  #      if p.to_s.scan('last/11').size>0
-  #        count += 1 if h[0] == true
-  #      end
-  #      if p.to_s.scan('last/13').size>0
-  #        count += 1 if h[0] == true
-  #      end
-  #    }
-  #  end
-  #}
-  #assert_in_delta 3, count, 2
+  count=0
+  @dataset.data_entries.each { |c,e|
+    if c.to_s.scan('InChI=1S/C9H10O3/c1-2-12-9-5-7(6-10)3-4-8(9)11/h3-6,11H,2H2,1H3').size > 0
+      e.each { |p,h|
+        if p.to_s.scan('last/2').size>0
+          count += 1 if h[0] == 1
+        end
+        if p.to_s.scan('last/3').size>0
+          count += 1 if h[0] == 1
+        end
+        if p.to_s.scan('last/8').size>0
+          count += 1 if h[0] == 1
+        end
+      }
+    end
+  }
+  assert_in_delta 3, count, 2
 
   # assert some values
-  #@dataset.features.each { |c,e|
-  #  if c.to_s.scan('feature/last/3').size > 0
-  #    assert_equal e['http://www.opentox.org/api/1.1#effect'], "activating"
-  #    assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 1.0
-  #    assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#8&A]=[#6&A]-[#8&A]-[#6&A]"
-  #  end
-  #}
+  @dataset.features.each { |c,e|
+    if c.to_s.scan('feature/last/3').size > 0
+      assert_equal e['http://www.opentox.org/api/1.1#effect'], "deactivating"
+      assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
+      assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&A]-[#6&a](:[#6&a]):[#6&a]"
+    end
+  }
   cleanup
 end
 
@@ -186,11 +183,11 @@ end
     @dataset_uri = OpenTox::RestClientWrapper.post(File.join(CONFIG[:services]["opentox-algorithm"],"fminer","bbrc"),{
       "dataset_uri" => @@classification_training_dataset.uri,
       "prediction_feature" => feature,
+      "min_frequency" => "10pm",
       "nr_hits" => true,
        :subjectid => @@subjectid })
     dump
-    assert_equal 41, @dataset.features.size # 32 bit
-    #assert_equal 52, @dataset.features.size
+    assert_equal 53, @dataset.features.size # 32 bit
 
     # assert hit counts present
     @dataset.data_entries.each { |c,e|
@@ -212,9 +209,9 @@ end
     # assert some values
     @dataset.features.each { |c,e|
       if c.to_s.scan('feature/bbrc/31').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], 2
-        assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.97
-        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]-[#6&a]:[#6&a]:[#6&a]:[#6&a]-[#7&A]"
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 1
+        assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.98
+        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#6&a]:[#6&a](-[#6&A]-[#6&A])(:[#6&a]:[#6&a])"
       end
     }
 
@@ -227,23 +224,23 @@ end
       "dataset_uri" => @@classification_training_dataset.uri,
       "prediction_feature" => feature,
       "backbone" => false,
+      "min_frequency" => "10pm",
        :subjectid => @@subjectid })
     dump
-    assert_equal 139, @dataset.features.size # 32 bit
-    #assert_equal 52, @dataset.features.size
+    assert_equal 195, @dataset.features.size # 32 bit
 
     # assert no hit counts present
     count=0
     @dataset.data_entries.each { |c,e|
       if c.to_s.scan('InChI=1S/C10H13N3O2/c1-13(12-15)7-3-5-10(14)9-4-2-6-11-8-9/h2,4,6,8H,3,5,7H2,1H3').size > 0
         e.each { |p,h|
-          if p.to_s.scan('bbrc/113').size>0
+          if p.to_s.scan('bbrc/167').size>0
             count += 1 if h[0] == 1
           end
-          if p.to_s.scan('bbrc/99').size>0
+          if p.to_s.scan('bbrc/134').size>0
             count += 1 if h[0] == 1
           end
-          if p.to_s.scan('bbrc/77').size>0
+          if p.to_s.scan('bbrc/112').size>0
             count += 1 if h[0] == 1
           end
         }
@@ -254,10 +251,10 @@ end
 
     # assert some values
     @dataset.features.each { |c,e|
-      if c.to_s.scan('feature/bbrc/31').size > 0
-        assert_equal e['http://www.opentox.org/api/1.1#effect'], 2
-        assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.99
-        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#8&A]-[#6&A]-[#7&A]-[#7&A]=[#8&A]"
+      if c.to_s.scan('feature/bbrc/183').size > 0
+        assert_equal e['http://www.opentox.org/api/1.1#effect'], 1
+        assert_equal e['http://www.opentox.org/api/1.1#pValue'].to_f.round_to(2), 0.98
+        assert_equal e['http://www.opentox.org/api/1.1#smarts'], "[#7&A]-[#6&a](:[#6&a]:[#6&a])(:[#6&a]:[#6&a]:[#6&a])"
       end
     }
 
@@ -266,7 +263,7 @@ end
 
   def test_bbrc_multinomial
     feature = @@multinomial_training_dataset.features.keys.first
-    @dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({:dataset_uri => @@multinomial_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid}).to_s
+    @dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({:dataset_uri => @@multinomial_training_dataset.uri, :prediction_feature => feature, :min_frequency => "10pm", :subjectid => @@subjectid}).to_s
     dump 
     assert_equal 152, @dataset.features.size # 32 bit
 
@@ -316,7 +313,7 @@ end
 
   def test_last_multinomial
     feature = @@multinomial_training_dataset.features.keys.first
-    @dataset_uri = OpenTox::Algorithm::Fminer::LAST.new.run({:dataset_uri => @@multinomial_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid}).to_s
+    @dataset_uri = OpenTox::Algorithm::Fminer::LAST.new.run({:dataset_uri => @@multinomial_training_dataset.uri, :prediction_feature => feature, :min_frequency => "75pm", :subjectid => @@subjectid}).to_s
     dump 
     assert_in_delta 138, @dataset.features.size, 2 # 32 bit
 
@@ -326,18 +323,18 @@ end
       if c.to_s.scan('InChI=1S/C7H6N2O4/c8-6-3-4(9(12)13)1-2-5(6)7(10)11/h1-3H,8H2,(H,10,11)').size > 0
         e.each { |p,h|
           if p.to_s.scan('last/127').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
           if p.to_s.scan('last/54').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
           if p.to_s.scan('last/120').size>0
-            count += 1 if h[0] == true
+            count += 1 if h[0] == 1
           end
         }
       end
     }
-    #assert_equal 3, count
+    assert_equal 3, count
 
     # assert some values
     #@dataset.features.each { |c,e|
@@ -367,19 +364,18 @@ end
   def test_match
     feature = @@classification_training_dataset.features.keys.first
     feature_dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({
-      :dataset_uri => @@classification_training_dataset.uri, :prediction_feature => feature, :subjectid => @@subjectid}).to_s
+      :dataset_uri => @@classification_training_dataset.uri, :prediction_feature => feature, :min_frequency => "10pm", :subjectid => @@subjectid}).to_s
     feature_dataset = OpenTox::Dataset.find(feature_dataset_uri,@@subjectid)
     tmp_resources = [ feature_dataset_uri ]
     [true,false].each do |hits|
       matched_dataset_uri = OpenTox::RestClientWrapper.post(File.join(CONFIG[:services]["opentox-algorithm"],"fminer","bbrc","match"),
-        {:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@multinomial_training_dataset.uri, 
-         :nr_hits => hits, :subjectid => @@subjectid}).to_s
+        {:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@multinomial_training_dataset.uri, :nr_hits => hits, :min_frequency => "10pm", :subjectid => @@subjectid}).to_s
       tmp_resources << matched_dataset_uri
       matched_dataset = OpenTox::Dataset.find(matched_dataset_uri,@@subjectid)
-      # matched dataset should have same features as feature dataset
-      assert_equal feature_dataset.features.keys.sort,matched_dataset.features.keys.sort
       # matched datset should have same compounds as input dataset for matching
       assert_equal matched_dataset.compounds.sort,@@multinomial_training_dataset.compounds.sort
+      # matched dataset should have same features as feature dataset
+      #assert_equal feature_dataset.features.keys.sort,matched_dataset.features.keys.sort   
       matched_dataset.compounds.each do |c|
         matched_dataset.features.keys.each do |f|
           if matched_dataset.data_entries[c] and matched_dataset.data_entries[c][f]
@@ -397,5 +393,4 @@ end
     end
     tmp_resources.each{|uri| OpenTox::RestClientWrapper.delete(uri,{:subjectid=>@@subjectid})}
   end
-
 end
