@@ -369,13 +369,16 @@ end
     tmp_resources = [ feature_dataset_uri ]
     [true,false].each do |hits|
       matched_dataset_uri = OpenTox::RestClientWrapper.post(File.join(CONFIG[:services]["opentox-algorithm"],"fminer","bbrc","match"),
-        {:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@multinomial_training_dataset.uri, :nr_hits => hits, :min_frequency => "10pm", :subjectid => @@subjectid}).to_s
+        {:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@classification_training_dataset.uri, :nr_hits => hits, :min_frequency => "10pm", :subjectid => @@subjectid}).to_s
+        #{:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@multinomial_training_dataset.uri, :nr_hits => hits, :min_frequency => "10pm", :subjectid => @@subjectid}).to_s
       tmp_resources << matched_dataset_uri
       matched_dataset = OpenTox::Dataset.find(matched_dataset_uri,@@subjectid)
       # matched datset should have same compounds as input dataset for matching
-      assert_equal matched_dataset.compounds.sort,@@multinomial_training_dataset.compounds.sort
+      #assert_equal matched_dataset.compounds.sort,@@multinomial_training_dataset.compounds.sort
+      assert_equal matched_dataset.compounds.sort,@@classification_training_dataset.compounds.sort
       # matched dataset should have same features as feature dataset
-      #assert_equal feature_dataset.features.keys.sort,matched_dataset.features.keys.sort   
+      matched_features = matched_dataset.features.keys.collect {|f| f.gsub("/match", "")}
+      assert_equal feature_dataset.features.keys.sort,matched_features.sort
       matched_dataset.compounds.each do |c|
         matched_dataset.features.keys.each do |f|
           if matched_dataset.data_entries[c] and matched_dataset.data_entries[c][f]
@@ -393,4 +396,43 @@ end
     end
     tmp_resources.each{|uri| OpenTox::RestClientWrapper.delete(uri,{:subjectid=>@@subjectid})}
   end
+
+  def test_match_pValue
+    feature = @@classification_training_dataset.features.keys.first
+    feature_dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({
+      :dataset_uri => @@classification_training_dataset.uri, :prediction_feature => feature, :min_frequency => "10pm", :nr_hits => false, :subjectid => @@subjectid}).to_s
+    feature_dataset = OpenTox::Dataset.find(feature_dataset_uri,@@subjectid)
+    tmp_resources = [ feature_dataset_uri ]
+    
+    matched_dataset_uri = OpenTox::RestClientWrapper.post(File.join(CONFIG[:services]["opentox-algorithm"],"fminer","bbrc","match"),
+      {:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@classification_training_dataset.uri, :nr_hits => false, :subjectid => @@subjectid}).to_s
+    tmp_resources << matched_dataset_uri
+    
+    matched_dataset = OpenTox::Dataset.find(matched_dataset_uri,@@subjectid)
+    matched_smarts_pValues = {}
+    bbrc_smarts_pValues = {}
+  
+    feature_dataset.features.each do |f, values| 
+      if values[RDF::type].include?(OT.Substructure)
+        bbrc_smarts_pValues[values[OT::smarts]] =  values[OT::pValue]
+      end
+    end
+    matched_dataset.features.each do |f, values| 
+      if values[RDF::type].include?(OT.Substructure)
+        matched_smarts_pValues[values[OT::smarts]] =  values[OT::pValue]
+      end
+    end
+   
+    # matched dataset has same features and p_values
+    assert_equal matched_smarts_pValues.size,bbrc_smarts_pValues.size 
+    if !matched_smarts_pValues.nil?
+      bbrc_smarts_pValues.each do |s, p|
+        assert matched_smarts_pValues.has_key?(s)
+        assert_equal p,matched_smarts_pValues[s]
+      end
+    end  
+   
+    tmp_resources.each{|uri| OpenTox::RestClientWrapper.delete(uri,{:subjectid=>@@subjectid})}
+  end
+
 end
