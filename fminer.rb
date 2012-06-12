@@ -368,8 +368,7 @@ end
     feature_dataset = OpenTox::Dataset.find(feature_dataset_uri,@@subjectid)
     tmp_resources = [ feature_dataset_uri ]
     [true,false].each do |hits|
-      matched_dataset_uri = OpenTox::RestClientWrapper.post(File.join(CONFIG[:services]["opentox-algorithm"],"fminer","bbrc","match"),
-        {:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@classification_training_dataset.uri, :nr_hits => hits, :min_frequency => "10pm", :subjectid => @@subjectid}).to_s
+      matched_dataset_uri = OpenTox::RestClientWrapper.post(File.join(CONFIG[:services]["opentox-algorithm"],"fminer","bbrc","match"),{:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@classification_training_dataset.uri, :nr_hits => hits, :min_frequency => "10pm", :subjectid => @@subjectid})
         #{:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@multinomial_training_dataset.uri, :nr_hits => hits, :min_frequency => "10pm", :subjectid => @@subjectid}).to_s
       tmp_resources << matched_dataset_uri
       matched_dataset = OpenTox::Dataset.find(matched_dataset_uri,@@subjectid)
@@ -404,8 +403,7 @@ end
     feature_dataset = OpenTox::Dataset.find(feature_dataset_uri,@@subjectid)
     tmp_resources = [ feature_dataset_uri ]
     
-    matched_dataset_uri = OpenTox::RestClientWrapper.post(File.join(CONFIG[:services]["opentox-algorithm"],"fminer","bbrc","match"),
-      {:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@classification_training_dataset.uri, :nr_hits => false, :subjectid => @@subjectid}).to_s
+    matched_dataset_uri = OpenTox::RestClientWrapper.post(File.join(CONFIG[:services]["opentox-algorithm"],"fminer","bbrc","match"),{:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@classification_training_dataset.uri, :nr_hits => false, :subjectid => @@subjectid})
     tmp_resources << matched_dataset_uri
     
     matched_dataset = OpenTox::Dataset.find(matched_dataset_uri,@@subjectid)
