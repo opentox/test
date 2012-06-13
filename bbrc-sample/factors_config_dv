@@ -1,0 +1,25 @@
+#Dataset num_boots backbone min_frequence 
+#MOU 100 true
+#MOU 100 false
+#RAT 100 true
+#RAT 100 false
+#MCC 100 true
+#MCC 100 false
+SAL 100 true 40pm mle
+SAL 100 true 40pm mean
+SAL 100 true 40pm bbrc
+#SAL 100 false
+#KAZ 100 true
+#KAZ 100 false
+#BB 300
+#BB 200
+#BB 150
+#BB 100
+#NCT 300
+#NCT 200
+#NCT 150
+#NCT 100
+#YOSH 300
+#YOSH 200
+#YOSH 150
+#YOSH 100
