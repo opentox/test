@@ -113,7 +113,7 @@ class RUtilTest < Test::Unit::TestCase
             assert d.data_entries[c]==nil || d.data_entries[c][f]==nil
           else
             assert_not_nil d.data_entries[c]
-            assert_equal @@hamster_features.data_entries[c][f],d.data_entries[c][f]
+            assert_equal @@hamster_features.data_entries[c][f].collect{|v|v.to_s},d.data_entries[c][f].collect{|v|v.to_s}
           end 
         end
       end
@@ -136,7 +136,7 @@ class RUtilTest < Test::Unit::TestCase
             assert d.data_entries[c]==nil || d.data_entries[c][f]==nil
           else
             assert_not_nil d.data_entries[c]
-            assert_equal @@hamster_features.data_entries[c][f],d.data_entries[c][f]
+            assert_equal @@hamster_features.data_entries[c][f].collect{|v|v.to_s},d.data_entries[c][f].collect{|v|v.to_s}
           end 
         end
       end
