@@ -4,8 +4,8 @@ require 'rubygems'
 require 'opentox-ruby'
 require 'yaml'
 
-if ARGV.size != 7 
-  puts "Args: path/to/dataset.yaml ds_name num_boots backbone min_frequency method find_min_frequency"
+if ARGV.size != 9 
+  puts "Args: path/to/dataset.yaml ds_name num_boots backbone min_frequency method find_min_frequency start_seed end_seed"
   puts ARGV.size
   exit
 end
@@ -28,7 +28,13 @@ backbone = ARGV[3] # true/false
 min_freq = ARGV[4] # integer
 method = ARGV[5] # mle, mean, bbrc
 find_min_frequency = ARGV[6] # true/false
+start_seed = ARGV[7] # integer (< end_seed)
+end_seed = ARGV[8] #integer (> start_seed)
 hits = false
+
+if start_seed > end_seed
+  puts "Start_seed has to be smaller than end_seed. "
+end
 
 ds = YAML::load_file("#{path}")
 ds_uri = ds[ds_name]["dataset"]
@@ -37,8 +43,19 @@ result1 = []
 result2 = []
 metadata = []
 
+statistics = {}
+statistics[:t_ds_nr_com] = []
+statistics[:bbrc_ds_nr_com] = []
+statistics[:bbrc_ds_nr_f] = []
+statistics[:min_sampling_support] = []
+statistics[:min_frequency_per_sample] = []
+statistics[:duration] = []
+statistics[:merge_time] = []
+statistics[:n_stripped_mss] = []
+statistics[:n_stripped_cst] = []
+
 begin
-  for i in 1..50
+  for i in start_seed..end_seed
     puts
     puts "--------------------------- Round: #{i} ---------------------------"
 
@@ -148,8 +165,8 @@ begin
       puts "[#{Time.now.iso8601(4).to_s}] BBRC params: #{algo_params.to_yaml}"
       feature_dataset_uri = OpenTox::RestClientWrapper.post( File.join(CONFIG[:services]["opentox-algorithm"],"fminer/bbrc/sample"), algo_params )
     end
-    duration = Time.now - t
-    puts "[#{Time.now.iso8601(4).to_s}] BBRC duration: #{duration}"
+    bbrc_duration = Time.now - t
+    puts "[#{Time.now.iso8601(4).to_s}] BBRC duration: #{bbrc_duration}"
     puts "[#{Time.now.iso8601(4).to_s}] BBRC result: #{feature_dataset_uri}"
     puts
 
@@ -205,7 +222,24 @@ begin
     #################################
     result1 << sum_E1
     result2 << sum_E2
+    
+    # save statistics
+    t_ds = OpenTox::Dataset.find(datasets[:training_ds])
+    statistics[:t_ds_nr_com] << ds.compounds.size.to_f
+  
+    statistics[:bbrc_ds_nr_com] << bbrc_ds.compounds.size.to_f
+    statistics[:bbrc_ds_nr_f] << bbrc_ds.features.size.to_f
+    statistics[:duration] << bbrc_duration
+   
+    if !method.to_s.include?("bbrc")
+      statistics[:min_sampling_support] << bbrc_ds.metadata[OT::parameters][2][OT::paramValue].to_f #ToDo get values by params name
+      statistics[:min_frequency_per_sample] << bbrc_ds.metadata[OT::parameters][4][OT::paramValue].to_f
+      statistics[:merge_time] << bbrc_ds.metadata[OT::parameters][6][OT::paramValue].to_f
+      statistics[:n_stripped_mss] << bbrc_ds.metadata[OT::parameters][7][OT::paramValue].to_f
+      statistics[:n_stripped_cst] << bbrc_ds.metadata[OT::parameters][8][OT::paramValue].to_f
+    end
 
+    # save params
     info = []
     info << { :ds_name => ds_name, :nr_features => bbrc_ds.features.size} 
     info << split_params
@@ -215,7 +249,28 @@ begin
     metadata << info
     puts
   end
+  
+  min_sampling_support = (statistics[:min_sampling_support].inject{|sum,x| sum + x })/(statistics[:min_sampling_support].size) unless statistics[:min_sampling_support].compact.empty?
+  min_frequency_per_sample = (statistics[:min_frequency_per_sample].inject{|sum,x| sum + x })/(statistics[:min_frequency_per_sample].size) unless statistics[:min_frequency_per_sample].compact.empty?
+  bbrc_ds_nr_com = (statistics[:bbrc_ds_nr_com].inject{|sum,x| sum + x })/(statistics[:bbrc_ds_nr_com].size) unless statistics[:bbrc_ds_nr_com].compact.empty?
+  ds_nr_com = (statistics[:t_ds_nr_com].inject{|sum,x| sum + x })/(statistics[:t_ds_nr_com].size) unless statistics[:t_ds_nr_com].compact.empty?
+  bbrc_ds_nr_f = (statistics[:bbrc_ds_nr_f].inject{|sum,x| sum + x })/(statistics[:bbrc_ds_nr_f].size) unless statistics[:bbrc_ds_nr_f].compact.empty?
+  duration = (statistics[:duration].inject{|sum,x| sum + x })/(statistics[:duration].size) unless statistics[:duration].compact.empty?
+  merge_time = (statistics[:merge_time].inject{|sum,x| sum + x })/(statistics[:merge_time].size) unless statistics[:merge_time].compact.empty?
+  n_stripped_mss = (statistics[:n_stripped_mss].inject{|sum,x| sum + x })/(statistics[:n_stripped_mss].size) unless statistics[:n_stripped_mss].compact.empty?
+  n_stripped_cst = (statistics[:n_stripped_cst].inject{|sum,x| sum + x })/(statistics[:n_stripped_cst].size) unless statistics[:n_stripped_cst].compact.empty?
 
+  if method.to_s.include?("bbrc")
+    metadata << "Dataset,num_boot,nr_hits,bbrc_ds_nr_com,ds_nr_com,bbrc_ds_nr_f,duration"
+    gdoc_input = "=hyperlink(\"#{ds_uri}\";\"#{ds_name}\"),#{num_boots},#{hits},#{bbrc_ds_nr_com},#{ds_nr_com},#{bbrc_ds_nr_f},#{duration}"
+    metadata << gdoc_input
+  else
+    metadata << "Dataset,num_boot,min_sampling_support,min_frequency,nr_hits,bbrc_ds_nr_com,ds_nr_com,bbrc_ds_nr_f,duration,merge_time,n_stripped_mss,n_stripped_cst"
+    gdoc_input = "=hyperlink(\"#{ds_uri}\";\"#{ds_name}\"),#{num_boots},#{min_sampling_support},#{min_frequency_per_sample},#{hits},#{bbrc_ds_nr_com},#{ds_nr_com},#{bbrc_ds_nr_f},#{duration},#{merge_time},#{n_stripped_mss},#{n_stripped_cst}"
+    metadata << gdoc_input
+  end
+
+   
   puts "############################################"
   puts "############# FINAL RESULTS ################"
   puts "############################################"
@@ -229,6 +284,26 @@ begin
 rescue Exception => e
   LOGGER.debug "#{e.class}: #{e.message}"
   LOGGER.debug "Backtrace:\n\t#{e.backtrace.join("\n\t")}"
+
+  min_sampling_support = (statistics[:min_sampling_support].inject{|sum,x| sum + x })/(statistics[:min_sampling_support].size) unless statistics[:min_sampling_support].compact.empty?
+  min_frequency_per_sample = (statistics[:min_frequency_per_sample].inject{|sum,x| sum + x })/(statistics[:min_frequency_per_sample].size) unless statistics[:min_frequency_per_sample].compact.empty?
+  bbrc_ds_nr_com = (statistics[:bbrc_ds_nr_com].inject{|sum,x| sum + x })/(statistics[:bbrc_ds_nr_com].size) unless statistics[:bbrc_ds_nr_com].compact.empty?
+  ds_nr_com = (statistics[:t_ds_nr_com].inject{|sum,x| sum + x })/(statistics[:t_ds_nr_com].size) unless statistics[:t_ds_nr_com].compact.empty?
+  bbrc_ds_nr_f = (statistics[:bbrc_ds_nr_f].inject{|sum,x| sum + x })/(statistics[:bbrc_ds_nr_f].size) unless statistics[:bbrc_ds_nr_f].compact.empty?
+  duration = (statistics[:duration].inject{|sum,x| sum + x })/(statistics[:duration].size) unless statistics[:duration].compact.empty?
+  merge_time = (statistics[:merge_time].inject{|sum,x| sum + x })/(statistics[:merge_time].size) unless statistics[:merge_time].compact.empty?
+  n_stripped_mss = (statistics[:n_stripped_mss].inject{|sum,x| sum + x })/(statistics[:n_stripped_mss].size) unless statistics[:n_stripped_mss].compact.empty?
+  n_stripped_cst = (statistics[:n_stripped_cst].inject{|sum,x| sum + x })/(statistics[:n_stripped_cst].size) unless statistics[:n_stripped_cst].compact.empty?
+
+  if method.to_s.include?("bbrc")
+    metadata << "Dataset,num_boot,nr_hits,bbrc_ds_nr_com,ds_nr_com,bbrc_ds_nr_f,duration"
+    gdoc_input = "=hyperlink(\"#{ds_uri}\";\"#{ds_name}\"),#{num_boots},#{hits},#{bbrc_ds_nr_com},#{ds_nr_com},#{bbrc_ds_nr_f},#{duration}"
+    metadata << gdoc_input
+  else
+    metadata << "Dataset,num_boot,min_sampling_support,min_frequency,nr_hits,bbrc_ds_nr_com,ds_nr_com,bbrc_ds_nr_f,duration,merge_time,n_stripped_mss,n_stripped_cst"
+    gdoc_input = "=hyperlink(\"#{ds_uri}\";\"#{ds_name}\"),#{num_boots},#{min_sampling_support},#{min_frequency_per_sample},#{hits},#{bbrc_ds_nr_com},#{ds_nr_com},#{bbrc_ds_nr_f},#{duration},#{merge_time},#{n_stripped_mss},#{n_stripped_cst}"
+    metadata << gdoc_input
+  end
 
   puts "############################################"
   puts "############ RESULTS befor error ###########"
