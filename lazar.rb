@@ -27,6 +27,7 @@ class LazarTest < Test::Unit::TestCase
 
   def create_model(params)
     params[:subjectid] = @@subjectid
+    params[:min_frequency] = "8"
     model_uri = OpenTox::Algorithm::Lazar.new.run(params).to_s
     @model = OpenTox::Model::Lazar.find model_uri, @@subjectid
     dump @model, File.join(@dump_dir,caller[0][/`.*'/][1..-2],"model")+".yaml"
@@ -63,18 +64,18 @@ class LazarTest < Test::Unit::TestCase
 
 ## Regression
 def test_create_regression_svm_pc_model
-  create_model :dataset_uri => @@regression_training_dataset.uri, :feature_dataset_uri => @@regression_feature_dataset.uri, :pc_type => "constitutional"
+  create_model :dataset_uri => @@regression_training_dataset.uri, :feature_dataset_uri => @@regression_feature_dataset.uri, :pc_type => "constitutional", :lib => "cdk", :subjectid => @@subjectid
   predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-  assert_in_delta @predictions.first.value(@compounds.first), 7.6, 0.3
-  assert_equal 0.603, @predictions.first.confidence(@compounds.first).round_to(3)
-  assert_equal 74, @predictions.first.neighbors(@compounds.first).size
+  assert_in_delta @predictions.first.value(@compounds.first), 17.13, 0.3
+  assert_equal 0.531, @predictions.first.confidence(@compounds.first).round_to(3)
+  assert_equal 91, @predictions.first.neighbors(@compounds.first).size
   cleanup
 end
 
 
 ##Classification
 def test_classification_model
-  create_model :dataset_uri => @@classification_training_dataset.uri
+  create_model :dataset_uri => @@classification_training_dataset.uri, :subjectid => @@subjectid
   # single prediction
   predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
   # dataset activity
@@ -84,8 +85,8 @@ def test_classification_model
   # assertions
   # single prediction
   assert_equal "false", @predictions[0].value(@compounds[0])
-  assert_equal 0.3383.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
-  assert_equal 16, @predictions[0].neighbors(@compounds[0]).size
+  assert_equal 0.3443.round_to(4), @predictions[0].confidence(@compounds[0]).round_to(4)
+  assert_equal 18, @predictions[0].neighbors(@compounds[0]).size
   # dataset activity
   assert !@predictions[1].measured_activities(@compounds[1]).empty?
   assert_equal "true", @predictions[1].measured_activities(@compounds[1]).first.to_s
@@ -96,9 +97,9 @@ def test_classification_model
   assert_equal "true", @predictions[2].measured_activities(c).first.to_s
   c = OpenTox::Compound.from_smiles("c1ccccc1NN")
   assert_equal "false", @predictions[2].value(c)
-  assert_equal 0.3383 , @predictions[2].confidence(c).round_to(4)
+  assert_equal 0.3443 , @predictions[2].confidence(c).round_to(4)
   # model
-  assert_equal 41, @model.features.size
+  assert_equal 25, @model.features.size
   cleanup
 end
  

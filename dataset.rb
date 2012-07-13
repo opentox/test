@@ -29,13 +29,6 @@ class DatasetTest < Test::Unit::TestCase
     #@new_dataset.delete
   end
 
-#  def test_get_pc
-#    ds_uri = OpenTox::RestClientWrapper.post(CONFIG[:services]["opentox-dataset"], {:file => File.new("data/EPAFHM.csv")} ,{:accept => "text/uri-list", :subjectid => @@subjectid}).to_s.chomp
-#    puts "DS: #{ds_uri}"
-#    fds_uri = OpenTox::Algorithm.pc_descriptors( { :dataset_uri => ds_uri, :pc_type => "constitutional" } )
-#    puts "FDS: #{fds_uri}"
-#  end
-
   def test_save_external
 
     @dataset = OpenTox::Dataset.find "http://apps.ideaconsult.net:8080/ambit2/dataset/2698"
@@ -267,6 +260,37 @@ class DatasetTest < Test::Unit::TestCase
     end
   end
   
+  def test_multithreading
+    dataset = OpenTox::Dataset.find(@datasets.keys[0],@@subjectid)
+    assert dataset!=nil && dataset.compounds.size>0 && dataset.features.size > 0
+    uris = []
+    
+    num = 20
+    num.times do |i|
+      Thread.new do
+        d = OpenTox::Dataset.new
+        dataset.compounds.each do |c|
+          d.add_compound c
+        end
+        dataset.features.each do |f,m|
+          d.add_feature f,m
+        end
+        dataset.compounds.each do |c|
+          dataset.features.keys.each do |f|
+            dataset.add c,f,rand
+          end
+        end
+        d.save @@subjectid
+        uris << d.uri
+      end
+    end
+    
+    sleep 1 while (uris.size < num)
+    uris.uniq.each{|uri| OpenTox::RestClientWrapper.delete(uri,{:subjectid=>@@subjectid})}
+    #puts uris.sort.to_yaml
+    assert_equal uris.size,uris.uniq.size
+  end
+
   def validate(data)
     assert_kind_of OpenTox::Dataset, @dataset
     assert_equal @dataset.data_entries.size, data[:nr_data_entries] if data
