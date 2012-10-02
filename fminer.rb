@@ -360,7 +360,7 @@ end
     #}
     cleanup
   end
-  
+ 
   def test_match
     feature = @@classification_training_dataset.features.keys.first
     feature_dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({
@@ -368,26 +368,28 @@ end
     feature_dataset = OpenTox::Dataset.find(feature_dataset_uri,@@subjectid)
     tmp_resources = [ feature_dataset_uri ]
     [true,false].each do |hits|
-      matched_dataset_uri = OpenTox::RestClientWrapper.post(File.join(CONFIG[:services]["opentox-algorithm"],"fminer","bbrc","match"),{:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@classification_training_dataset.uri, :nr_hits => hits, :min_frequency => "10pm", :subjectid => @@subjectid})
+      matched_dataset_uri = OpenTox::RestClientWrapper.post(File.join(CONFIG[:services]["opentox-algorithm"],"fminer","bbrc","match"),{:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@classification_training_dataset.uri, :nr_hits => hits, :min_frequency => "10pm", :complete_entries => "true", :subjectid => @@subjectid})
         #{:feature_dataset_uri => feature_dataset_uri, :dataset_uri => @@multinomial_training_dataset.uri, :nr_hits => hits, :min_frequency => "10pm", :subjectid => @@subjectid}).to_s
       tmp_resources << matched_dataset_uri
       matched_dataset = OpenTox::Dataset.find(matched_dataset_uri,@@subjectid)
       # matched datset should have same compounds as input dataset for matching
       #assert_equal matched_dataset.compounds.sort,@@multinomial_training_dataset.compounds.sort
-      assert_equal matched_dataset.compounds.sort,@@classification_training_dataset.compounds.sort
+      assert_equal matched_dataset.compounds.sort.collect{|x|x.split('/').last},@@classification_training_dataset.compounds.sort.collect{|x|x.split('/').last}
       # matched dataset should have same features as feature dataset
       matched_features = matched_dataset.features.keys.collect {|f| f.gsub("/match", "")}
-      assert_equal feature_dataset.features.keys.sort,matched_features.sort
+      assert_equal feature_dataset.features.keys.sort.collect{|x|x.split('/').last},matched_features.sort.collect{|x|x.split('/').last}
       matched_dataset.compounds.each do |c|
         matched_dataset.features.keys.each do |f|
           if matched_dataset.data_entries[c] and matched_dataset.data_entries[c][f]
             v = matched_dataset.data_entries[c][f]
             if hits
+              File.open('/tmp/del.txt',"w") { |f| f.puts "AM: '#{v}', '#{v.class}'" }
               assert_equal v.size,1
               assert v[0].is_a?(Integer)
-              assert v[0]>0
+              assert v[0]>=0
             else
-              assert_equal v,[1]
+              File.open('/tmp/del.txt',"w") { |f| f.puts "AM: #{v}" }
+              assert (v[0] == 0 or v[0] == 1)
             end 
           end
         end
@@ -395,7 +397,7 @@ end
     end
     tmp_resources.each{|uri| OpenTox::RestClientWrapper.delete(uri,{:subjectid=>@@subjectid})}
   end
-
+ 
   def test_match_pValue
     feature = @@classification_training_dataset.features.keys.first
     feature_dataset_uri = OpenTox::Algorithm::Fminer::BBRC.new.run({
