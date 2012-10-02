@@ -62,18 +62,18 @@ class LazarTest < Test::Unit::TestCase
   end
 
 
-## Regression
+# Regression
 def test_create_regression_svm_pc_model
   create_model :dataset_uri => @@regression_training_dataset.uri, :feature_dataset_uri => @@regression_feature_dataset.uri, :pc_type => "constitutional", :lib => "cdk", :subjectid => @@subjectid
   predict_compound OpenTox::Compound.from_smiles("c1ccccc1NN")
-  assert_in_delta @predictions.first.value(@compounds.first), 17.13, 0.3
-  assert_equal 0.531, @predictions.first.confidence(@compounds.first).round_to(3)
-  assert_equal 91, @predictions.first.neighbors(@compounds.first).size
+  assert_in_delta @predictions.first.value(@compounds.first), 6.82, 0.3
+  assert_equal 0.761, @predictions.first.confidence(@compounds.first).round_to(3)
+  assert_equal 62, @predictions.first.neighbors(@compounds.first).size
   cleanup
 end
 
 
-##Classification
+#Classification
 def test_classification_model
   create_model :dataset_uri => @@classification_training_dataset.uri, :subjectid => @@subjectid
   # single prediction
