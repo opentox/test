@@ -277,7 +277,7 @@ class DatasetTest < Test::Unit::TestCase
         end
         dataset.compounds.each do |c|
           dataset.features.keys.each do |f|
-            dataset.add c,f,rand
+            d.add c,f,rand
           end
         end
         d.save @@subjectid
