@@ -146,14 +146,9 @@ class RUtilTest < Test::Unit::TestCase
   def stratified_split
     unless defined?@@strat
       @@split_ratio = 0.05
-      @@split_has_duplicates = false #hamster has no duplicates
-#     res = @@rutil.stratified_split(@@hamster,0,@@split_ratio,1)
-#     @@resources += [ res[0].uri, res[1].uri ]
-#     @@strat = { :data => @@hamster, :split1 => res[0], :split2 => res[1] }
-      data_combined = OpenTox::Dataset.merge(@@hamster,@@hamster_features,{},@@subjectid)
-      res1, res2 = @@rutil.stratified_split(data_combined,{},0,@@split_ratio,@@subjectid,1)
-      @@resources += [ data_combined.uri, res1.uri, res2.uri ]
-      @@strat = {:data => data_combined, :split1 => res1, :split2 => res2 }
+      res1, res2 = @@rutil.stratified_split(@@hamster_features,{},0,@@split_ratio,@@subjectid,1)
+      @@resources += [ res1.uri, res2.uri ]
+      @@strat = {:data => @@hamster_features, :split1 => res1, :split2 => res2 }
     end
     @@strat
   end
@@ -165,31 +160,22 @@ class RUtilTest < Test::Unit::TestCase
     size1 = split[:split1].compounds.size
     size2 = split[:split2].compounds.size
     assert_equal size,(split[:split1].compounds+split[:split2].compounds).uniq.size
-    unless @@split_has_duplicates
-      assert_equal (@@split_ratio*size).round,size1,
-        "Dataset #{size} should be split into #{(@@split_ratio*size).round}/#{size-(@@split_ratio*size).round}"+
-        " (exact: #{@@split_ratio*size}), instead: #{size1}/#{size2}"
-    end
+    assert_equal (@@split_ratio*size).round,size1,
+      "Dataset #{size} should be split into #{(@@split_ratio*size).round}/#{size-(@@split_ratio*size).round}"+
+      " (exact: #{@@split_ratio*size}), instead: #{size1}/#{size2}"
     split[:data].compounds.each do |c|
       include1 = split[:split1].compounds.include?(c)
       include2 = split[:split2].compounds.include?(c)
-      unless @@split_has_duplicates
-        assert(((include1 and !include2) or (!include1 and include2)))
-      else
-        assert((include1 or include2))
-      end
+      assert(((include1 and !include2) or (!include1 and include2)))
     end
   end
   
   def test_k_fold_stratified_split
     puts "test_k_fold_stratified_split"
-    data_combined = OpenTox::Dataset.merge(@@hamster,@@hamster_features,{},@@subjectid)
-    num_duplicates = 0 #hamster has no duplicates
     num_folds = 10
-    avg_split_size = (data_combined.compounds.size+num_duplicates)/num_folds.to_f
+    avg_split_size = (@@hamster_features.compounds.size)/num_folds.to_f
     
-    @@resources += [ data_combined.uri ]
-    train, test = @@rutil.stratified_k_fold_split(data_combined,{},0,num_folds,@@subjectid,1)
+    train, test = @@rutil.stratified_k_fold_split(@@hamster_features,{},0,num_folds,@@subjectid,1)
     @@resources += (train + test).collect{ |r| r.uri }
     [train, test].each do |result|
       assert result.is_a?(Array)
@@ -204,28 +190,20 @@ class RUtilTest < Test::Unit::TestCase
       sum_test+=test[i].compounds.size
       compounds_test += test[i].compounds
       
-      assert_equal (test[i].compounds.size+train[i].compounds.size),(data_combined.compounds.size+num_duplicates)
+      assert_equal (test[i].compounds.size+train[i].compounds.size),(@@hamster_features.compounds.size)
       compounds = (test[i].compounds + train[i].compounds)
-      if num_duplicates==0
-        assert_equal compounds.sort,data_combined.compounds.sort
-      else
-        assert_equal compounds.uniq.sort,data_combined.compounds.sort
-      end   
+      assert_equal compounds.sort,@@hamster_features.compounds.sort
     end
-    assert_equal sum_test,(data_combined.compounds.size+num_duplicates)
-    if num_duplicates==0
-      assert_equal compounds_test.sort,data_combined.compounds.sort
-    else
-      assert_equal compounds_test.uniq.sort,data_combined.compounds.sort
-    end
+    assert_equal sum_test,(@@hamster_features.compounds.size)
+    assert_equal compounds_test.sort,@@hamster_features.compounds.sort
   end  
 
   def test_feature_value_plot
     puts "feature_value_plot"
     split = stratified_split
     data = split[:data]
-    dataset1 = data.split( data.compounds[0..4], data.features.keys, {}, @@subjectid)
-    dataset2 = data.split( data.compounds[5..-1], data.features.keys, {}, @@subjectid)
+    dataset1 = data.split( (0..4).to_a, data.features.keys, {}, @@subjectid)
+    dataset2 = data.split( (5..(data.compounds.size-1)).to_a, data.features.keys, {}, @@subjectid)
     @@resources += [dataset1.uri, dataset2.uri]
     files = []
     #plot

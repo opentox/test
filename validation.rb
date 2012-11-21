@@ -38,10 +38,10 @@ class ValidationTest < Test::Unit::TestCase
       :info => "http://apps.ideaconsult.net:8080/ambit2/dataset/435293?page=0&pagesize=300" }     
   @@files = { 
              File.new("data/hamster_carcinogenicity.csv") => :crossvalidation,  
-             #File.new("data/hamster_carcinogenicity.mini.csv") => :crossvalidation,
              #File.new("data/EPAFHM.csv") => :crossvalidation,
              File.new("data/EPAFHM.mini.csv") => :crossvalidation,
              File.new("data/hamster_carcinogenicity.csv") => :split_validation,
+             File.new("data/hamster_carcinogenicity.csv") => :bootstrap_validation,
              File.new("data/EPAFHM.csv") => :split_validation,
             #File.new("data/StJudes-HepG2-testset_Class.csv") => :crossvalidation
              }  
@@ -66,7 +66,7 @@ class ValidationTest < Test::Unit::TestCase
   
   def global_teardown
     puts "delete and logout"
-    if @@delete
+    if defined?(@@delete) and @@delete
       [:data, :train_data, :test_data].each do |d|
         @@data.each do |data| 
           OpenTox::Dataset.find(data[d],@@subjectid).delete(@@subjectid) if data[d] and data[:delete] and OpenTox::Dataset.exist?(data[d], @@subjectid)
@@ -88,6 +88,48 @@ class ValidationTest < Test::Unit::TestCase
       assert l.uri?
     end
   end
+  
+  def test_bootstrapping
+
+    @@vs = [] unless defined?@@vs
+    @@data.each do |data|
+      if data[:type]==:bootstrap_validation
+        puts "bootstrapping "+data[:info].to_s
+        p = { 
+          :dataset_uri => data[:data],
+          :algorithm_uri => File.join(CONFIG[:services]["opentox-algorithm"],"lazar"),
+          :algorithm_params => "feature_generation_uri="+File.join(CONFIG[:services]["opentox-algorithm"],"fminer/bbrc"),
+          :prediction_feature => data[:feat],
+          :random_seed => 2}
+        t = OpenTox::SubTask.new(nil,0,1)
+        def t.progress(pct)
+          if !defined?@last_msg or @last_msg+10<Time.new
+            puts "waiting for boostrap validation: "+pct.to_s
+            @last_msg=Time.new
+          end
+        end
+        def t.waiting_for(task_uri); end
+        v = OpenTox::Validation.create_bootstrapping_validation(p, @@subjectid, t)
+        assert v.uri.uri?
+        if AA_SERVER
+          assert_rest_call_error OpenTox::NotAuthorizedError do
+            OpenTox::Validation.find(v.uri)
+          end
+        end
+        v = OpenTox::Validation.find(v.uri, @@subjectid)
+        assert_valid_date v
+        assert v.uri.uri?
+        assert_prob_correct(v)
+        model = v.metadata[OT.model]
+        assert model.uri?
+        v_list = OpenTox::Validation.list( {:model => model} )
+        assert v_list.size==1 and v_list.include?(v.uri)
+        puts v.uri unless defined?(@@delete) and @@delete
+        @@vs << v
+      end
+    end    
+    
+  end
  
   def test_training_test_split
     
@@ -100,7 +142,7 @@ class ValidationTest < Test::Unit::TestCase
           :algorithm_uri => File.join(CONFIG[:services]["opentox-algorithm"],"lazar"),
           :algorithm_params => "feature_generation_uri="+File.join(CONFIG[:services]["opentox-algorithm"],"fminer/bbrc"),
           :prediction_feature => data[:feat],
-          :split_ratio => 0.95,
+          :split_ratio => 0.7,
           :random_seed => 2}
         t = OpenTox::SubTask.new(nil,0,1)
         def t.progress(pct)
@@ -121,11 +163,19 @@ class ValidationTest < Test::Unit::TestCase
         assert_valid_date v
         assert v.uri.uri?
         assert_prob_correct(v)
+        
+        train_compounds = OpenTox::Dataset.find(v.metadata[OT.trainingDataset]).compounds
+        test_compounds = OpenTox::Dataset.find(v.metadata[OT.testDataset]).compounds
+        orig_compounds = OpenTox::Dataset.find(data[:data]).compounds
+        assert_equal((orig_compounds.size*0.7).round,train_compounds.size)
+        assert_equal(orig_compounds.size,(train_compounds+test_compounds).size)
+        assert_equal(orig_compounds.uniq.size,(train_compounds+test_compounds).uniq.size)
+        
         model = v.metadata[OT.model]
         assert model.uri?
         v_list = OpenTox::Validation.list( {:model => model} )
         assert v_list.size==1 and v_list.include?(v.uri)
-        puts v.uri unless @@delete
+        puts v.uri unless defined?(@@delete) and @@delete
         @@vs << v
       end
     end
@@ -167,7 +217,7 @@ class ValidationTest < Test::Unit::TestCase
         assert model.uri?
         v_list = OpenTox::Validation.list( {:model => model} )
         assert v_list.size==1 and v_list.include?(v.uri)
-        puts v.uri unless @@delete
+        puts v.uri unless defined?(@@delete) and @@delete
         @@vs << v
       end
     end
@@ -204,7 +254,7 @@ class ValidationTest < Test::Unit::TestCase
       assert_equal report.uri,report2.uri
       report3_uri = v.find_or_create_report(@@subjectid)
       assert_equal report.uri,report3_uri
-      puts report2.uri unless @@delete
+      puts report2.uri unless defined?(@@delete) and @@delete
       @@reports << report2
     end  
   end
@@ -283,7 +333,7 @@ class ValidationTest < Test::Unit::TestCase
               assert_equal report.errorType,OpenTox::NotAuthorizedError.to_s
             end
           end
-          puts cv.uri unless @@delete
+          puts cv.uri unless defined?(@@delete) and @@delete
           
           @@cvs << cv
           @@cv_datasets << data
@@ -324,7 +374,7 @@ class ValidationTest < Test::Unit::TestCase
       assert_equal report.uri,report2.uri
       report3_uri = cv.find_or_create_report(@@subjectid)
       assert_equal report.uri,report3_uri
-      puts report2.uri unless @@delete
+      puts report2.uri unless defined?(@@delete) and @@delete
       @@reports << report2
     end  
   end
@@ -362,14 +412,14 @@ class ValidationTest < Test::Unit::TestCase
           assert_equal report.uri,report2.uri
           report3 = OpenTox::AlgorithmComparisonReport.find_for_crossvalidation(@@cvs[j].uri,@@subjectid)
           assert_equal report.uri,report3.uri
-          puts report2.uri unless @@delete
+          puts report2.uri unless defined?(@@delete) and @@delete
           @@reports << report2 
         end
       end
     end
   end
   
-  if @@qmrf_test
+  if defined?(@@qmrf_test) and @@qmrf_test
    def test_qmrf_report
     #@@cv = OpenTox::Crossvalidation.find("http://local-ot/validation/crossvalidation/13", @@subjectid)
    
@@ -404,7 +454,7 @@ class ValidationTest < Test::Unit::TestCase
         qmrf_uris = OpenTox::RestClientWrapper.get(File.join(CONFIG[:services]["opentox-validation"],"/reach_report/QMRF?model="+model_uri),
           {:subjectid =>  @@subjectid}).chomp.split("\n")
         assert qmrf_uris.size==1 and qmrf_uris[0]==qmrfReport.uri
-        puts qmrfReport.uri unless @@delete
+        puts qmrfReport.uri unless defined?(@@delete) and @@delete
         @@qmrfReports << qmrfReport
       end
     end

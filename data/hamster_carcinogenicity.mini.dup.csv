@@ -1,0 +1,12 @@
+SMILES,Hamster-Carcinogenicity,Missing
+CC=O,1,
+C12C3=C(C=CC=C3)CC1=CC(=CC=2)NC(C)=O,1,a
+O=C(N)\C(C2=CC=CO2)=C/C1=CC=C([N+]([O-])=O)O1,1,a
+C1(N=CNN=1)N,0,b
+Br(=O)(=O)[O-].[K+],1,a
+[Cl-].[Cd+2].[Cl-],0,b
+O=S(=O)([O-])[O-].[Cd+2],0,b
+ClC1=CC(=NC(=N1)SCC(=O)O)NC2=CC=CC(=C2C)C,0,a
+ClCOC,1,a
+C=C(Cl)C=C,0,
+C=C(Cl)C=C,1,a

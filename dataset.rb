@@ -219,45 +219,23 @@ class DatasetTest < Test::Unit::TestCase
     end
   end
   
- 
-  def test_merge()
-    #upload
-    dataset1 = OpenTox::Dataset.create_from_csv_file(File.new("data/hamster_carcinogenicity.csv").path, @@subjectid)
-    dataset2 = OpenTox::Dataset.create_from_csv_file(File.new("data/multi_cell_call.csv").path, @@subjectid)
-    #merge1
-    title = "test merge"
-    dataset_merge1 = OpenTox::Dataset.merge(dataset1, dataset2, { DC.title => title,DC.creator => "testsuite"}, @@subjectid )
-    dataset_reloaded1 = OpenTox::Dataset.find(dataset_merge1.uri, @@subjectid)
-    #test1
-    [dataset_merge1, dataset_reloaded1].each do |d|
-      assert_equal d.metadata[DC.title],title
-      assert_equal d.features.size,(dataset1.features.size+dataset2.features.size)
-      assert_equal d.compounds.size,(dataset1.compounds+dataset2.compounds).uniq.size
-      [dataset1, dataset2].each do |d_i|
-        d_i.compounds.each{|c| assert d.compounds.include?(c)}
-        d_i.features.keys.each{|f| assert d.features.keys.include?(f)}
-        d_i.features.keys.each do |f|
-          assert_equal d_i.features[f],d.features[f]
-          d_i.compounds do |c|
-            assert_equal d_i.data_entries[c][f],d.data_entries[c][f]
-          end
-        end  
-      end
-    end
-    #merge2
-    compounds1 = dataset1.compounds[0..dataset1.compounds.size/2]
-    features1 = []
-    dataset_merge2 = OpenTox::Dataset.merge(dataset1, dataset2, {}, @@subjectid, features1, nil, compounds1 )
-    dataset_reloaded2 = OpenTox::Dataset.find(dataset_merge2.uri, @@subjectid)
-    #test2
-    [dataset_merge2, dataset_reloaded2].each do |d|
-      assert_equal d.features.size,dataset2.features.size
-      assert_equal d.compounds.size,(compounds1+dataset2.compounds).uniq.size
-    end
-    #cleanup
-    [dataset_merge1, dataset_merge2, dataset1, dataset2].each do |d|
-      OpenTox::RestClientWrapper.delete(d.uri,{:subjectid => @@subjectid})
-    end
+  def test_split()
+    puts "test_split"
+    d = @@duplicate_dataset
+    assert_equal(d.compounds.size,11)
+    assert_equal(d.compounds.uniq.size,10)
+    assert_equal(d.compounds[9],d.compounds[10])
+    dupl = d.compounds[9]
+    feat1 = d.features.keys.sort[0]
+    feat2 = d.features.keys.sort[1]
+    assert_not_equal(d.data_entries[dupl][feat1][0],d.data_entries[dupl][feat1][1])
+    assert_equal(d.data_entries[dupl][feat2][0],nil)
+    d2 = d.split([0,1,2,3,4,5,6,7,8,10],d.features.keys,d.metadata)
+    assert_equal(d2.compounds.size,10)
+    assert_equal(d2.compounds.uniq.size,10)
+    assert_equal(d.data_entries[dupl][feat1][1],d2.data_entries[dupl][feat1][0])
+    assert_equal(d2.data_entries[dupl][feat2][0],"a") 
+    d2.delete
   end
   
   def test_multithreading
