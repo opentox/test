@@ -90,10 +90,10 @@ def test_classification_model
   # dataset activity
   assert !@predictions[1].measured_activities(@compounds[1]).empty?
   assert_equal "true", @predictions[1].measured_activities(@compounds[1]).first.to_s
-  assert @predictions[1].value(@compounds[1]).nil?
+  #NO, measured activites are stored as predictions as well!, assert @predictions[1].value(@compounds[1]).nil?
   # dataset prediction
   c = OpenTox::Compound.from_smiles("CC(=Nc1ccc2c(c1)Cc1ccccc21)O")
-  assert_equal nil, @predictions[2].value(c)
+  #NO, measured activites are stored as predictions as well!, assert_equal nil, @predictions[2].value(c)
   assert_equal "true", @predictions[2].measured_activities(c).first.to_s
   c = OpenTox::Compound.from_smiles("c1ccccc1NN")
   assert_equal "false", @predictions[2].value(c)
