@@ -426,7 +426,7 @@ end
     if !matched_smarts_pValues.nil?
       bbrc_smarts_pValues.each do |s, p|
         assert matched_smarts_pValues.has_key?(s)
-        assert_equal p,matched_smarts_pValues[s]
+        assert_equal p.to_f.round_to(4),matched_smarts_pValues[s].to_f.round_to(4)
       end
     end  
    
